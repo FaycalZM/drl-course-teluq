@@ -1,0 +1,23 @@
+{
+  "delimiters": [
+    { "left": "$$",  "right": "$$",  "display": true  },
+    { "left": "\\[", "right": "\\]", "display": true  },
+    { "left": "$",   "right": "$",   "display": false },
+    { "left": "\\(", "right": "\\)", "display": false }
+  ],
+  "throwOnError": false,
+  "errorColor": "#b00020",
+  "strict": "ignore",
+  "macros": {
+    "\\E": "\\mathbb{E}",
+    "\\R": "\\mathbb{R}",
+    "\\pit": "\\pi_{\\theta}",
+    "\\Qt": "Q_{\\theta}",
+    "\\Qtm": "Q_{\\theta^{-}}",
+    "\\Adv": "A^{\\pi}",
+    "\\KL": "D_{\\mathrm{KL}}",
+    "\\argmax": "\\operatorname*{arg\\,max}",
+    "\\argmin": "\\operatorname*{arg\\,min}",
+    "\\defeq": "\\doteq"
+  }
+}

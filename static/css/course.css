@@ -1,0 +1,37 @@
+/* Styles propres au cours SCI1070 — figures, crédits, tableaux de double lecture.
+   Les couleurs viennent des variables de hugo-book pour rester lisibles en thème sombre. */
+
+.bookfig {
+  margin: 2rem auto;
+  text-align: center;
+}
+.bookfig img {
+  max-width: 100%;
+  height: auto;
+  padding: 4px;
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 4px;
+  background: var(--body-background, #fff);
+}
+.bookfig-caption {
+  display: block;
+  margin-top: .5rem;
+  font-size: .9em;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--body-font-color, #4a4a4a);
+  opacity: .85;
+}
+.bookfig-credit {
+  display: block;
+  margin-top: .25rem;
+  font-size: .8em;
+  font-style: normal;
+  opacity: .65;
+}
+
+/* Tableau « symbole ↔ variable » de la double lecture : la colonne de code en monospace */
+table td code, table th code { white-space: nowrap; }
+
+/* Équations en bloc : un peu d'air, et pas de débordement sur mobile */
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: .35rem 0; }

@@ -1,0 +1,19 @@
+{{- /* Styles du cours */ -}}
+<link rel="stylesheet" href="{{ "css/course.css" | relURL }}">
+<link rel="stylesheet" href="{{ "css/colab.css" | relURL }}">
+
+{{- /*
+  KaTeX, chargé sur TOUTES les pages.
+  Le thème hugo-book ne charge KaTeX que depuis le shortcode {{< katex />}} ou un bloc de
+  code ```katex. Pour un cours où presque chaque page porte des équations, dépendre d'un
+  shortcode à ne pas oublier est trop fragile : on l'injecte donc globalement, avec les
+  options et les macros de assets/katex.json.
+  → Corollaire : NE PAS utiliser {{< katex />}} dans le contenu, cela chargerait KaTeX
+    une deuxième fois.
+*/ -}}
+<link rel="stylesheet" href="{{ "katex/katex.min.css" | relURL }}">
+<script defer src="{{ "katex/katex.min.js" | relURL }}"></script>
+{{- with resources.Get "katex.json" | minify }}
+<script defer src="{{ "katex/auto-render.min.js" | relURL }}"
+        onload="renderMathInElement(document.body, {{ .Content | safeJS }});"></script>
+{{- end }}

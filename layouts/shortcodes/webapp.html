@@ -1,0 +1,9 @@
+{{- $path := .Get "path" -}}
+<iframe
+  src="{{ "apps/" | relURL }}{{ $path }}"
+  width="100%"
+  height="700"
+  frameborder="0"
+  allowfullscreen
+  style="border: 1px solid var(--gray-200, #e5e7eb); border-radius: 8px;"
+></iframe>

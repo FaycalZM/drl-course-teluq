@@ -1,0 +1,33 @@
+{{- /*
+  Figure légendée du cours.
+    {{< bookfig src="05-01.png" week="05" >}}
+    {{< bookfig src="05-01.svg" week="05" credit="Lapan (2024)" >}}
+
+  Légende : static/images/week{week}/{nom sans extension}.txt
+  Crédit  : paramètre credit=, sinon {nom}.credit.txt
+  Accepte .png, .svg, .jpg — l'extension n'est plus supposée.
+*/ -}}
+{{- $src := .Get "src" -}}
+{{- $week := .Get "week" -}}
+{{- $base := path.BaseName $src -}}
+{{- $dir := printf "static/images/week%s" $week -}}
+{{- $captionPath := printf "%s/%s.txt" $dir $base -}}
+{{- $creditPath := printf "%s/%s.credit.txt" $dir $base -}}
+{{- $caption := "" -}}
+{{- if fileExists $captionPath -}}
+  {{- $caption = trim (readFile $captionPath) "\n \t" -}}
+{{- else -}}
+  {{- $caption = printf "Légende manquante pour %s" $src -}}
+  {{- warnf "bookfig : légende absente → %s" $captionPath -}}
+{{- end -}}
+{{- $credit := .Get "credit" -}}
+{{- if and (not $credit) (fileExists $creditPath) -}}
+  {{- $credit = trim (readFile $creditPath) "\n \t" -}}
+{{- end -}}
+<figure class="bookfig">
+  <img src="{{ printf "images/week%s/%s" $week $src | relURL }}" alt="{{ $caption }}" loading="lazy">
+  <figcaption class="bookfig-caption">
+    {{ $caption }}
+    {{- with $credit }}<span class="bookfig-credit">Source : {{ . }}</span>{{ end }}
+  </figcaption>
+</figure>

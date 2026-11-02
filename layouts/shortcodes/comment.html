@@ -1,0 +1,14 @@
+{{- /*
+  Commentaire de developpement — ne rend RIEN. Support de la tracabilite invisible (D17).
+
+  Pourquoi ce fichier existe : le shortcode « comment » integre a Hugo est deprecie depuis
+  la v0.143.0, avec pour conseil d'utiliser des commentaires HTML. Or un commentaire HTML
+  ne convient pas ici — avec markup.goldmark.renderer.unsafe = true, il traverse le rendu
+  et se retrouve dans le HTML livre : invisible a l'ecran, mais lisible dans le code source
+  de la page (verifie). En definissant le shortcode au niveau du projet, on garde la
+  syntaxe du contenu, sans avertissement et sans dependre d'un integre voue a disparaitre.
+
+  Le « if .Inner » est obligatoire : Hugo refuse un shortcode a balise fermante qui
+  n'evalue jamais .Inner. La condition consomme le contenu sans l'emettre.
+*/ -}}
+{{- if .Inner -}}{{- end -}}

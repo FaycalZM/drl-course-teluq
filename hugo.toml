@@ -1,0 +1,32 @@
+baseURL = 'https://FaycalZM.github.io/drl-course-teluq/'
+languageCode = 'fr'
+defaultContentLanguage = 'fr'
+
+title = "SCI1070 - Apprentissage par Renforcement Profond"
+theme = 'hugo-book'
+
+# --- Paramètres du thème hugo-book ---
+[params]
+  BookSection = "docs"
+  BookToC = true
+  BookSearch = true
+  BookLogo = "logo.png"
+  # math = true est conservé pour documenter l'intention, mais ce thème ne s'en sert pas :
+  # KaTeX est chargé globalement par layouts/partials/docs/inject/head.html.
+  math = true
+
+[markup]
+  [markup.highlight]
+    style = 'github'
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          # Les maths traversent Goldmark intactes. L'ajout de ['$','$'] en inline est le
+          # correctif de SOURCES.md §8.4 : sans lui, $Q_{\theta}$ voit ses _ transformés
+          # en italique avant KaTeX, et l'équation casse silencieusement.
+          block  = [['\[', '\]'], ['$$', '$$']]
+          inline = [['\(', '\)'], ['$', '$']]

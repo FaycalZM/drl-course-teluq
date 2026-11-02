@@ -1,0 +1,27 @@
+.colab-link {
+  display: inline-block;
+  margin: var(--padding-1) 0;
+  transition: opacity 0.2s;
+}
+
+.colab-link:hover {
+  opacity: 0.8;
+}
+
+.bookfig {
+  margin: var(--padding-2) 0;
+  text-align: center;
+}
+
+.bookfig img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--gray-200);
+}
+
+.bookfig figcaption {
+  font-size: var(--font-size-smaller);
+  color: var(--gray-500);
+  margin-top: var(--padding-1);
+}

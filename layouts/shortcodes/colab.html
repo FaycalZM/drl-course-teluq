@@ -1,0 +1,5 @@
+{{ $url := .Get "url" }}
+{{ $label := default "Open in Google Colab" (.Get "label") }}
+<a href="{{ $url }}" target="_blank" rel="noopener" class="colab-link">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="{{ $label }}">
+</a>
