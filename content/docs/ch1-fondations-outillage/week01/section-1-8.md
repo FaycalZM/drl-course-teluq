@@ -7,11 +7,15 @@ weight: 9
 
 Nous arrivons au point le plus délicat de la semaine, et je ne veux pas que vous le lisiez comme une page de documentation : c'est ici que le formalisme des sections 1.3 à 1.5 rencontre du code réel, et ici que se cache l'erreur la plus répandue de tout l'apprentissage par renforcement profond. Appliquons donc la **double lecture** du cours : l'intuition, l'équation, puis le code et la table qui relie les deux.
 
+---
+
 ## 1. L'intuition
 
 Imaginez un tourniquet de station de métro avec exactement deux boutons accessibles de l'extérieur. Le premier remet tout à zéro et vous donne votre position de départ : c'est `reset()`, et vous devez l'actionner avant toute chose, sinon l'environnement ne sait pas où vous êtes. Le second prend votre action, l'applique et vous rend un petit paquet d'informations : où vous êtes maintenant, combien vous venez de gagner, s'il faut s'arrêter. C'est `step()`, que vous actionnez en boucle. C'est tout : aussi complexe soit le monde simulé, l'interface d'un environnement Gymnasium, c'est deux boutons et deux descriptions d'espaces. Notez bien ce que ces boutons **ne donnent pas** : ni l'état interne, ni les probabilités de transition, ni la fonction de récompense. Le tourniquet reste une boîte noire.
 
 {{% comment %}}SOURCE: LAPAN ch.2 p.67-68{{% /comment %}}
+
+---
 
 ## 2. L'équation
 
@@ -24,6 +28,8 @@ $$
 C'est là que le vocabulaire de la section 1.2 doit être réactivé : l'agent ne reçoit pas \(S_{t+1}\), il reçoit une **observation** de cet état, que nous noterons \(O_{t+1}\) lorsque la distinction importera. Sur CartPole, où l'observation est à peu près l'état, la différence est négligeable ; en semaine 7, sur des images d'écran, elle ne le sera plus.
 
 Deux signaux supplémentaires, absents de toutes ces formules, complètent le tableau. La **terminaison** (*terminated*) : la trajectoire atteint un état terminal du processus (le bâton est tombé, la partie est perdue). C'est un fait **sur le modèle**, et il signifie que la valeur de la suite est nulle : il n'y a plus de suite. La **troncature** (*truncated*) : on arrête de regarder, l'horloge a sonné, un nombre maximal de pas est atteint, alors que le processus, lui, aurait très bien pu continuer. Les deux événements mettent fin à la boucle. **Ils ne signifient pas du tout la même chose.**
+
+---
 
 ## 3. Le code
 
@@ -56,6 +62,8 @@ La boucle d'un agent tient alors en une phrase : appeler `step()` jusqu'à ce qu
 
 {{% comment %}}SOURCE: LAPAN ch.2 p.67-69{{% /comment %}}
 
+---
+
 ## La table de correspondance symbole ↔ variable
 
 Voici le livrable de cette section, et la table à laquelle revenir chaque fois qu'un symbole du cours vous paraîtra abstrait. À gauche le formalisme des sections 1.3 à 1.5 ; à droite ce que vous tapez réellement.
@@ -81,12 +89,16 @@ Voici le livrable de cette section, et la table à laquelle revenir chaque fois 
 > [!IMPORTANT]
  **Deux lignes méritent qu'on s'arrête.** Celle de \(p(s' \mid s, a)\) : **il n'y a pas de variable**. Tout notre cours existe parce que la dynamique n'est pas accessible : si elle l'était, nous ferions de la programmation dynamique et nous aurions fini en trois semaines. Et celle de \(G_t\) : `total_reward` additionne les récompenses **sans les actualiser**. L'écart n'est pas une négligence mais une convention de mesure : on rapporte la récompense brute d'un épisode, et c'est l'algorithme qui, à l'intérieur, travaille avec \(\gamma\).
 
+---
+
 ## Un mot de vocabulaire, à dire une fois pour toutes
 
 Vous rencontrerez, dans du code et des documents plus anciens (ils sont nombreux, car la convention a changé en cours de route), une version de `step()` qui ne renvoie que **quatre** valeurs, dont un troisième élément nommé `done`. Ce `done` est l'ancêtre de notre `terminated`, mais il mélangeait souvent les deux situations. Dans ce cours les noms sont fixés : en prose nous parlons de **terminaison** et de **troncature** ; dans le code nous écrivons `terminated` et `truncated`, jamais `done`. Les identifiants de l'interface (`terminated`, `truncated`, `obs`, `info`, `action_space`) restent en anglais dans les listings : ce sont des noms de variables, pas des mots de la langue.
 
 > [!NOTE]
  **La question des versions est réglée.** Le `step()` à cinq valeurs et le `reset()` qui renvoie `(observation, info)` n'ont pas changé depuis plusieurs années : l'interface décrite ici est l'interface courante, et vous pouvez installer `gymnasium` sans épingler de version. Si un bout de code trouvé en ligne échoue sur une erreur de dépaquetage, vous savez maintenant pourquoi, et comment le corriger.
+
+---
 
 ## Pourquoi nous insistons dès maintenant sur la troncature
 

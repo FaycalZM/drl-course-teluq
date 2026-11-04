@@ -9,6 +9,8 @@ Deuxième étage. Nous ajoutons **un seul** ingrédient, la récompense ; états
 
 {{% comment %}}SOURCE: LAPAN ch.1 p.50{{% /comment %}}
 
+---
+
 ## Le retour
 
 Le **retour** (*return*) \(G_t\) est la quantité que l'agent cherche à maximiser. Il se définit pour un instant \(t\) donné, à l'intérieur d'un épisode :
@@ -20,6 +22,8 @@ $$
 Lisons cette formule plutôt que de la contempler. Chaque récompense future est multipliée par \(\gamma\) élevé au **nombre de pas qui la sépare de \(t\)** : celle du pas suivant compte pleinement, celle qui arrive dix pas plus tard compte \(\gamma^{10}\) fois moins. Autrement dit, \(\gamma\) mesure **la distance à laquelle nous regardons dans le futur**. À \(\gamma = 1\) l'agent est parfaitement clairvoyant ; à \(\gamma = 0\) seule \(R_{t+1}\) subsiste, c'est la myopie absolue. Ni l'un ni l'autre n'est utilisable tel quel, d'où les valeurs de la pratique, **0,9 ou 0,99** ; \(\gamma = 1\) n'est acceptable que pour des épisodes finis et courts.
 
 {{% comment %}}SOURCE: LAPAN ch.1 p.50-51{{% /comment %}}
+
+---
 
 ## Du retour à la valeur d'état
 
@@ -33,6 +37,8 @@ $$
 
 > [!NOTE]
  **Une remarque de notation, et elle est volontaire.** J'écris ici \(v(s)\) sans indice, alors que vous verrez partout ailleurs \(v_\pi(s)\), la notation définitive du cours ; mais à ce stade nous sommes dans un processus **sans actions**, il n'y a aucune politique, donc rien à mettre en indice. Nous ferons la mise à niveau en section 1.5, dès que \(\pi\) existera.
+
+---
 
 ## Le calcul à la main, et le moment où tout casse
 

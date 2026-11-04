@@ -5,6 +5,8 @@ weight: 12
 
 Trois niveaux, un seul carnet. **Aucun réseau de neurones, aucun GPU : chaque exercice s'exécute en quelques secondes**, et ce budget dérisoire est une information en soi, puisqu'il vous autorise à *répéter* une mesure cent fois plutôt qu'à la commenter une fois. Deux règles partout : une graine passée à `reset(seed=...)`, et les **cinq** valeurs de `step()` dépaquetées.
 
+---
+
 ## Niveau 1 : Implémentation guidée
 
 **Objectif.** Faire passer l'environnement-jouet de la section 1.6 à l'interface Gymnasium, puis mesurer l'agent aléatoire sur CartPole et poser une enveloppe sur celui-ci.
@@ -71,6 +73,8 @@ print(f"{L.mean():.1f} pas en moyenne, écart-type {L.std(ddof=1):.1f}, max {L.m
 
 {{< colab url="TODO" label="Niveau 1 : environnement-jouet, agent aléatoire, enveloppe" >}}
 
+---
+
 ## Niveau 2 : Hyperparamètres et sensibilité
 
 **Objectif.** Cette semaine n'entraîne rien : le seul hyperparamètre disponible est l'\(\varepsilon\) de l'enveloppe, et la seule quantité à régler est **le nombre d'épisodes qu'il faut pour qu'une moyenne soit crédible**. Installez l'habitude maintenant : tous les résultats des quatorze semaines suivantes seront des moyennes.
@@ -95,6 +99,8 @@ print("épisodes requis pour ±1 pas :", int(np.ceil(s ** 2))) # s/sqrt(n) <= 1
 * À écrire noir sur blanc : les **100 épisodes consécutifs** de la frontière de récompense ne sont pas un chiffre rond arbitraire. Dites, avec *votre* \(s\), quelle précision ils achètent.
 
 {{< colab url="TODO" label="Niveau 2 : balayage d'epsilon et crédibilité d'une moyenne" >}}
+
+---
 
 ## Niveau 3 : Extension créative, choisir l'environnement de votre projet
 

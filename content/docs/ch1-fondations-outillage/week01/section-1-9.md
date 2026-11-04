@@ -86,6 +86,8 @@ Avec `reset()`, `step()`, les deux espaces et `sample()`, vous disposez d'enviro
 
 {{% comment %}}SOURCE: LAPAN ch.2 p.75{{% /comment %}}
 
+---
+
 ## Préparer le jalon 1 : choisir votre environnement de projet
 
 L'évaluation de ce cours est un projet continu, et son premier jalon, en semaine 3, suppose que vous ayez **choisi un environnement** et su justifier ce choix. La ressource à utiliser est **la documentation de Gymnasium**, et elle seule : c'est le catalogue officiel, il est à jour, et il est organisé par familles. On y trouve la commande classique comme CartPole, les jeux d'arcade, la physique articulée, et la possibilité de définir le vôtre. Méfiez-vous des listes d'environnements trouvées dans des livres ou des billets de blogue : elles vieillissent très vite et les noms changent. Pour choisir, posez-vous cinq questions, celles auxquelles cette semaine vous a appris à répondre.

@@ -17,6 +17,8 @@ Voici la cible de la semaine. Un agent qui tire ses actions au hasard sur CartPo
 
 {{% comment %}}SOURCE: LAPAN ch.2 p.74-75{{% /comment %}}
 
+---
+
 ## Objectifs de la semaine
 
 À la fin de cette semaine, vous saurez :
@@ -31,6 +33,8 @@ Voici la cible de la semaine. Un agent qui tire ses actions au hasard sur CartPo
 - Mesurer un agent aléatoire sur CartPole et comparer le résultat à la frontière de récompense de 195.
 - Écrire une enveloppe (*wrapper*) et la chaîner sur un environnement existant.
 - Choisir, et justifier, un environnement pour votre projet de session.
+
+---
 
 ## Prérequis et outils
 

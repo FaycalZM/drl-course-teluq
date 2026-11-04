@@ -12,6 +12,8 @@ Replaçons d'abord notre discipline sur la carte. L'**apprentissage supervisé**
 > [!NOTE]
  **Notez bien cette intuition :** notre discipline emprunte à l'apprentissage supervisé l'essentiel de sa machinerie (réseaux profonds, descente de gradient stochastique, rétropropagation), mais elle en fait un **usage** radicalement différent. Voilà pourquoi la semaine 2, consacrée à PyTorch, n'est pas un détour.
 
+---
+
 ## Les trois difficultés propres à l'apprentissage par renforcement
 
 Trois difficultés lui sont spécifiques, et je veux que vous les connaissiez **maintenant** : chacune reviendra plus loin sous la forme d'un algorithme précis.
