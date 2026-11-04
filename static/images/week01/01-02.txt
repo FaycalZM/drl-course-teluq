@@ -1,0 +1,1 @@
+Figure 1-2. La journée d'un employé de bureau comme chaîne de Markov à quatre états.

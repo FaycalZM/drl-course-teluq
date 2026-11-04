@@ -20,6 +20,13 @@
   {{- $caption = printf "Légende manquante pour %s" $src -}}
   {{- warnf "bookfig : légende absente → %s" $captionPath -}}
 {{- end -}}
+{{- /*
+  Crédit (D39) : rendu **uniquement** si le fichier {nom}.credit.txt existe. Et il
+  n'existe que pour les sources dont la licence impose l'attribution — d2l.ai, en
+  CC BY-SA 4.0, où créditer est la condition de la réutilisation. `deploy_figures.py`
+  décide, à partir du champ `license` de figure_sources.json ; ce patron ne fait
+  qu'obéir. Pour toutes les autres figures, aucune source n'apparaît nulle part.
+*/ -}}
 {{- $credit := .Get "credit" -}}
 {{- if and (not $credit) (fileExists $creditPath) -}}
   {{- $credit = trim (readFile $creditPath) "\n \t" -}}

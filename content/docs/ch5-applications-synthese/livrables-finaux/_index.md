@@ -10,7 +10,7 @@ weight: 16
 - **Dépôt GitHub** complet et reproductible
 
 {{% comment %}}
-SQUELETTE Phase 1 — à rédiger en Phase 4 : attentes, grille d'évaluation, format de
+SQUELETTE Phase 1 : à rédiger en Phase 4 : attentes, grille d'évaluation, format de
 soutenance.
 {{% /comment %}}
 

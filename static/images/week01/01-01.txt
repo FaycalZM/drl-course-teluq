@@ -1,0 +1,1 @@
+Figure 1-1. Les deux entités et les trois canaux : l'agent envoie des actions, l'environnement renvoie observations et récompenses.

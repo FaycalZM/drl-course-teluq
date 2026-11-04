@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Quiz Semaine 1 : Rappels RL et API Gymnasium</title>
+ <style>
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body {
+ font-family: 'Segoe UI', system-ui, sans-serif;
+ background: #f8fafc;
+ color: #1e293b;
+ padding: 1.5rem;
+ line-height: 1.6;
+ }
+ h1 {
+ font-size: 1.4rem;
+ font-weight: 700;
+ color: #0f172a;
+ margin-bottom: 0.5rem;
+ }
+ .subtitle {
+ color: #64748b;
+ font-size: 0.9rem;
+ margin-bottom: 1.5rem;
+ }
+ .question {
+ background: #fff;
+ border: 1px solid #e2e8f0;
+ border-radius: 10px;
+ padding: 1.25rem 1.5rem;
+ margin-bottom: 1.25rem;
+ transition: box-shadow 0.2s;
+ }
+ .question:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+ .question-text {
+ font-weight: 600;
+ margin-bottom: 0.85rem;
+ font-size: 0.98rem;
+ }
+ .option {
+ display: flex;
+ align-items: flex-start;
+ gap: 0.6rem;
+ padding: 0.5rem 0.75rem;
+ border-radius: 6px;
+ margin-bottom: 0.35rem;
+ cursor: pointer;
+ transition: background 0.15s;
+ font-size: 0.93rem;
+ }
+ .option-text { flex: 1; min-width: 0; }
+ .option:hover { background: #f1f5f9; }
+ .option input[type="radio"] { margin-top: 0.2rem; accent-color: #6366f1; flex-shrink: 0; }
+ .feedback {
+ margin-top: 0.85rem;
+ padding: 0.6rem 1rem;
+ border-radius: 6px;
+ font-size: 0.9rem;
+ display: none;
+ }
+ .feedback.correct { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+ .feedback.incorrect { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+ .btn-check {
+ margin-top: 1rem;
+ padding: 0.5rem 1.2rem;
+ background: #6366f1;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ font-size: 0.9rem;
+ font-weight: 600;
+ cursor: pointer;
+ transition: background 0.2s;
+ }
+ .btn-check:hover { background: #4f46e5; }
+ .score-box {
+ background: #ede9fe;
+ border: 1px solid #c4b5fd;
+ border-radius: 10px;
+ padding: 1.5rem;
+ text-align: center;
+ display: none;
+ margin-top: 1rem;
+ }
+ .score-box h2 { font-size: 1.6rem; color: #4c1d95; margin-bottom: 0.25rem; }
+ .score-box p { color: #6d28d9; font-size: 0.95rem; }
+ .btn-reset {
+ margin-top: 1rem;
+ padding: 0.5rem 1.4rem;
+ background: #7c3aed;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ cursor: pointer;
+ font-weight: 600;
+ transition: background 0.2s;
+ }
+ .btn-reset:hover { background: #6d28d9; }
+ #submit-all {
+ display: block;
+ width: 100%;
+ padding: 0.75rem;
+ background: #0f172a;
+ color: #fff;
+ border: none;
+ border-radius: 8px;
+ font-size: 1rem;
+ font-weight: 700;
+ cursor: pointer;
+ margin-top: 1.5rem;
+ transition: background 0.2s;
+ }
+ #submit-all:hover { background: #1e3a5f; }
+ </style>
+</head>
+<body>
+
+<h1> Quiz : Semaine 1</h1>
+<p class="subtitle">Rappels d'apprentissage par renforcement et API Gymnasium · 11 questions</p>
+
+<form id="quiz-form">
+
+ <div class="question" data-correct="c">
+ <div class="question-text">1. Une partie d'échecs est modélisée en apprentissage par renforcement (<em>reinforcement learning</em>). Quelle est la différence entre l'<strong>état</strong> de l'environnement et l'<strong>observation</strong> reçue par l'agent ?</div>
+ <label class="option"><input type="radio" name="q1" value="a" /><span class="option-text">a) Il n'y en a aucune : aux échecs la position des pièces est entièrement visible, donc l'état et l'observation coïncident</span></label>
+ <label class="option"><input type="radio" name="q1" value="b" /><span class="option-text">b) L'observation, c'est l'état augmenté des informations de diagnostic publiées dans le dictionnaire <code>info</code></span></label>
+ <label class="option"><input type="radio" name="q1" value="c" /><span class="option-text">c) L'état comprend la position <em>et</em> l'adversaire (son niveau, son humeur, sa tactique), alors que l'observation se limite à la position sur l'échiquier</span></label>
+ <label class="option"><input type="radio" name="q1" value="d" /><span class="option-text">d) L'état est ce que l'agent reconstruit à partir de ses observations passées ; l'environnement, lui, n'a pas d'état propre</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">2. Vous modélisez la météo par une chaîne de Markov à deux états [ensoleillé, pluvieux]. Vos données montrent que la probabilité de pluie après une journée ensoleillée n'est pas la même en été qu'en hiver : la propriété de Markov est violée. Quelle correction rétablit le modèle ?</div>
+ <label class="option"><input type="radio" name="q2" value="a" /><span class="option-text">a) Agrandir l'espace d'états en y intégrant la saison : [ensoleillé+été, ensoleillé+hiver, pluvieux+été, pluvieux+hiver]</span></label>
+ <label class="option"><input type="radio" name="q2" value="b" /><span class="option-text">b) Garder deux états et faire dépendre la matrice de transition du pas de temps écoulé depuis le début de l'épisode</span></label>
+ <label class="option"><input type="radio" name="q2" value="c" /><span class="option-text">c) Garder deux états et fournir à l'agent les deux dernières observations au lieu d'une seule</span></label>
+ <label class="option"><input type="radio" name="q2" value="d" /><span class="option-text">d) Ne rien changer : la propriété de Markov tolère la dépendance à un facteur extérieur tant que ce facteur n'est pas observé</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">3. La matrice de transition d'un processus de Markov à N états est carrée (N × N) et sa cellule (i, j) donne la probabilité de passer de l'état i à l'état j. Dans le tableau symbole ↔ variable de la semaine, à quelle variable de l'API Gymnasium correspond-elle ?</div>
+ <label class="option"><input type="radio" name="q3" value="a" /><span class="option-text">a) À <code>env.observation_space</code>, qui décrit l'ensemble des transitions autorisées</span></label>
+ <label class="option"><input type="radio" name="q3" value="b" /><span class="option-text">b) Au dictionnaire <code>info</code> renvoyé par <code>step()</code>, où l'environnement publie ses probabilités de transition</span></label>
+ <label class="option"><input type="radio" name="q3" value="c" /><span class="option-text">c) À <code>env.unwrapped.P</code>, disponible pour tout environnement Gymnasium</span></label>
+ <label class="option"><input type="radio" name="q3" value="d" /><span class="option-text">d) À aucune : la dynamique reste enfermée dans l'environnement et l'agent n'y accède que par les transitions qu'il échantillonne</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">4. Le retour (<em>return</em>) s'écrit G_t = R_(t+1) + γ·R_(t+2) + γ²·R_(t+3) + … Vous posez γ = 1 sur un processus de Markov avec récompense dont le graphe ne possède aucun état puits (tout état a au moins une transition sortante) et dont toutes les récompenses immédiates sont positives. Que valent les valeurs d'état ?</div>
+ <label class="option"><input type="radio" name="q4" value="a" /><span class="option-text">a) Chaque état prend pour valeur la plus forte récompense immédiate accessible depuis lui</span></label>
+ <label class="option"><input type="radio" name="q4" value="b" /><span class="option-text">b) Elles sont infinies pour tous les états : la somme ne converge pas, et c'est précisément la raison d'être du facteur d'actualisation γ &lt; 1</span></label>
+ <label class="option"><input type="radio" name="q4" value="c" /><span class="option-text">c) Elles restent finies : les lignes de la matrice de transition sommant à 1, la somme des récompenses est bornée</span></label>
+ <label class="option"><input type="radio" name="q4" value="d" /><span class="option-text">d) La question n'a pas de sens : par définition, γ doit être strictement inférieur à 1</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">5. Une politique (<em>policy</em>) se définit comme π(a | s) = Pr{A_t = a | S_t = s}. Dans l'agent aléatoire de la semaine, la ligne <code>action = env.action_space.sample()</code> réalise quelle politique sur CartPole-v1 ?</div>
+ <label class="option"><input type="radio" name="q5" value="a" /><span class="option-text">a) Aucune : l'agent tire au hasard, il n'a donc pas de politique</span></label>
+ <label class="option"><input type="radio" name="q5" value="b" /><span class="option-text">b) Une politique déterministe, puisque chaque appel ne renvoie qu'une seule action</span></label>
+ <label class="option"><input type="radio" name="q5" value="c" /><span class="option-text">c) La politique uniforme : π(a | s) = 0,5 pour chacune des deux poussées, quel que soit l'état</span></label>
+ <label class="option"><input type="radio" name="q5" value="d" /><span class="option-text">d) Une politique gloutonne sur l'espace d'actions, <code>sample()</code> renvoyant l'action la plus probable</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">6. Dans une session CartPole-v1, <code>e.action_space</code> affiche <code>Discrete(2)</code> et <code>e.observation_space</code> affiche un <code>Box</code> de forme (4,). Quelle lecture est exacte ?</div>
+ <label class="option"><input type="radio" name="q6" value="a" /><span class="option-text">a) Deux actions mutuellement exclusives numérotées 0 et 1 (pousser à gauche, pousser à droite) ; l'observation est un vecteur de quatre réels bornés : position et vitesse du chariot, angle et vitesse angulaire du pôle</span></label>
+ <label class="option"><input type="radio" name="q6" value="b" /><span class="option-text">b) Deux actions numérotées 1 et 2 ; l'observation est un vecteur de quatre entiers</span></label>
+ <label class="option"><input type="radio" name="q6" value="c" /><span class="option-text">c) Une action continue dans l'intervalle [0, 2] ; l'observation est une image à quatre canaux</span></label>
+ <label class="option"><input type="radio" name="q6" value="d" /><span class="option-text">d) L'environnement accepte deux actions simultanées à chaque pas, et <code>Box</code> indique que les quatre observations sont discrétisées en boîtes</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">7. Vous reprenez un script trouvé en ligne qui contient <code>obs = env.reset()</code> puis <code>obs, reward, done, info = env.step(action)</code>. Que faut-il corriger pour Gymnasium ?</div>
+ <label class="option"><input type="radio" name="q7" value="a" /><span class="option-text">a) Rien : Gymnasium accepte les deux formes par compatibilité ascendante</span></label>
+ <label class="option"><input type="radio" name="q7" value="b" /><span class="option-text">b) <code>reset()</code> renvoie le couple <code>(obs, info)</code> et <code>step()</code> renvoie cinq valeurs, <code>(obs, reward, terminated, truncated, info)</code> ; le <code>done</code> du code ancien correspond à <code>terminated</code></span></label>
+ <label class="option"><input type="radio" name="q7" value="c" /><span class="option-text">c) Seul l'appel à <code>reset()</code> est à corriger : <code>step()</code> renvoie bien quatre valeurs</span></label>
+ <label class="option"><input type="radio" name="q7" value="d" /><span class="option-text">d) Il faut renommer <code>done</code> en <code>truncated</code>, Gymnasium ayant rebaptisé le signal de fin d'épisode</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">8. CartPole-v1 est enveloppé par défaut dans un <code>TimeLimit</code>. Au pas qui atteint cette limite de temps, le pôle étant encore en équilibre, que renvoie <code>step()</code> ?</div>
+ <label class="option"><input type="radio" name="q8" value="a" /><span class="option-text">a) <code>terminated = True</code> et <code>truncated = False</code> : l'épisode est fini, peu importe la cause</span></label>
+ <label class="option"><input type="radio" name="q8" value="b" /><span class="option-text">b) <code>terminated = True</code> et <code>truncated = True</code> : les deux signaux sont levés ensemble à chaque fin d'épisode</span></label>
+ <label class="option"><input type="radio" name="q8" value="c" /><span class="option-text">c) <code>terminated = False</code> et <code>truncated = False</code> : l'enveloppe gère la limite de temps et appelle <code>reset()</code> d'elle-même</span></label>
+ <label class="option"><input type="radio" name="q8" value="d" /><span class="option-text">d) <code>terminated = False</code> et <code>truncated = True</code> : il y a troncature (<em>truncated</em>) et non terminaison (<em>terminated</em>), car l'état atteint n'est pas un état terminal</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">9. Un algorithme des semaines suivantes construit sa cible par amorçage (<em>bootstrapping</em>) : il y ajoute la valeur estimée de l'état suivant, sauf quand l'épisode est fini. Que se passe-t-il s'il utilise <code>terminated or truncated</code> comme condition de fin ?</div>
+ <label class="option"><input type="radio" name="q9" value="a" /><span class="option-text">a) Rien : les deux signaux marquent la fin de l'épisode, la cible est identique</span></label>
+ <label class="option"><input type="radio" name="q9" value="b" /><span class="option-text">b) L'entraînement s'interrompt sur une erreur dès la première troncature</span></label>
+ <label class="option"><input type="radio" name="q9" value="c" /><span class="option-text">c) Il traite la coupure de temps comme un état terminal : il apprend que l'avenir après ce pas ne vaut rien et optimise donc une fonction de perte erronée, silencieusement</span></label>
+ <label class="option"><input type="radio" name="q9" value="d" /><span class="option-text">d) Il converge simplement plus lentement, puisqu'il exploite moins de transitions</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">10. Vous voulez diviser toutes les récompenses par 100 avant qu'elles n'atteignent votre agent, sans toucher au code de l'environnement. Quelle construction convient ?</div>
+ <label class="option"><input type="radio" name="q10" value="a" /><span class="option-text">a) Dériver de <code>RewardWrapper</code>, redéfinir <code>reward(rew)</code>, puis écrire <code>env = MonEnveloppe(gym.make("CartPole-v1"))</code></span></label>
+ <label class="option"><input type="radio" name="q10" value="b" /><span class="option-text">b) Dériver de <code>ObservationWrapper</code> et redéfinir <code>step()</code> sans appeler la méthode de la classe mère</span></label>
+ <label class="option"><input type="radio" name="q10" value="c" /><span class="option-text">c) Modifier <code>env.unwrapped</code> pour remplacer la récompense à la source</span></label>
+ <label class="option"><input type="radio" name="q10" value="d" /><span class="option-text">d) C'est impossible : une enveloppe (<em>wrapper</em>) ne peut filtrer que les observations et les actions</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">11. Supposons que votre agent aléatoire tienne en moyenne 13 pas par épisode sur CartPole-v1, soit une récompense cumulée de 13. La frontière de récompense (<em>reward boundary</em>) de l'environnement vaut 195. Comment l'interpréter ?</div>
+ <label class="option"><input type="radio" name="q11" value="a" /><span class="option-text">a) L'environnement est résolu dès qu'un épisode atteint 195 pas</span></label>
+ <label class="option"><input type="radio" name="q11" value="b" /><span class="option-text">b) L'environnement est réputé résolu quand la récompense moyenne atteint 195 sur 100 épisodes consécutifs : l'agent aléatoire est à environ 7 % de l'objectif</span></label>
+ <label class="option"><input type="radio" name="q11" value="c" /><span class="option-text">c) 195 est la récompense maximale qu'un épisode de CartPole-v1 peut rapporter</span></label>
+ <label class="option"><input type="radio" name="q11" value="d" /><span class="option-text">d) 195 est le nombre d'épisodes d'entraînement nécessaires pour résoudre l'environnement</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <button type="button" id="submit-all" onclick="submitQuiz()">Valider mes réponses</button>
+</form>
+
+<div class="score-box" id="score-box">
+ <h2 id="score-text"></h2>
+ <p id="score-msg"></p>
+ <button class="btn-reset" onclick="resetQuiz()"> Recommencer</button>
+</div>
+
+<script>
+const explanations = {
+ q1: "L'état de l'environnement est interne et le plus souvent non mesurable : aux échecs, il englobe l'adversaire lui-même. L'observation n'en est qu'une projection partielle, parfois bruitée. L'API ne vous livre jamais S_t, seulement obs, et c'est pour ces situations que l'apprentissage par renforcement a été conçu.",
+ q2: "La propriété de Markov exige que l'état suffise à décrire l'avenir du système. Quand un facteur caché manque, le remède est d'agrandir l'espace d'états, au prix de sa taille. L'historique récent ne suffit pas ici : deux jours de météo ne révèlent pas la saison. Et indexer la matrice sur le temps détruirait la stationnarité, que la propriété de Markov implique.",
+ q3: "Aucune variable : la matrice de transition est la dynamique de l'environnement, et l'agent ne la voit pas. C'est la ligne la plus importante du tableau de la semaine : tout le cours existe parce que cette matrice est inaccessible et qu'il faut apprendre à partir d'interactions échantillonnées. Quelques environnements tabulaires publient bien leurs probabilités, mais c'est l'exception et aucune méthode du cours n'en dépend.",
+ q4: "Sans état puits et avec des récompenses positives, la somme non actualisée diverge : la valeur est infinie partout, donc inutilisable pour comparer deux états. C'est l'argument qui introduit γ. À γ = 0 l'agent est totalement myope (il ne voit que R_(t+1)) ; en pratique on prend 0,9 ou 0,99. Et γ = 1 reste admissible (il appartient à l'intervalle [0, 1]), mais seulement pour des épisodes finis et courts.",
+ q5: "Une politique est une distribution de probabilité sur les actions pour chaque état ; une politique déterministe n'est que le cas particulier où une action a la probabilité 1. Tirer uniformément dans l'espace d'actions est donc bien une politique, et c'est celle qui sert de référence cette semaine : vous en mesurerez vous-même la performance au laboratoire.",
+ q6: "Discrete(n) énumère n éléments mutuellement exclusifs numérotés de 0 à n−1 ; Box(low, high, shape, dtype) décrit un tenseur de réels bornés : ici quatre nombres, avec l'angle du pôle en radians. Les deux sont des sous-classes de Space, et c'est cette abstraction commune qui permet d'écrire un agent indépendant de l'environnement.",
+ q7: "Deux corrections, pas une. reset() renvoie l'observation initiale et un dictionnaire info (souvent vide) ; step() renvoie cinq valeurs. Le dépaquetage à quatre valeurs lève une erreur bien visible, mais obs = env.reset() échoue en silence : obs devient le couple (obs, info). Les documents plus anciens, le manuel compris, nomment done la troisième valeur ; ce done correspond à terminated, jamais à truncated.",
+ q8: "terminated signale que le processus de décision markovien a atteint un état terminal (le pôle est tombé, le chariot est sorti des limites). truncated signale une coupure artificielle, extérieure au processus, le plus souvent un TimeLimit. Dans les deux cas il faut appeler reset(), mais les deux signaux ne sont pas interchangeables.",
+ q9: "Après une troncature, l'environnement aurait continué : l'état suivant a une valeur réelle et l'amorçage doit s'y poursuivre. Seul un véritable état terminal a une valeur nulle. Confondre les deux ne produit aucune erreur Python : le code tourne, les valeurs de fin d'épisode sont systématiquement sous-estimées et la perte optimisée n'est pas la bonne. La cible doit se conditionner sur terminated seul : voilà pourquoi la distinction est posée dès la semaine 1.",
+ q10: "Wrapper hérite de Env et reçoit dans son constructeur l'environnement à envelopper ; trois sous-classes filtrent un seul canal : ObservationWrapper (observation), RewardWrapper (reward), ActionWrapper (action). Si vous redéfinissez step() ou reset(), vous devez appeler la méthode de la classe mère. Et comme une enveloppe est elle-même un Env, les enveloppes s'emboîtent aussi profondément qu'on le souhaite.",
+ q11: "CartPole rapporte 1 à chaque pas : la récompense cumulée est donc la durée de l'épisode. La frontière de récompense est une moyenne sur 100 épisodes consécutifs, pas la performance d'un épisode chanceux. L'écart entre cette moyenne et 195 est ce que les semaines suivantes doivent combler, et c'est pourquoi on mesure d'abord l'agent aléatoire."
+};
+
+function submitQuiz() {
+ const questions = document.querySelectorAll('.question');
+ let score = 0;
+ let answered = 0;
+
+ questions.forEach((q, i) => {
+ const name = `q${i + 1}`;
+ const correct = q.dataset.correct;
+ const selected = q.querySelector(`input[name="${name}"]:checked`);
+ const feedback = q.querySelector('.feedback');
+
+ if (selected) {
+ answered++;
+ feedback.style.display = 'block';
+ if (selected.value === correct) {
+ score++;
+ feedback.className = 'feedback correct';
+ feedback.textContent = ' Correct ! ' + explanations[name];
+ } else {
+ feedback.className = 'feedback incorrect';
+ feedback.textContent = ` Incorrect. La bonne réponse est (${correct.toUpperCase()}). ` + explanations[name];
+ }
+ }
+ });
+
+ if (answered < questions.length) {
+ alert('Veuillez répondre à toutes les questions avant de valider.');
+ return;
+ }
+
+ const scoreBox = document.getElementById('score-box');
+ scoreBox.style.display = 'block';
+ document.getElementById('score-text').textContent = `${score} / ${questions.length}`;
+ const pct = Math.round((score / questions.length) * 100);
+ let msg = '';
+ if (pct >= 90) msg = ' Excellent ! Vous maîtrisez les fondements du cours.';
+ else if (pct >= 70) msg = ' Très bien ! Quelques révisions sur les points incorrects et vous serez prêt·e.';
+ else if (pct >= 50) msg = ' Pas mal ! Relisez les sections correspondantes avant de continuer.';
+ else msg = ' Prenez le temps de revoir le cours, puis réessayez.';
+ document.getElementById('score-msg').textContent = msg;
+ scoreBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+ document.getElementById('quiz-form').reset();
+ document.querySelectorAll('.feedback').forEach(f => { f.style.display = 'none'; f.textContent = ''; });
+ document.getElementById('score-box').style.display = 'none';
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

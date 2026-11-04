@@ -1,0 +1,1 @@
+Figure 1-5. En ajoutant les actions, la matrice de transition devient un pavé de dimensions |S| × |S| × |A|.

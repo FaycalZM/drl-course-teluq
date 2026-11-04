@@ -19,6 +19,6 @@ Quinze semaines, cinq modules, un projet continu qui court du début à la fin.
 plus les livrables finaux. Aucun examen terminal.
 
 {{% comment %}}
-SQUELETTE Phase 1 — page à enrichir en Phase 4 : fil conducteur entre les modules
+SQUELETTE Phase 1 : page à enrichir en Phase 4 : fil conducteur entre les modules
 (diagramme Mermaid), charge de travail hebdomadaire, modalités des laboratoires.
 {{% /comment %}}
