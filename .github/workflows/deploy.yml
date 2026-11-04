@@ -40,6 +40,7 @@ jobs:
         run: hugo --minify
 
       - name: Setup Pages
+        if: ${{ github.event.repository.has_pages }}
         uses: actions/configure-pages@v5
         with:
           enablement: true
@@ -50,6 +51,7 @@ jobs:
           path: public/
 
   deploy:
+    if: ${{ github.event.repository.has_pages }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
