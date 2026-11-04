@@ -9,7 +9,7 @@ Le cours suit la notation de la 2ᵉ édition de *Reinforcement Learning: An Int
 pour rester cohérent avec SCI1060.
 
 {{% comment %}}
-SQUELETTE Phase 1 — table à reprendre depuis source-assets/notation.md, qui est la
+SQUELETTE Phase 1 : table à reprendre depuis source-assets/notation.md, qui est la
 référence de travail. Mettre à jour les deux ensemble.
 {{% /comment %}}
 
