@@ -7,6 +7,8 @@ weight: 6
 
 Troisième et dernier étage. Nous ajoutons les **actions**, et l'agent cesse d'être un spectateur. La différence tient en une phrase, à lire lentement : l'agent **n'observe plus passivement** les transitions d'état, il peut **choisir activement une action** à chaque transition. C'est tout, et c'est aussi tout le cours.
 
+---
+
 ## L'espace d'actions transforme la matrice en pavé
 
 Un **processus de décision markovien** (*Markov decision process*) est un processus de Markov avec récompense auquel on ajoute un **espace d'actions** (*action space*) fini \(\mathcal{A}\). La conséquence est mécanique : les probabilités dépendent désormais de l'action, donc il ne faut plus une matrice mais une pile de matrices, une par action. Un pavé de dimensions \(|\mathcal{S}| \times |\mathcal{S}| \times |\mathcal{A}|\), indexé par l'état de départ \(i\) en hauteur, l'état d'arrivée \(j\) en largeur et l'action \(k\) en profondeur. La **Figure 1-5** montre ce passage de la matrice au pavé mieux que n'importe quelle description.
@@ -30,6 +32,8 @@ L'exemple qui rend ce pavé concret, et qui introduit la stochasticité, est un 
 > [!NOTE]
  **Notez bien cette intuition :** la stochasticité du monde n'est pas une nuisance que nos méthodes devront tolérer, c'est une information rangée **dans le modèle**, à l'intérieur du pavé \(p(s' \mid s, a)\), que l'agent **ne voit jamais**. Ce qu'on peut faire en décidant de l'apprendre explicitement, c'est la semaine 13, celle des modèles du monde.
 
+---
+
 ## La politique
 
 Il reste à nommer l'objet que tout le cours va chercher à construire. Une **politique** (*policy*) est un ensemble de règles qui définit le comportement de l'agent. Quatre politiques pour notre robot, pour voir que l'éventail est large : avancer aveuglément ; contourner les obstacles en vérifiant si le dernier *avancer* a échoué ; tourner systématiquement à droite, ce qui fait tourner le robot en rond ; ou choisir au hasard, ce qui donne un robot ivre. Sur le même processus de décision markovien, elles produisent des retours radicalement différents : voilà pourquoi en trouver une bonne est un problème intéressant.
@@ -43,6 +47,8 @@ $$
 Pourquoi une probabilité et non une simple fonction de \(s\) vers \(a\) ? Pour introduire explicitement de l'**aléa** dans le comportement. Et vous savez déjà pourquoi nous en aurons besoin : sans aléa, pas d'exploration. Une politique **déterministe** reste parfaitement représentable, comme le cas particulier où une action a la probabilité 1 et les autres 0.
 
 {{% comment %}}SOURCE: LAPAN ch.1 p.56{{% /comment %}}
+
+---
 
 ## La valeur d'état, mise à niveau : le pont vers la semaine 3
 

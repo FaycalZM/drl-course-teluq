@@ -13,6 +13,8 @@ Quelle que soit sa complexité, un environnement doit rendre quatre services : d
 
 {{% comment %}}SOURCE: LAPAN ch.2 p.64-65{{% /comment %}}
 
+---
+
 ## La classe `Space`
 
 Cette abstraction est la classe `Space`, dont la **Figure 1-6** donne la hiérarchie. Elle expose une propriété et trois méthodes, toutes abstraites et réimplémentées par chaque sous-classe : `shape`, la forme de l'espace, avec la même signification que pour un tableau NumPy ; `sample()`, qui renvoie un élément tiré au hasard ; `contains(x)`, qui teste l'appartenance ; et `seed()`, qui fixe la graine du générateur aléatoire, propagée aux sous-espaces, ce qui rend une exécution reproductible.

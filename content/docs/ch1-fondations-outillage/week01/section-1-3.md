@@ -11,6 +11,8 @@ Un **processus de Markov** (*Markov process*), ou chaîne de Markov, est un syst
 
 {{% comment %}}SOURCE: LAPAN ch.1 p.45{{% /comment %}}
 
+---
+
 ## La propriété de Markov
 
 Il faut une hypothèse pour que ce cadre fonctionne, et c'est **la propriété de Markov** (*Markov property*) : la dynamique future du système, depuis n'importe quel état, ne doit dépendre **que de cet état**.
@@ -31,6 +33,8 @@ L'objectif de cette propriété mérite d'être dit en clair, car c'est ce qui l
 
 > [!TIP]
  **Notez bien cette technique, vous la réutiliserez :** un modèle non markovien se répare en **agrandissant l'espace d'états** : ajoutez la saison, et les quatre états [beau+été, beau+hiver, pluie+été, pluie+hiver] rétablissent la propriété. Le prix est explicite, la taille de l'espace d'états : c'est l'arbitrage même qui justifiera l'empilement d'images en semaine 7.
+
+---
 
 ## La matrice de transition, et un exemple à quatre états
 
@@ -56,6 +60,8 @@ La **Figure 1-3** reprend le même graphe en portant les probabilités sur les a
 | **Computer** | 20 % | 20 % | 10 % | 50 % |
 
 {{% comment %}}SOURCE: LAPAN ch.1 p.48{{% /comment %}}
+
+---
 
 ## L'épisode, la matrice inconnue, la stationnarité
 

@@ -15,6 +15,8 @@ C'est ce que fait la classe `Wrapper`. Elle **hérite de `Env`** et son construc
 
 {{% comment %}}SOURCE: LAPAN ch.2 p.76{{% /comment %}}
 
+---
+
 ## Une enveloppe qui referme une boucle ouverte en section 1.1
 
 Écrivons celle qui me plaît le plus pédagogiquement. Souvenez-vous du dilemme exploration-exploitation : un agent qui suit sa politique sans jamais s'en écarter reste enfermé dans ce qu'il connaît déjà. Remède : remplacer, de temps en temps, l'action de l'agent par une action au hasard, avec une probabilité \(\varepsilon\), disons 10 %.
@@ -50,6 +52,8 @@ Treize lignes, et vous venez de lire l'une des méthodes les plus pratiques et l
  **La propriété qui rend tout cela puissant :** comme `Wrapper` hérite de `Env` et expose la même interface, une enveloppe peut en envelopper une autre : on **imbrique les enveloppes aussi profondément qu'on veut**. En semaine 5, notre environnement Atari sera une pile de cinq ou six enveloppes posées sur l'environnement nu, chacune faisant une chose et une seule.
 
 {{% comment %}}SOURCE: LAPAN ch.2 p.77{{% /comment %}}
+
+---
 
 ## Voir ce que fait l'agent, depuis Colab
 

@@ -15,6 +15,8 @@ Le schéma canonique de toute la discipline tient en deux boîtes et trois flèc
 
 Trois canaux, pas quatre : l'agent ne reçoit ni le plan du labyrinthe, ni les probabilités de transition, ni la fonction de récompense. Tout l'édifice du cours existe parce que ce tuyau est étroit.
 
+---
+
 ## La récompense
 
 La **récompense** (*reward*) est une valeur scalaire que l'environnement nous remet périodiquement : un seul nombre, pas un rapport détaillé. Le mot important est « périodiquement », car **la fréquence n'est pas imposée**, d'une récompense à chaque seconde à une seule récompense dans toute l'existence de l'agent. Ce second cas n'est pas théorique : dans un système à récompense terminale unique, toutes les récompenses sauf la dernière valent zéro, et c'est le régime normal des jeux de plateau. Le terme « renforcement » vient de là : la récompense **renforce** le comportement, positivement ou négativement. Mais elle est **locale**, car une grosse récompense maintenant n'interdit rien pour la suite : c'est un peu comme braquer une banque. Ce que l'agent maximise, c'est la récompense **accumulée**, à laquelle la section 1.4 donnera un nom et une formule.
@@ -30,6 +32,8 @@ Gardez sous la main huit situations et, pour chacune, demandez-vous qui est l'ag
 
 {{% comment %}}SOURCE: LAPAN ch.1 p.39-40{{% /comment %}}
 
+---
+
 ## L'agent, l'environnement, les actions
 
 Un **agent** est quelqu'un ou quelque chose qui interagit avec l'environnement en exécutant des actions, en faisant des observations et en recevant d'éventuelles récompenses ; dans notre pratique, ce sera toujours « un morceau de code qui met en œuvre une politique ». L'**environnement** se définit par exclusion : **tout ce qui est extérieur à l'agent**. Pris au pied de la lettre cela désigne le reste de l'univers, ce qui est manifestement excessif ; en pratique nous découpons, et ce découpage est une décision de conception qui vous appartiendra au moment de définir votre projet.
@@ -37,6 +41,8 @@ Un **agent** est quelqu'un ou quelque chose qui interagit avec l'environnement e
 Une **action** est ce que l'agent peut faire, et il n'existe que deux familles. Les actions **discrètes** forment un ensemble fini de possibilités mutuellement exclusives : gauche *ou* droite. Les actions **continues** portent une valeur attachée : un angle de braquage, une pression sur une pédale. L'argument qui les sépare suffit : « tourner le volant » ne dit rien du tout, il faut dire de combien de degrés et dans quel sens. Cette distinction structure le plan du cours : les semaines 4 à 8 traitent les espaces discrets, la semaine 9 est consacrée aux espaces continus.
 
 {{% comment %}}SOURCE: LAPAN ch.1 p.40-41{{% /comment %}}
+
+---
 
 ## État et observation : la distinction sur laquelle tout repose
 
