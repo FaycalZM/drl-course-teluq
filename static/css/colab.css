@@ -8,6 +8,25 @@
   opacity: 0.8;
 }
 
+/* Carnet pas encore écrit : le badge reste visible mais n'est pas cliquable, et le dit.
+   Un <a href="TODO"> donnait une 404 indiscernable d'un lien valide. */
+.colab-link--pending {
+  cursor: not-allowed;
+}
+
+.colab-link--pending img {
+  filter: grayscale(100%);
+  opacity: 0.45;
+}
+
+.colab-pending-note {
+  margin-left: var(--padding-1);
+  font-size: var(--font-size-smaller);
+  font-style: italic;
+  color: var(--gray-500);
+  vertical-align: middle;
+}
+
 .bookfig {
   margin: var(--padding-2) 0;
   text-align: center;

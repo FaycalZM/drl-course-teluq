@@ -1,0 +1,1 @@
+Figure 1-7. La hiérarchie Wrapper : trois sous-classes de filtrage, une par canal de communication.

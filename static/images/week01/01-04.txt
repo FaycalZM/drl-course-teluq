@@ -1,0 +1,1 @@
+Figure 1-4. Le processus de Markov avec récompense : chaque transition porte désormais une récompense.

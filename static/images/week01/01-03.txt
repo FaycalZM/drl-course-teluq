@@ -1,0 +1,1 @@
+Figure 1-3. La même chaîne, avec les probabilités de transition portées sur les arêtes.

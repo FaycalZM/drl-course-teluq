@@ -1,0 +1,1 @@
+Figure 1-6. La hiérarchie Space : une seule abstraction décrit les actions et les observations. La troisième sous-classe, que le schéma nomme Spaces, est la classe Tuple de Gymnasium.

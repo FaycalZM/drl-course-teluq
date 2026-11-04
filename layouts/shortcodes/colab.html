@@ -1,5 +1,25 @@
-{{ $url := .Get "url" }}
-{{ $label := default "Open in Google Colab" (.Get "label") }}
+{{- /*
+  Badge « Ouvrir dans Colab ».
+    {{< colab url="https://colab.research.google.com/..." >}}
+    {{< colab url="TODO" >}}   → badge désactivé, pas un lien mort
+
+  Un carnet pas encore écrit se déclare `url="TODO"` (RUNBOOK §1, étape 5) et
+  `scripts/check_week.py` les compte. Sans le garde ci-dessous, Hugo produisait
+  <a href="TODO">, qui se résout relativement à la page : l'étudiant cliquait un badge
+  identique à un badge valide et tombait sur une 404. On rend donc un badge grisé,
+  visiblement en attente, plutôt qu'un lien cassé.
+*/ -}}
+{{- $url := .Get "url" | default "" -}}
+{{- $label := default "Open in Google Colab" (.Get "label") -}}
+{{- $badge := "https://colab.research.google.com/assets/colab-badge.svg" -}}
+{{- if or (eq $url "TODO") (eq $url "") -}}
+<span class="colab-link colab-link--pending" role="note"
+      aria-label="Carnet Colab à venir" title="Carnet Colab à venir">
+  <img src="{{ $badge }}" alt="{{ $label }} (carnet à venir)" loading="lazy">
+  <span class="colab-pending-note">Carnet à venir</span>
+</span>
+{{- else -}}
 <a href="{{ $url }}" target="_blank" rel="noopener" class="colab-link">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="{{ $label }}">
+  <img src="{{ $badge }}" alt="{{ $label }}" loading="lazy">
 </a>
+{{- end -}}
