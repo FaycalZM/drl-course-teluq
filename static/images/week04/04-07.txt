@@ -1,0 +1,1 @@
+Figure 4-7. L'agent remplace la probabilité de transition par la fréquence observée : le compte d'une issue divisé par le total des exécutions.

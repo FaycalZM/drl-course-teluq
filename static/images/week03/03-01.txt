@@ -1,0 +1,1 @@
+Figure 3-1. L'agent fondé sur la politique : l'observation entre dans une fonction entraînable, dont la sortie est la politique, et l'action est tirée au sort selon elle.

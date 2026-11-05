@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Quiz Semaine 4 : Équation de Bellman et apprentissage tabulaire</title>
+ <style>
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body {
+ font-family: 'Segoe UI', system-ui, sans-serif;
+ background: #f8fafc;
+ color: #1e293b;
+ padding: 1.5rem;
+ line-height: 1.6;
+ }
+ h1 {
+ font-size: 1.4rem;
+ font-weight: 700;
+ color: #0f172a;
+ margin-bottom: 0.5rem;
+ }
+ .subtitle {
+ color: #64748b;
+ font-size: 0.9rem;
+ margin-bottom: 1.5rem;
+ }
+ .question {
+ background: #fff;
+ border: 1px solid #e2e8f0;
+ border-radius: 10px;
+ padding: 1.25rem 1.5rem;
+ margin-bottom: 1.25rem;
+ transition: box-shadow 0.2s;
+ }
+ .question:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+ .question-text {
+ font-weight: 600;
+ margin-bottom: 0.85rem;
+ font-size: 0.98rem;
+ }
+ .option {
+ display: flex;
+ align-items: flex-start;
+ gap: 0.6rem;
+ padding: 0.5rem 0.75rem;
+ border-radius: 6px;
+ margin-bottom: 0.35rem;
+ cursor: pointer;
+ transition: background 0.15s;
+ font-size: 0.93rem;
+ }
+ .option-text { flex: 1; min-width: 0; }
+ .option:hover { background: #f1f5f9; }
+ .option input[type="radio"] { margin-top: 0.2rem; accent-color: #6366f1; flex-shrink: 0; }
+ .feedback {
+ margin-top: 0.85rem;
+ padding: 0.6rem 1rem;
+ border-radius: 6px;
+ font-size: 0.9rem;
+ display: none;
+ }
+ .feedback.correct { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+ .feedback.incorrect { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+ .btn-check {
+ margin-top: 1rem;
+ padding: 0.5rem 1.2rem;
+ background: #6366f1;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ font-size: 0.9rem;
+ font-weight: 600;
+ cursor: pointer;
+ transition: background 0.2s;
+ }
+ .btn-check:hover { background: #4f46e5; }
+ .score-box {
+ background: #ede9fe;
+ border: 1px solid #c4b5fd;
+ border-radius: 10px;
+ padding: 1.5rem;
+ text-align: center;
+ display: none;
+ margin-top: 1rem;
+ }
+ .score-box h2 { font-size: 1.6rem; color: #4c1d95; margin-bottom: 0.25rem; }
+ .score-box p { color: #6d28d9; font-size: 0.95rem; }
+ .btn-reset {
+ margin-top: 1rem;
+ padding: 0.5rem 1.4rem;
+ background: #7c3aed;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ cursor: pointer;
+ font-weight: 600;
+ transition: background 0.2s;
+ }
+ .btn-reset:hover { background: #6d28d9; }
+ #submit-all {
+ display: block;
+ width: 100%;
+ padding: 0.75rem;
+ background: #0f172a;
+ color: #fff;
+ border: none;
+ border-radius: 8px;
+ font-size: 1rem;
+ font-weight: 700;
+ cursor: pointer;
+ margin-top: 1.5rem;
+ transition: background 0.2s;
+ }
+ #submit-all:hover { background: #1e3a5f; }
+ </style>
+</head>
+<body>
+
+<h1>Quiz : Semaine 4</h1>
+<p class="subtitle">Équation de Bellman et apprentissage tabulaire · 12 questions</p>
+
+<form id="quiz-form">
+
+ <div class="question" data-correct="b">
+ <div class="question-text">1. Trois familles de symboles vont vous suivre jusqu'à la fin du cours : v_π et q_π, puis v_* et q_*, puis V et Q. Que désignent-elles, et laquelle de ces quantités la semaine 4 calcule-t-elle réellement ?</div>
+ <label class="option"><input type="radio" name="q1" value="a" /><span class="option-text">a) Les minuscules désignent les valeurs d'état et les majuscules les valeurs d'action : v_π(s) est la valeur de l'état s, Q(s,a) celle du couple état-action, et la semaine calcule les deux</span></label>
+ <label class="option"><input type="radio" name="q1" value="b" /><span class="option-text">b) Les minuscules sont les valeurs <em>vraies</em> définies par le formalisme, que personne ne possède : v_π et q_π sous une politique donnée, v_* et q_* sous une politique optimale. Les majuscules V et Q sont une estimation tabulaire, un tableau rangé en mémoire, et c'est elle que tous les algorithmes de la semaine calculent</span></label>
+ <label class="option"><input type="radio" name="q1" value="c" /><span class="option-text">c) Les minuscules sont les valeurs sous une politique quelconque et les majuscules les valeurs sous la politique optimale : écrire V(s) revient donc à écrire v_*(s)</span></label>
+ <label class="option"><input type="radio" name="q1" value="d" /><span class="option-text">d) Les majuscules désignent l'approximation paramétrée par un vecteur de poids, celle que l'on entraîne par descente de gradient ; les minuscules désignent les tables exactes obtenues par balayage</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">2. Un environnement déterministe à trois états : depuis l'état 1, aller à droite rapporte 1 et termine l'épisode en 2 ; aller vers le bas rapporte 2 et termine en 3. La meilleure politique est donc « toujours vers le bas », qui vaut 2,0. On ajoute un quatrième état : l'état 3 n'est plus terminal, et la seule action qui en part rapporte −20. Les quatre mêmes politiques valent alors 1,0 pour « toujours à droite », −18 pour « toujours vers le bas », −8,5 pour « moitié, moitié » et −16,1 pour « 10 % à droite ». Qu'est-ce que ce basculement établit ?</div>
+ <label class="option"><input type="radio" name="q2" value="a" /><span class="option-text">a) Que le facteur d'actualisation était mal choisi : avec un γ suffisamment petit, le −20 serait escompté presque à zéro et « toujours vers le bas » resterait la meilleure politique</span></label>
+ <label class="option"><input type="radio" name="q2" value="b" /><span class="option-text">b) Que les récompenses immédiates de l'état 1 ont changé en même temps que l'environnement, et que le classement des politiques devait donc changer avec elles</span></label>
+ <label class="option"><input type="radio" name="q2" value="c" /><span class="option-text">c) Qu'une valeur d'état n'est pas une propriété de l'environnement seul, et surtout que choisir l'action de plus grande récompense immédiate est un piège : aucune des deux récompenses de l'état 1 n'a bougé, seule une conséquence située deux pas plus loin a changé, et elle suffit à inverser la meilleure première action</span></label>
+ <label class="option"><input type="radio" name="q2" value="d" /><span class="option-text">d) Que la gourmandise à un pas redevient correcte si l'on compare les récompenses actualisées γ·r plutôt que les récompenses brutes : c'est l'actualisation qui manquait, pas le regard sur l'avenir</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">3. Dans un monde en grille, sous la politique aléatoire équiprobable à quatre actions et avec γ = 0,9, vous examinez une case centrale : elle n'est au bord de rien, aucune de ses quatre transitions ne rapporte de récompense, et ses quatre voisines portent les valeurs 2,3 en haut, 0,4 à droite, −0,4 en bas et 0,7 à gauche. Que vaut cette case centrale selon l'équation de Bellman ?</div>
+ <label class="option"><input type="radio" name="q3" value="a" /><span class="option-text">a) 0,675, soit 0,7 après arrondi, c'est-à-dire <code>0,9 × (2,3 + 0,4 − 0,4 + 0,7) / 4</code></span></label>
+ <label class="option"><input type="radio" name="q3" value="b" /><span class="option-text">b) 0,75, c'est-à-dire la moyenne des quatre voisines : les récompenses étant nulles, il n'y a rien à actualiser</span></label>
+ <label class="option"><input type="radio" name="q3" value="c" /><span class="option-text">c) 2,07, c'est-à-dire <code>0,9 × 2,3</code> : c'est la meilleure promesse disponible depuis cette case qui en fixe la valeur</span></label>
+ <label class="option"><input type="radio" name="q3" value="d" /><span class="option-text">d) 2,7, c'est-à-dire <code>0,9 × (2,3 + 0,4 − 0,4 + 0,7)</code> : les quatre voisines sont toutes atteignables depuis la case centrale, donc toutes comptent</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">4. Vous devez écrire les deux équations d'optimalité de Bellman, et la place du max décide de ce que vous écrivez. Quelle version est correcte ?</div>
+ <label class="option"><input type="radio" name="q4" value="a" /><span class="option-text">a) Les deux max sont placés devant la somme sur les successeurs et portent tous les deux sur l'action courante a : l'optimalité, c'est choisir la meilleure action, et cela s'écrit de la même façon pour une valeur d'état et pour une valeur d'action</span></label>
+ <label class="option"><input type="radio" name="q4" value="b" /><span class="option-text">b) Le max de v_* est à l'intérieur du crochet et porte sur a', celui de q_* est placé devant la somme : c'est la valeur d'état qui regarde un pas en avant, et la valeur d'action qui choisit</span></label>
+ <label class="option"><input type="radio" name="q4" value="c" /><span class="option-text">c) Aucune des deux équations ne contient de max : l'optimalité s'obtient en remplaçant π(a | s) par la politique optimale π_*(a | s) dans l'équation de Bellman ordinaire</span></label>
+ <label class="option"><input type="radio" name="q4" value="d" /><span class="option-text">d) Pour v_*, le max porte sur l'action courante a et se place devant la somme : <code>v_*(s) = max_a Σ_{s',r} p(s',r | s,a) [ r + γ v_*(s') ]</code>. Pour q_*, l'action a est imposée par l'argument, donc le max est à l'intérieur du crochet et porte sur a', l'action du pas suivant : <code>q_*(s,a) = Σ_{s',r} p(s',r | s,a) [ r + γ max_a' q_*(s',a') ]</code></span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">5. On vous remet la table complète de q_* pour un environnement, et rien d'autre : ni les probabilités de transition, ni la fonction de récompense. Pouvez-vous agir optimalement ?</div>
+ <label class="option"><input type="radio" name="q5" value="a" /><span class="option-text">a) Oui, et sans même un regard en avant : il suffit de lire la ligne de l'état courant et de jouer <code>argmax_a q_*(s,a)</code>. Une valeur d'action met en cache le résultat de toutes les recherches à un pas, et c'est ce qui permet d'agir optimalement sans rien savoir de la dynamique</span></label>
+ <label class="option"><input type="radio" name="q5" value="b" /><span class="option-text">b) Non : comparer deux actions demande de prendre l'espérance de leurs issues, donc de connaître p(s' | s,a). Une table de valeurs, qu'elle porte sur les états ou sur les couples, ne suffit jamais à décider</span></label>
+ <label class="option"><input type="radio" name="q5" value="c" /><span class="option-text">c) Oui, mais seulement si l'environnement est déterministe : dès que les transitions sont bruitées, q_* ne décrit plus qu'une issue parmi d'autres et il faut repasser par les probabilités</span></label>
+ <label class="option"><input type="radio" name="q5" value="d" /><span class="option-text">d) Oui, et c'est de surcroît plus économe : une table de q_* occupe moins de mémoire qu'une table de v_*, puisqu'elle évite de stocker une valeur par état</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">6. Vous avez évalué une politique π quelconque et vous disposez de v_π. Vous construisez π' en rendant la politique gloutonne par rapport à v_π, état par état. Qu'est-ce qui est garanti ?</div>
+ <label class="option"><input type="radio" name="q6" value="a" /><span class="option-text">a) Rien du tout : être glouton est précisément le piège de l'ouverture de la semaine, et une politique gloutonne par rapport à une valeur intermédiaire peut être arbitrairement mauvaise</span></label>
+ <label class="option"><input type="radio" name="q6" value="b" /><span class="option-text">b) Que π' est optimale : toute politique gloutonne par rapport à une fonction de valeur est optimale, c'est le résultat établi par la section sur l'optimalité</span></label>
+ <label class="option"><input type="radio" name="q6" value="c" /><span class="option-text">c) Que v_π'(s) ≥ v_π(s) en tout état, avec une inégalité stricte quelque part, sauf lorsque π était déjà optimale : dans ce seul cas v_π' = v_π, et cette fonction satisfait alors l'équation d'optimalité. π' est donc strictement meilleure, sans être optimale pour autant</span></label>
+ <label class="option"><input type="radio" name="q6" value="d" /><span class="option-text">d) Que π' est meilleure dans les états où l'action gloutonne diffère de celle de π, et éventuellement pire ailleurs : le théorème d'amélioration ne compare les deux politiques qu'état par état</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">7. L'itération sur la politique alterne une évaluation menée jusqu'à convergence et une amélioration. L'itération sur la valeur en est la version tronquée. Qu'est-ce qui est tronqué exactement, et quelle observation autorise la troncature ?</div>
+ <label class="option"><input type="radio" name="q7" value="a" /><span class="option-text">a) On tronque l'amélioration : au lieu de rendre la politique gloutonne en tout état, on ne la corrige que dans les états dont la valeur a bougé pendant le dernier balayage, ce qui économise la passe d'argmax</span></label>
+ <label class="option"><input type="radio" name="q7" value="b" /><span class="option-text">b) On tronque l'évaluation, et jusqu'au cas le plus brutal : un seul balayage. L'amélioration est conservée, repliée dans le <code>max_a</code> du balayage, si bien que la mise à jour ne diffère de celle de l'évaluation que par ce max. La justification est expérimentale : sur la grille de quatre cases sur quatre, la politique gloutonne par rapport à v_k est déjà optimale au troisième balayage, alors que les valeurs y sont encore autour de −3,0 là où elles finiront à −22</span></label>
+ <label class="option"><input type="radio" name="q7" value="c" /><span class="option-text">c) On tronque l'évaluation en changeant son critère d'arrêt : au lieu de s'arrêter quand plus aucun état ne change d'action, on s'arrête quand Δ &lt; ϑ, ce qui survient bien plus tôt</span></label>
+ <label class="option"><input type="radio" name="q7" value="d" /><span class="option-text">d) On ne tronque rien : les deux méthodes font les mêmes balayages, et l'itération sur la valeur est seulement plus rapide parce que son max évite de parcourir les actions une seconde fois pendant l'amélioration</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">8. L'agent tabulaire de la semaine tient trois tables : récompenses, transitions, valeurs. On vous demande de pointer l'endroit précis où cet agent consulte la dynamique de son environnement. Que répondez-vous ?</div>
+ <label class="option"><input type="radio" name="q8" value="a" /><span class="option-text">a) Nulle part : l'interface de l'environnement ne fournit jamais p(s' | s,a), donc cet agent est sans modèle, comme tous ceux du cours</span></label>
+ <label class="option"><input type="radio" name="q8" value="b" /><span class="option-text">b) Dans l'appel à <code>step()</code> : c'est l'environnement qui applique sa dynamique à chaque pas, et l'agent la consulte donc à chaque transition</span></label>
+ <label class="option"><input type="radio" name="q8" value="c" /><span class="option-text">c) Dans la table des récompenses, indexée par (état, action, état cible) : c'est elle qui contient le modèle de l'environnement, la table des transitions n'étant qu'un journal de visites</span></label>
+ <label class="option"><input type="radio" name="q8" value="d" /><span class="option-text">d) Dans le calcul de la valeur d'une action, à la ligne où le compte d'une issue est divisé par le total des exécutions du couple (état, action) : cet agent fabrique son propre p(s' | s,a) par comptage, puis le lit à l'intérieur de la mise à jour de Bellman</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">9. La forme incrémentale de Monte-Carlo s'écrit <code>V(S_t) ← V(S_t) + α [ G_t − V(S_t) ]</code>. TD(0) remplace la cible G_t par <code>R_(t+1) + γ V(S_(t+1))</code>. Qu'est-ce que cette seule substitution change ?</div>
+ <label class="option"><input type="radio" name="q9" value="a" /><span class="option-text">a) Elle rend la cible exacte : R_(t+1) est réellement observée et V(S_(t+1)) est déjà dans la table, donc plus rien n'est estimé dans le membre de droite</span></label>
+ <label class="option"><input type="radio" name="q9" value="b" /><span class="option-text">b) Elle oblige à connaître p(s' | s,a) : pour calculer γ V(S_(t+1)) il faut prendre l'espérance sur tous les successeurs possibles, exactement comme en programmation dynamique</span></label>
+ <label class="option"><input type="radio" name="q9" value="c" /><span class="option-text">c) La cible devient disponible dès l'instant t+1, donc la mise à jour devient incrémentale et en ligne, sans attendre la fin de l'épisode ni même qu'il y en ait une. Le prix est double : elle ne regarde qu'un seul successeur échantillonné, c'est une mise à jour par échantillon et non en espérance, et elle s'appuie sur une estimation courante, c'est l'amorçage</span></label>
+ <label class="option"><input type="radio" name="q9" value="d" /><span class="option-text">d) Rien d'essentiel : V(S_(t+1)) n'est fiable qu'une fois l'épisode terminé, donc la mise à jour doit de toute façon être reportée à la fin de l'épisode</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">10. Vous écrivez Sarsa en repartant de votre Q-learning, mais vous laissez la ligne <code>cible_future = q[suivant].max()</code> inchangée. Sur la falaise, vos deux courbes se superposent. Que s'est-il passé ?</div>
+ <label class="option"><input type="radio" name="q10" value="a" /><span class="option-text">a) Vous avez écrit Q-learning deux fois. La cible ne contient plus l'action que la politique ε-gloutonne va réellement jouer, mais la meilleure action du pas suivant : votre Sarsa est redevenu hors politique, et comme aucune exception n'est levée, seules les deux courbes identiques vous le signalent</span></label>
+ <label class="option"><input type="radio" name="q10" value="b" /><span class="option-text">b) Sarsa a simplement convergé plus vite : le max propage la valeur plus énergiquement, les deux méthodes atteignent donc le même plateau et se superposent une fois les courbes lissées</span></label>
+ <label class="option"><input type="radio" name="q10" value="c" /><span class="option-text">c) Une erreur de forme était attendue : <code>q[suivant]</code> est un vecteur d'actions là où la cible de Sarsa doit être un scalaire. Que rien ne plante signale plutôt que la table a été mal dimensionnée</span></label>
+ <label class="option"><input type="radio" name="q10" value="d" /><span class="option-text">d) Rien de significatif : avec ε = 0,1, l'action ε-gloutonne est l'action gloutonne neuf fois sur dix, donc Q(S',A') et max_a Q(S',a) coïncident presque toujours et les deux méthodes sont de toute façon très proches</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">11. Sur la falaise, avec une sélection ε-gloutonne à ε = 0,1 pour les deux méthodes et 500 épisodes, Sarsa se stabilise autour de −25 par épisode et Q-learning autour de −50. C'est pourtant Q-learning qui a appris la politique optimale. Comment les deux moitiés de cette phrase peuvent-elles être vraies en même temps ?</div>
+ <label class="option"><input type="radio" name="q11" value="a" /><span class="option-text">a) Le pas d'apprentissage α = 0,5 est trop grand pour une cible qui contient un max : les valeurs de Q-learning oscillent, la politique jouée change sans cesse, et le score en ligne s'effondre. Réduire α ramène les deux courbes à la même hauteur</span></label>
+ <label class="option"><input type="radio" name="q11" value="b" /><span class="option-text">b) Parce que la politique apprise et la politique jouée sont deux objets différents. La cible de Q-learning contient max_a Q(S',a) : elle évalue la politique gloutonne, qui longe le bord au plus court, et c'est bien la meilleure. Mais l'agent joue la politique ε-gloutonne : une fois sur dix il tire une action au hasard, et au bord du gouffre ce tirage le fait tomber, à −100 la chute. La cible de Sarsa contient l'action réellement jouée, donc Sarsa tient compte de la règle de sélection, apprend le détour par les rangées du haut et joue bien une politique sous-optimale</span></label>
+ <label class="option"><input type="radio" name="q11" value="c" /><span class="option-text">c) Il y a un bogue : une méthode qui a appris la meilleure politique ne peut pas obtenir le pire score sur le même environnement. En pratique, un max s'est glissé dans la cible de Sarsa, ou il a disparu de celle de Q-learning</span></label>
+ <label class="option"><input type="radio" name="q11" value="d" /><span class="option-text">d) Q-learning n'a pas eu le temps de converger : apprendre hors politique coûte des échantillons, et 500 épisodes n'y suffisent pas. Avec dix fois plus d'épisodes, sa courbe rejoint puis dépasse celle de Sarsa</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">12. La question laissée ouverte en fin de semaine, et c'est ici qu'elle se règle : si la sélection d'action est purement gloutonne, c'est-à-dire ε = 0, Q-learning et Sarsa sont-ils le même algorithme ?</div>
+ <label class="option"><input type="radio" name="q12" value="a" /><span class="option-text">a) Non : le max de la cible de Q-learning et le Q(S',A') de celle de Sarsa sont deux expressions différentes, et « hors politique » comme « sur politique » sont des propriétés des formules, pas du réglage de ε</span></label>
+ <label class="option"><input type="radio" name="q12" value="b" /><span class="option-text">b) Les deux cibles coïncident, mais les deux algorithmes restent différents : Sarsa doit transporter A' d'un pas à l'autre, et cette variable supplémentaire modifie les tables obtenues</span></label>
+ <label class="option"><input type="radio" name="q12" value="c" /><span class="option-text">c) Non : à ε = 0, Sarsa n'explore plus et perd sa garantie de convergence, alors que Q-learning converge toujours vers q_*, puisque sa cible ne dépend pas de la politique suivie</span></label>
+ <label class="option"><input type="radio" name="q12" value="d" /><span class="option-text">d) Oui, pour les sélections d'action comme pour les mises à jour. Une sélection gloutonne choisit A' = argmax_a Q(S',a), donc Q(S',A') vaut exactement max_a Q(S',a) : les deux cibles sont la même expression, terme pour terme, et les deux agents produisent la même suite de tables</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <button type="button" id="submit-all" onclick="submitQuiz()">Valider mes réponses</button>
+</form>
+
+<div class="score-box" id="score-box">
+ <h2 id="score-text"></h2>
+ <p id="score-msg"></p>
+ <button class="btn-reset" onclick="resetQuiz()"> Recommencer</button>
+</div>
+
+<script>
+const explanations = {
+ q1: "Trois niveaux, trois notations, et ils ne sont pas interchangeables. Les minuscules sont des objets mathématiques : v_π(s) est l'espérance du retour quand on part de s et qu'on suit π, et personne ne la possède, c'est la cible que l'on vise. Les étoilées sont du même type, à ceci près que la politique est optimale. Les majuscules V et Q, elles, sont un tableau de nombres rangé en mémoire, initialisé arbitrairement et corrigé par des mises à jour : c'est tout ce que la semaine 4 produit, et c'est pourquoi les équations de la semaine portent une flèche d'affectation plutôt qu'un signe égal. La réponse (a) confond la distinction minuscule/majuscule avec la distinction v/q, qui est portée par la lettre et non par la casse. La réponse (c) est la plus intéressante, parce que c'est une convention réellement répandue : vous croiserez ailleurs des V qui désignent en fait v_*. Ce n'est pas une faute de leur part, mais cette convention rend invisible la distinction la plus importante de la semaine prochaine. La réponse (d) décrit v̂(s,w), la quatrième ligne de l'échelle : elle existe, mais c'est l'affaire de la semaine 5, où la table sera remplacée par une fonction paramétrée.",
+ q2: "Regardez ce qui a changé et ce qui n'a pas changé. Aller à droite rapporte toujours 1, aller vers le bas rapporte toujours 2 : les deux récompenses immédiates de l'état 1 sont intactes, ce qui élimine la réponse (b). Seule une conséquence située deux pas plus loin a bougé, et elle fait passer « toujours vers le bas » de 2,0 à 2 + (−20) = −18, pendant que « toujours à droite » reste à 1,0. Dix-neuf points d'écart, sur un environnement de quatre états, pour une erreur qui ne vient d'aucun mauvais calcul : elle vient d'avoir regardé la mauvaise quantité. C'est la gourmandise à un pas, et c'est le piège fondateur du domaine. La réponse (d) propose de le corriger en actualisant les récompenses immédiates, mais multiplier 1 et 2 par un même γ positif ne change pas leur classement : l'actualisation ne crée pas de l'information sur le futur, elle pondère un futur que l'on regarde déjà. La réponse (a) est la plus instructive : il est vrai qu'un γ très petit escompterait le −20 presque à zéro et rétablirait le classement initial. Mais choisir un γ myope pour sauver un raisonnement myope revient à changer le problème, et le piège revient intact dès que la conséquence tombe dans l'horizon. Ce qui manque est une quantité qui contienne déjà tout le futur, et ce sont exactement v_π et q_π.",
+ q3: "Déroulez l'équation terme par terme, c'est la vérification qui vaut mieux qu'une relecture. La politique étant équiprobable, chaque action pèse π(a | s) = 1/4. Les transitions étant déterministes, la somme intérieure sur les successeurs se réduit à un seul terme par action. Les récompenses étant nulles, il ne reste que γ v_π(s') pour chaque voisine. Donc v_π(centre) = 0,9 × (2,3 + 0,4 − 0,4 + 0,7) / 4 = 0,9 × 0,75 = 0,675, que l'arrondi affiche 0,7. La réponse (b) oublie γ : l'actualisation ne porte pas sur la récompense, qui est nulle ici, mais sur la valeur de l'état suivant, et elle s'applique donc quand même. La réponse (d) laisse tomber les poids π(a | s) : sans eux la valeur grossirait avec le nombre d'actions disponibles, ce qui n'a aucun sens, puisque ces poids somment à 1 par construction. La réponse (c) est l'erreur la plus importante à désapprendre : la somme pondérée par la politique est une moyenne, pas un maximum. Le max n'apparaît que dans l'équation d'optimalité, et c'est précisément lui qui sépare « évaluer une politique donnée » de « caractériser la meilleure ». Retenez enfin ce que vous venez de faire : vous avez vérifié une contrainte de cohérence entre voisins, et v_π est l'unique fonction qui la satisfait partout.",
+ q4: "La place du max n'est pas cosmétique, elle dit qui choisit et à quel instant. Dans v_*(s), rien n'est imposé : l'agent est libre de son action immédiate, donc le max porte sur a et se place devant la somme sur les successeurs. Dans q_*(s,a), l'action a est donnée par l'argument de la fonction, c'est la définition même d'une valeur d'action : elle ne peut donc pas être maximisée, et le seul choix qui reste est celui du pas suivant, d'où un max sur a' à l'intérieur du crochet. La réponse (a) maximise une action imposée, ce qui efface le second argument de q_*, et la réponse (b) échange exactement les deux places. La réponse (c) n'est pas absurde, et c'est pour cela qu'elle est utile : v_* est bien la valeur sous une politique optimale, donc on pourrait écrire l'équation ordinaire avec π_*. Mais cela supposerait de connaître π_*, alors que l'intérêt de l'équation d'optimalité est justement de caractériser v_* sans aucune politique ; remarquez que π a disparu de ses deux écritures. Prenez l'habitude de vérifier cette position avant de coder : un max déplacé ne lève aucune erreur, il fabrique une autre quantité, et il est à l'origine d'un biais que nous nommerons plus loin dans le cours.",
+ q5: "C'est le résultat charnière de la semaine, et il vaut la peine de le formuler dans les deux sens. Avec v_*, agir optimalement demande un regard d'un pas en avant : pour comparer deux actions, il faut savoir où chacune mène et avec quelles probabilités, donc connaître la dynamique. Avec q_*, il n'y a même plus de regard en avant : la fonction de valeur d'action met en cache le résultat de toutes les recherches à un pas, et un argmax sur une ligne de la table suffit. La réponse (b) est la méprise à lever : l'espérance sur les issues a bel et bien été prise, mais une fois pour toutes, au moment de calculer q_*. La réponse (c) tombe exactement sur ce point : les quatre valeurs 2,31, 1,98, 2,64 et 2,97 de l'exemple à 33 % de glissement montrent une valeur d'action qui intègre déjà le bruit des transitions, et c'est pourquoi la meilleure action y est celle qui n'aboutit qu'une fois sur trois. La réponse (d) inverse le bilan mémoire : une case par couple état-action au lieu d'une case par état, soit quatre fois plus sur un environnement à quatre actions. C'est le prix, et il est payé volontiers, parce que ce qu'il achète est l'autonomie vis-à-vis du modèle. Voilà pourquoi tout ce cours apprend des Q plutôt que des V.",
+ q6: "Trois gourmandises, trois verdicts, et seule la quantité change. Glouton sur la récompense immédiate est un piège, vous l'avez vu sur l'environnement à quatre états. Glouton sur v_* est optimal, parce que v_* contient déjà tout le futur. Glouton sur v_π n'est ni l'un ni l'autre : c'est strictement meilleur. Le théorème d'amélioration de politique dit précisément cela : si q_π(s, π'(s)) ≥ v_π(s) en tout état, alors v_π'(s) ≥ v_π(s) en tout état, et la stricte inégalité se transmet là où elle se produit. La politique gloutonne satisfait l'hypothèse par construction, puisqu'elle choisit en chaque état l'action de plus grand q_π. La réponse (d) est l'erreur la plus naturelle : elle lit le théorème comme une comparaison locale, alors que tout son contenu est la transmission du local au global, obtenue en déroulant l'espérance jusqu'à faire apparaître v_π'. La réponse (b) confond v_π et v_*, qui sont deux lignes différentes de l'échelle de notations. La réponse (a) jette le bébé avec l'eau du bain : le piège de l'ouverture concernait la récompense immédiate, pas une fonction de valeur. Retenez enfin l'argument de clôture : si l'amélioration ne donne rien, c'est que v_π satisfait déjà l'équation d'optimalité, donc que la politique était optimale. Il n'existe aucun plateau intermédiaire où l'on resterait bloqué.",
+ q7: "Les deux mises à jour mises l'une sous l'autre ne diffèrent que par un symbole : la somme Σ_a π(a | s), qui moyenne sur les actions, devient max_a, qui sélectionne. C'est ce max qui est l'amélioration, repliée dans le balayage, et c'est pourquoi elle cesse d'exister comme étape séparée. Ce qui est tronqué est donc l'évaluation, et la troncature ne coûte pas la garantie de convergence : on peut l'interrompre après un nombre fini de balayages, et le cas important est celui d'un seul. La justification n'est pas théorique, elle est sous vos yeux dans la grille de quatre cases sur quatre : la politique gloutonne par rapport à v_k ne change plus à partir du troisième balayage, alors que les valeurs sont encore fausses d'un facteur sept. On n'a pas besoin de valeurs exactes pour prendre les bonnes décisions, donc évaluer jusqu'à convergence paie très cher une précision qui ne change aucune décision. La réponse (c) mérite un mot, parce qu'elle mélange les deux critères d'arrêt qui coexistent dans l'itération sur la politique : la boucle d'évaluation s'arrête sur Δ &lt; ϑ, qui mesure les valeurs, et le bloc d'amélioration s'arrête quand plus aucun état ne change d'action, qui mesure la politique. Ils ne sont pas interchangeables. Notez enfin la discipline que ce cours tient : la boucle d'itération sur la valeur produit V, et c'est une passe finale séparée d'argmax qui produit π.",
+ q8: "C'est la question à poser devant n'importe quel agent du cours, et cette semaine vous pouvez montrer la ligne. L'agent n'a pas p(s' | s,a), donc il le fabrique : il compte les triplets (état, action, état cible), et dans le calcul de la valeur d'une action, il divise le compte d'une issue par le total des exécutions du couple. Dix exécutions de l'action 1 dans l'état 0, trois atterrissages dans l'état 4 et sept dans l'état 5, cela donne le compteur {4: 3, 5: 7}, donc les probabilités estimées 0,3 et 0,7, injectées directement dans la mise à jour de Bellman. La réponse (a) part d'un fait exact, l'interface ne donne jamais p, et en tire la conclusion inverse de la bonne : c'est précisément parce qu'elle ne le donne pas que l'agent l'estime, et une dynamique estimée reste une dynamique lue. La réponse (b) confond subir la dynamique et la consulter : un appel de pas d'exécution échantillonne un seul successeur et ne dit rien de la distribution, et c'est exactement ce avec quoi les méthodes sans modèle devront vivre. La réponse (c) ne garde que la moitié du modèle : les récompenses observées sont nécessaires, mais ce qui rend la mise à jour en espérance possible est la distribution sur les successeurs, et elle vient des compteurs. Remarquez au passage que la sélection d'action de cet agent est un argmax pur, sans aucune exploration : les cent pas aléatoires de chaque tour la fournissent déjà, et c'est très exactement l'endroit où une méthode ε-gloutonne s'insérerait dans un agent sans modèle.",
+ q9: "Tout le blocage de Monte-Carlo tient dans le symbole G_t, qui n'est connu qu'à la fin de l'épisode. Remplacer cette cible par la récompense observée plus l'estimation courante de l'état atteint la rend disponible un pas plus tard, et la méthode devient entièrement incrémentale, en ligne, insensible aux épisodes très longs comme aux tâches qui ne terminent jamais. En échange, elle accumule deux approximations : la transition est échantillonnée, donc c'est une mise à jour par échantillon et non en espérance, et la valeur suivante est une estimation, donc il y a amorçage. Les trois familles se placent alors proprement : la cible de Monte-Carlo est une estimation parce qu'un retour échantillonné remplace une espérance inconnue, celle de la programmation dynamique parce que V(S_(t+1)) remplace v_π(S_(t+1)) inconnue, et celle de TD pour les deux raisons à la fois. La réponse (a) oublie la seconde, la réponse (b) la première. La réponse (d) est la plus tentante : non, on n'attend rien, et c'est tout l'intérêt. Si après vingt-cinq minutes de route vous êtes immobilisé dans un embouteillage durable, vous savez déjà que votre estimation de trente minutes était optimiste, et attendre d'être rentré pour l'écrire n'est pas de la prudence mais du gaspillage. Deux détails pratiques, enfin : l'erreur TD δ_t porte sur V(S_t) mais n'est disponible qu'à t+1, puisqu'elle fait intervenir R_(t+1) et S_(t+1), d'où la mise à jour écrite après l'exécution du pas ; et la valeur future vaut zéro lorsque l'état atteint est terminal, ce qui s'écrit par une condition explicite, en prenant garde qu'un épisode tronqué par une limite de temps n'est pas un épisode terminé.",
+ q10: "Entre les deux méthodes, il n'y a que deux différences, et vous venez d'en supprimer une. La première est la position du choix d'action : Sarsa choisit A avant la boucle interne et A' à l'intérieur, parce que sa mise à jour en a besoin, alors que Q-learning choisit au début de chaque pas et n'a aucune action à transporter. La seconde est la cible : Q(S',A') chez Sarsa, max_a Q(S',a) chez Q-learning. En gardant le max, votre cible ne contient plus l'action que la politique ε-gloutonne va réellement jouer, et vous avez écrit deux fois le même algorithme, sans la moindre exception pour vous avertir. C'est pour cela que la superposition des deux courbes est le bon test : elle n'est pas un résultat, c'est un symptôme. La réponse (c) est un réflexe de lecture de code qui se trompe de cible : l'appel de maximum renvoie bien un scalaire, le programme est valide, et c'est exactement le problème. La réponse (d) est la plus riche d'enseignement : il est vrai que les deux cibles coïncident neuf fois sur dix, et c'est tout de même ce dixième qui décide. Au bord de la falaise, une déviation coûte cent, si bien qu'une divergence une fois sur dix sépare un score de −25 d'un score de −50. Deux cibles presque toujours égales ne sont pas interchangeables lorsque les conséquences sont à ce point asymétriques.",
+ q11: "Les deux moitiés de la phrase sont vraies parce qu'elles parlent de deux objets différents : la politique apprise et la politique jouée. La cible de Q-learning contient un max, donc elle évalue la politique gloutonne, qui longe le bord au plus court et qui est bel et bien optimale dans cet environnement. Mais l'agent, lui, joue la politique ε-gloutonne, et une fois sur dix il tire une action au hasard : au bord du gouffre, ce tirage le fait tomber, à cent points la chute, avec retour au départ. La cible de Sarsa contient l'action qui sera réellement jouée, donc Sarsa tient compte de la règle de sélection, apprend que longer la falaise quand on dévie une fois sur dix est une mauvaise idée, et contourne par les rangées du haut. Sa politique est sous-optimale, et c'est la bonne réponse au problème qu'on lui a réellement posé. La réponse (a) accuse le pas d'apprentissage, qui n'a rien à voir : le coût vient de l'asymétrie de l'environnement, un gouffre collé au chemin le plus court. La réponse (d) attend la convergence, mais la courbe de Q-learning ne monte pas avec le nombre d'épisodes, parce que la perte vient de la politique jouée et non d'un apprentissage inachevé. La réponse (c) crie au bogue devant un résultat qui heurte l'intuition, et c'est le réflexe à désapprendre : ici les deux courbes se séparent exactement comme prévu. Deux prolongements à retenir : si l'on fait décroître ε, les deux méthodes convergent vers la politique optimale, puisque l'écart entre apprise et jouée se referme ; et si vous rejouez les deux politiques apprises de façon purement gloutonne, le classement s'inverse.",
+ q12: "Écrivez les deux mises à jour l'une sous l'autre et remplacez A' par ce qu'une sélection gloutonne choisit : A' = argmax_a Q(S',a), donc Q(S',A') = max_a Q(S',a). Les deux crochets deviennent la même expression, terme pour terme. Et comme les deux agents choisissent leurs actions dans la même table avec la même règle, ils suivent la même trajectoire : ce ne sont pas seulement les formules qui coïncident, ce sont les deux suites de tables, ce qui est bien l'énoncé le plus fort que la question demandait. La réponse (a) prend une étiquette pour une propriété éternelle : sur politique et hors politique décrivent le rapport entre la cible et la politique de comportement, et à ε = 0 la politique de comportement est la politique gloutonne, si bien qu'il ne reste plus rien à séparer. C'est aussi la lecture inverse de la falaise : les deux méthodes ne diffèrent que dans la mesure où la politique jouée diffère de la gloutonne. La réponse (b) a raison sur un point, Sarsa garde une variable de plus, et tort sur la conséquence, puisque cette variable est lue dans la même table ; une seule réserve subsiste, et elle est anecdotique : si une transition ramène l'agent dans l'état qu'il vient de quitter, Sarsa a choisi A' avant que la case ne soit mise à jour, et ce cas limite peut désigner deux actions différentes. La réponse (c) rappelle une condition réelle de convergence et l'attribue à une seule méthode : à ε = 0, aucune des deux n'explore, et aucune des deux ne garantit plus que tous les couples état-action continuent d'être mis à jour. C'est justement à cela que sert ε, et c'est pourquoi le correctif de la falaise consiste à le faire décroître plutôt qu'à l'annuler."
+};
+
+function submitQuiz() {
+ const questions = document.querySelectorAll('.question');
+ let score = 0;
+ let answered = 0;
+
+ questions.forEach((q, i) => {
+ const name = `q${i + 1}`;
+ const correct = q.dataset.correct;
+ const selected = q.querySelector(`input[name="${name}"]:checked`);
+ const feedback = q.querySelector('.feedback');
+
+ if (selected) {
+ answered++;
+ feedback.style.display = 'block';
+ if (selected.value === correct) {
+ score++;
+ feedback.className = 'feedback correct';
+ feedback.textContent = ' Correct ! ' + explanations[name];
+ } else {
+ feedback.className = 'feedback incorrect';
+ feedback.textContent = ` Incorrect. La bonne réponse est (${correct.toUpperCase()}). ` + explanations[name];
+ }
+ }
+ });
+
+ if (answered < questions.length) {
+ alert('Veuillez répondre à toutes les questions avant de valider.');
+ return;
+ }
+
+ const scoreBox = document.getElementById('score-box');
+ scoreBox.style.display = 'block';
+ document.getElementById('score-text').textContent = `${score} / ${questions.length}`;
+ const pct = Math.round((score / questions.length) * 100);
+ let msg = '';
+ if (pct >= 90) msg = ' Excellent ! Vous maîtrisez les fondements du cours.';
+ else if (pct >= 70) msg = ' Très bien ! Quelques révisions sur les points incorrects et vous serez prêt·e.';
+ else if (pct >= 50) msg = ' Pas mal ! Relisez les sections correspondantes avant de continuer.';
+ else msg = ' Prenez le temps de revoir le cours, puis réessayez.';
+ document.getElementById('score-msg').textContent = msg;
+ scoreBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+ document.getElementById('quiz-form').reset();
+ document.querySelectorAll('.feedback').forEach(f => { f.style.display = 'none'; f.textContent = ''; });
+ document.getElementById('score-box').style.display = 'none';
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

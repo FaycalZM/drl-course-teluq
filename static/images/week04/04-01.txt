@@ -1,0 +1,1 @@
+Figure 4-1. Un quatrième état, une récompense de −20, et la meilleure politique bascule : la gourmandise à un pas ne regarde pas assez loin.

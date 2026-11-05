@@ -1,0 +1,1 @@
+Figure 3-6. Sur FrozenLake, les retours ne prennent que deux valeurs. Le 70ᵉ percentile vaut exactement 0, et le filtre naïf retient tout le lot.

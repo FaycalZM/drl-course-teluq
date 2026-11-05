@@ -1,0 +1,1 @@
+Figure 4-9. Somme des récompenses par épisode sur 500 épisodes : la méthode qui a appris la meilleure politique obtient le pire score en ligne.
