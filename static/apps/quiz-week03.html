@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Quiz Semaine 3 : Méthode d'entropie croisée (CEM)</title>
+ <style>
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body {
+ font-family: 'Segoe UI', system-ui, sans-serif;
+ background: #f8fafc;
+ color: #1e293b;
+ padding: 1.5rem;
+ line-height: 1.6;
+ }
+ h1 {
+ font-size: 1.4rem;
+ font-weight: 700;
+ color: #0f172a;
+ margin-bottom: 0.5rem;
+ }
+ .subtitle {
+ color: #64748b;
+ font-size: 0.9rem;
+ margin-bottom: 1.5rem;
+ }
+ .question {
+ background: #fff;
+ border: 1px solid #e2e8f0;
+ border-radius: 10px;
+ padding: 1.25rem 1.5rem;
+ margin-bottom: 1.25rem;
+ transition: box-shadow 0.2s;
+ }
+ .question:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+ .question-text {
+ font-weight: 600;
+ margin-bottom: 0.85rem;
+ font-size: 0.98rem;
+ }
+ .option {
+ display: flex;
+ align-items: flex-start;
+ gap: 0.6rem;
+ padding: 0.5rem 0.75rem;
+ border-radius: 6px;
+ margin-bottom: 0.35rem;
+ cursor: pointer;
+ transition: background 0.15s;
+ font-size: 0.93rem;
+ }
+ .option-text { flex: 1; min-width: 0; }
+ .option:hover { background: #f1f5f9; }
+ .option input[type="radio"] { margin-top: 0.2rem; accent-color: #6366f1; flex-shrink: 0; }
+ .feedback {
+ margin-top: 0.85rem;
+ padding: 0.6rem 1rem;
+ border-radius: 6px;
+ font-size: 0.9rem;
+ display: none;
+ }
+ .feedback.correct { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+ .feedback.incorrect { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+ .btn-check {
+ margin-top: 1rem;
+ padding: 0.5rem 1.2rem;
+ background: #6366f1;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ font-size: 0.9rem;
+ font-weight: 600;
+ cursor: pointer;
+ transition: background 0.2s;
+ }
+ .btn-check:hover { background: #4f46e5; }
+ .score-box {
+ background: #ede9fe;
+ border: 1px solid #c4b5fd;
+ border-radius: 10px;
+ padding: 1.5rem;
+ text-align: center;
+ display: none;
+ margin-top: 1rem;
+ }
+ .score-box h2 { font-size: 1.6rem; color: #4c1d95; margin-bottom: 0.25rem; }
+ .score-box p { color: #6d28d9; font-size: 0.95rem; }
+ .btn-reset {
+ margin-top: 1rem;
+ padding: 0.5rem 1.4rem;
+ background: #7c3aed;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ cursor: pointer;
+ font-weight: 600;
+ transition: background 0.2s;
+ }
+ .btn-reset:hover { background: #6d28d9; }
+ #submit-all {
+ display: block;
+ width: 100%;
+ padding: 0.75rem;
+ background: #0f172a;
+ color: #fff;
+ border: none;
+ border-radius: 8px;
+ font-size: 1rem;
+ font-weight: 700;
+ cursor: pointer;
+ margin-top: 1.5rem;
+ transition: background 0.2s;
+ }
+ #submit-all:hover { background: #1e3a5f; }
+ </style>
+</head>
+<body>
+
+<h1>Quiz : Semaine 3</h1>
+<p class="subtitle">Méthode d'entropie croisée (CEM) · 12 questions</p>
+
+<form id="quiz-form">
+
+ <div class="question" data-correct="c">
+ <div class="question-text">1. Vous devez placer CEM sur les trois axes de la taxonomie. Quelle est la seule combinaison correcte, avec la conséquence concrète qui l'accompagne ?</div>
+ <label class="option"><input type="radio" name="q1" value="a" /><span class="option-text">a) Avec modèle, fondée sur la valeur, hors politique : la méthode prédit la prochaine observation, puis choisit son action à partir de cette prédiction</span></label>
+ <label class="option"><input type="radio" name="q1" value="b" /><span class="option-text">b) Sans modèle, fondée sur la valeur, sur politique : le réseau calcule la valeur de chaque action possible et l'agent prend la meilleure</span></label>
+ <label class="option"><input type="radio" name="q1" value="c" /><span class="option-text">c) Sans modèle, fondée sur la politique, sur politique : rien dans le code ne connaît les règles de l'environnement, la sortie du réseau <em>est</em> la politique, et un lot est périmé dès qu'un pas d'optimisation a été fait</span></label>
+ <label class="option"><input type="radio" name="q1" value="d" /><span class="option-text">d) Sans modèle, fondée sur la politique, hors politique : les épisodes déjà joués peuvent être conservés et réutilisés indéfiniment</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">2. Pour économiser de la simulation, vous décidez de faire trois pas d'optimisation sur le même ensemble d'élites avant de collecter le lot suivant. Qu'est-ce que cela change du point de vue du troisième axe ?</div>
+ <label class="option"><input type="radio" name="q2" value="a" /><span class="option-text">a) Rien : les élites restent les meilleurs épisodes du lot, et seule leur qualité compte pour l'apprentissage</span></label>
+ <label class="option"><input type="radio" name="q2" value="b" /><span class="option-text">b) Dès le deuxième pas, les données ne viennent plus de la politique que l'on met à jour : la politique de comportement et la politique cible ont divergé, et une méthode sur politique entraînée sur des données anciennes donne un résultat faux. Aucune erreur n'est levée</span></label>
+ <label class="option"><input type="radio" name="q2" value="c" /><span class="option-text">c) Cela rend la méthode hors politique, donc plus générale et plus économe en données, et sans contrepartie</span></label>
+ <label class="option"><input type="radio" name="q2" value="d" /><span class="option-text">d) PyTorch lève une erreur au deuxième appel de <code>backward()</code>, le graphe du premier pas ayant déjà été libéré</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">3. À quels titres CEM appartient-elle à la famille des méthodes de Monte-Carlo ?</div>
+ <label class="option"><input type="radio" name="q3" value="a" /><span class="option-text">a) Elle ne demande que de l'expérience et aucune connaissance de la dynamique, elle note chaque épisode par son retour complet, et elle ne met le réseau à jour qu'une fois les épisodes terminés</span></label>
+ <label class="option"><input type="radio" name="q3" value="b" /><span class="option-text">b) Elle tire son action au hasard dans la distribution produite par le réseau : c'est ce tirage aléatoire qui fait le Monte-Carlo</span></label>
+ <label class="option"><input type="radio" name="q3" value="c" /><span class="option-text">c) Elle estime ce que vaut un état à partir de l'estimation de l'état suivant, en moyennant ces estimations sur un grand nombre d'épisodes</span></label>
+ <label class="option"><input type="radio" name="q3" value="d" /><span class="option-text">d) Elle a besoin des probabilités de transition complètes de l'environnement pour simuler les trajectoires qu'elle moyenne</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">4. Dans quel ordre s'enchaînent les cinq étapes de la méthode ?</div>
+ <label class="option"><input type="radio" name="q4" value="a" /><span class="option-text">a) Fixer le seuil une fois pour toutes, jouer N épisodes, écarter ceux qui passent sous le seuil, entraîner le réseau sur les autres, reprendre au début</span></label>
+ <label class="option"><input type="radio" name="q4" value="b" /><span class="option-text">b) Jouer N épisodes, entraîner le réseau sur l'ensemble du lot, calculer ensuite le seuil, écarter les épisodes situés dessous, reprendre au début</span></label>
+ <label class="option"><input type="radio" name="q4" value="c" /><span class="option-text">c) Jouer N épisodes, calculer le retour moyen du lot, écarter les épisodes situés sous cette moyenne, entraîner le réseau sur les autres, reprendre au début</span></label>
+ <label class="option"><input type="radio" name="q4" value="d" /><span class="option-text">d) Jouer N épisodes avec le modèle courant, calculer le retour total de chacun et en déduire le seuil par un percentile, écarter les épisodes situés sous ce seuil, entraîner le réseau sur les épisodes restants, reprendre au début</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">5. Avec <code>PERCENTILE = 70</code> et un lot de 16 épisodes, que conserve exactement le filtre, et que jette-t-il ?</div>
+ <label class="option"><input type="radio" name="q5" value="a" /><span class="option-text">a) Les 70 % d'épisodes les mieux classés, soit une dizaine d'épisodes, dont il ne retient que la dernière paire (observation, action), celle qui a mené à la fin de l'épisode</span></label>
+ <label class="option"><input type="radio" name="q5" value="b" /><span class="option-text">b) Les épisodes dont le retour atteint le 70<sup>e</sup> percentile des retours du lot, soit environ les cinq meilleurs ; chacun verse au jeu d'entraînement autant de paires (observation, action) qu'il compte de pas, et les onze autres épisodes sont jetés avec tout ce qu'ils contenaient</span></label>
+ <label class="option"><input type="radio" name="q5" value="c" /><span class="option-text">c) Les épisodes dont le retour dépasse 70, valeur fixée une fois pour toutes par la constante <code>PERCENTILE</code></span></label>
+ <label class="option"><input type="radio" name="q5" value="d" /><span class="option-text">d) Les cinq meilleurs épisodes, dont il ne retient qu'une paire (observation, action) chacun, afin que tous les épisodes élites pèsent le même poids dans la mise à jour</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">6. Vous ajoutez <code>nn.Softmax(dim=1)</code> comme dernière couche du réseau de politique et vous conservez <code>nn.CrossEntropyLoss</code> comme fonction de perte. Que se passe-t-il ?</div>
+ <label class="option"><input type="radio" name="q6" value="a" /><span class="option-text">a) Rien ne change : la perte reconnaît que son entrée est déjà normalisée et saute son softmax interne</span></label>
+ <label class="option"><input type="radio" name="q6" value="b" /><span class="option-text">b) Une erreur est levée dès le premier lot, la perte vérifiant que la somme de ses entrées ne vaut pas 1</span></label>
+ <label class="option"><input type="radio" name="q6" value="c" /><span class="option-text">c) La perte applique un second softmax à des valeurs déjà normalisées : la distribution qu'elle voit est écrasée vers l'uniforme, le gradient s'affaiblit, l'entraînement ralentit nettement, et rien n'est signalé</span></label>
+ <label class="option"><input type="radio" name="q6" value="d" /><span class="option-text">d) L'entraînement s'améliore : le réseau produit enfin de vraies probabilités, donc l'échantillonnage de l'action devient correct</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">7. Dans votre générateur de lots, vous enregistrez <code>next_obs</code> au lieu de <code>obs</code> dans l'étape d'épisode. Quel est l'effet ?</div>
+ <label class="option"><input type="radio" name="q7" value="a" /><span class="option-text">a) Le jeu d'entraînement est décalé d'un pas : le réseau apprend à jouer, dans chaque état, l'action qui convenait à l'état précédent. L'entraînement continue de tourner, la perte descend, les courbes ont l'air normales, et l'agent apprend seulement moins bien et moins loin</span></label>
+ <label class="option"><input type="radio" name="q7" value="b" /><span class="option-text">b) Une erreur de forme est levée au premier appel de la perte, l'observation suivante n'ayant pas la même dimension que l'observation courante</span></label>
+ <label class="option"><input type="radio" name="q7" value="c" /><span class="option-text">c) Aucun effet : les observations se suivent, l'ensemble des paires est le même à un décalage près, et le réseau voit donc exactement la même distribution</span></label>
+ <label class="option"><input type="radio" name="q7" value="d" /><span class="option-text">d) L'agent apprend la politique exactement inverse : le retour moyen diminue régulièrement à mesure que l'entraînement avance</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">8. Sur FrozenLake, un lot de 100 épisodes contient 12 réussites, de retour 1,0, et 88 échecs, de retour 0,0. Que vaut le seuil des élites au 70<sup>e</sup> percentile, et combien d'épisodes le filtre naïf de la section 3.4 conserve-t-il ?</div>
+ <label class="option"><input type="radio" name="q8" value="a" /><span class="option-text">a) Le seuil vaut 0,12, c'est-à-dire le retour moyen du lot, et les 12 réussites sont les seules à passer</span></label>
+ <label class="option"><input type="radio" name="q8" value="b" /><span class="option-text">b) Le seuil vaut exactement 0,0 ; comme le filtre naïf n'écarte que les retours strictement inférieurs au seuil, il conserve les 100 épisodes du lot</span></label>
+ <label class="option"><input type="radio" name="q8" value="c" /><span class="option-text">c) Le seuil vaut exactement 0,0, et le filtre conserve les 12 réussites, seules à se situer au-dessus de lui</span></label>
+ <label class="option"><input type="radio" name="q8" value="d" /><span class="option-text">d) Le seuil vaut 1,0, le percentile se calculant sur les retours non nuls, et le filtre conserve les 12 réussites</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">9. La courbe du seuil des élites reste à 0,0 du début à la fin de l'exécution, pendant que la perte descend régulièrement. Un camarade en conclut que le réseau est mal réglé. Qu'enregistre réellement cette ligne plate ?</div>
+ <label class="option"><input type="radio" name="q9" value="a" /><span class="option-text">a) Que le pas d'apprentissage est trop grand : le réseau oscille autour de sa solution, et le seuil n'a pas le temps de se stabiliser à une valeur utile</span></label>
+ <label class="option"><input type="radio" name="q9" value="b" /><span class="option-text">b) Que l'enveloppe one-hot détruit l'information de position : seize entrées valant 0 ou 1 ne suffisent pas à distinguer les cases de la grille</span></label>
+ <label class="option"><input type="radio" name="q9" value="c" /><span class="option-text">c) Que les récompenses doivent être normalisées avant le calcul du percentile : un signal à deux valeurs n'est pas une échelle exploitable par un percentile</span></label>
+ <label class="option"><input type="radio" name="q9" value="d" /><span class="option-text">d) Que le seuil ne peut pas monter : l'ensemble des élites est le lot entier, échecs compris, donc le réseau s'entraîne à reproduire ses propres échecs, des exemples qui ne portent aucune information sur ce qu'il aurait fallu faire</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">10. Le filtre corrigé conserve les épisodes dont le score est strictement supérieur au seuil, là où le filtre naïf jetait ceux qui lui étaient strictement inférieurs. Avec un seuil coincé à 0,0, que change ce seul caractère ?</div>
+ <label class="option"><input type="radio" name="q10" value="a" /><span class="option-text">a) Il fait passer de « tous les échecs sont élites » à « aucun échec n'est élite » : seules les réussites franchissent le seuil, et quand le lot n'en contient aucune, l'ensemble des élites est vide, cas que la boucle doit traiter en sautant la mise à jour</span></label>
+ <label class="option"><input type="radio" name="q10" value="b" /><span class="option-text">b) Rien du tout : le percentile est calculé de la même façon dans les deux cas, donc le seuil est le même et l'ensemble des élites aussi</span></label>
+ <label class="option"><input type="radio" name="q10" value="c" /><span class="option-text">c) Il rend toute mise à jour impossible : un percentile étant toujours égal à l'un des retours du lot, aucun épisode ne peut lui être strictement supérieur</span></label>
+ <label class="option"><input type="radio" name="q10" value="d" /><span class="option-text">d) Il ne change le nombre d'élites que sur CartPole, où plusieurs épisodes ont souvent exactement le même retour, et reste sans effet sur FrozenLake</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">11. À une itération donnée, votre lot de 100 épisodes ne contient aucune réussite. Quels correctifs répondent à ce problème précis ?</div>
+ <label class="option"><input type="radio" name="q11" value="a" /><span class="option-text">a) Diminuer le pas d'apprentissage et monter le percentile à 90 : des exemples plus rares mais meilleurs compensent la rareté des réussites</span></label>
+ <label class="option"><input type="radio" name="q11" value="b" /><span class="option-text">b) Le score actualisé, qui attribue à chaque échec une valeur différente selon la longueur de l'épisode et rend donc le lot à nouveau discriminable</span></label>
+ <label class="option"><input type="radio" name="q11" value="c" /><span class="option-text">c) Des lots beaucoup plus grands, pour qu'il y ait quelques réussites dans l'échantillon, et la conservation des épisodes élites sur plusieurs itérations, pour qu'une réussite rare continue d'enseigner après la mise à jour qui l'a utilisée ; en attendant, la boucle saute les itérations sans élite</span></label>
+ <label class="option"><input type="radio" name="q11" value="d" /><span class="option-text">d) Aucun : il suffit d'entraîner beaucoup plus longtemps, puisque la rareté des réussites se paie en itérations</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">12. Avec les cinq correctifs, le lac glissant plafonne autour de 55 % d'épisodes réussis après environ 10 000 itérations. Le même code lancé sur <code>is_slippery=False</code> résout l'environnement en 120 à 140 lots. Qu'est-ce que cette comparaison isole ?</div>
+ <label class="option"><input type="radio" name="q12" value="a" /><span class="option-text">a) La taille de l'espace d'observations : seize cases sont déjà trop nombreuses pour un réseau à une seule couche cachée</span></label>
+ <label class="option"><input type="radio" name="q12" value="b" /><span class="option-text">b) Le bruit des transitions : quand l'action demandée n'est exécutée qu'une fois sur trois, le lien entre ce que l'agent a fait et ce qu'il a obtenu devient très ténu, et une méthode qui note des épisodes entiers a besoin d'énormément d'échantillons pour le retrouver. La grille a seize cases dans les deux cas, et la récompense y est aussi parcimonieuse</span></label>
+ <label class="option"><input type="radio" name="q12" value="c" /><span class="option-text">c) La parcimonie de la récompense à elle seule : un percentile mieux choisi suffirait donc à résoudre aussi la version glissante</span></label>
+ <label class="option"><input type="radio" name="q12" value="d" /><span class="option-text">d) Le codage one-hot, qui convient à une grille déterministe mais perd de l'information dès que les transitions deviennent aléatoires</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <button type="button" id="submit-all" onclick="submitQuiz()">Valider mes réponses</button>
+</form>
+
+<div class="score-box" id="score-box">
+ <h2 id="score-text"></h2>
+ <p id="score-msg"></p>
+ <button class="btn-reset" onclick="resetQuiz()"> Recommencer</button>
+</div>
+
+<script>
+const explanations = {
+ q1: "Les trois axes se posent comme trois questions, et chacune a une conséquence lisible dans le code. Construit-elle un modèle ? Non : CEM relie directement l'observation à l'action, rien n'y prédit la prochaine observation ni la prochaine récompense. Apprend-elle une politique ou des valeurs ? Une politique : la sortie du réseau, après softmax, est la distribution sur les actions, et aucune valeur d'action n'est jamais calculée, ce qui élimine la réponse (b). A-t-elle besoin de données fraîches ? Oui : la réponse (d) est la méprise la plus fréquente, car c'est précisément parce que la méthode est sur politique que l'ensemble des élites est un jeu de données d'une seule itération, jeté aussitôt utilisé. Ce gâchis a un nom et un prix, que la notion d'efficacité en échantillons chiffrera plus tard dans le cours.",
+ q2: "Une méthode sur politique évalue ou améliore la politique qui sert à décider : c'est le cas particulier où la politique cible et la politique de comportement coïncident. Dès le deuxième pas d'optimisation, elles ne coïncident plus, puisque les épisodes ont été engendrés par un réseau que vous avez déjà modifié. C'est pour cela que la collecte et l'entraînement se déroulent dans un seul fil d'exécution et que le lot n'est jamais réutilisé : à chaque reprise de la boucle, le réseau qui produit le lot suivant n'est déjà plus le même. Les méthodes hors politique savent apprendre de données historiques, et cette liberté est réelle, mais elle n'est pas gratuite : elle suppose une condition de couverture, et elle s'accompagne en général de plus de variance et d'une convergence plus lente. Surtout, elle ne s'obtient pas en réutilisant un lot dans une méthode qui n'a aucun mécanisme pour cela : rien ne plante, les courbes restent lisibles, et le résultat est simplement faux.",
+ q3: "La famille se définit par trois critères, et CEM les remplit tous les trois. Premier critère : de l'expérience seulement, c'est-à-dire des suites échantillonnées d'états, d'actions et de récompenses, sans aucune connaissance préalable de la dynamique ; c'est l'axe « sans modèle » énoncé par le formalisme. Deuxième critère : moyenner des retours complets, et c'est bien le retour total de l'épisode qui sert à le noter. Troisième critère : la mise à jour n'a lieu qu'à l'achèvement des épisodes, ici une mise à jour par lot de seize épisodes terminés, ce qui restreint la famille aux tâches épisodiques. Le tirage aléatoire de l'action, en (b), est le mécanisme d'exploration de CEM, pas ce qui la rattache à Monte-Carlo. La réponse (c) décrit une estimation construite sur une autre estimation : rien dans CEM ne fonctionne ainsi, chaque chiffre utilisé a réellement été observé, et c'est exactement le mécanisme que la semaine 4 introduira. La réponse (d) inverse le propos : un modèle, s'il y en a un, n'a besoin que d'engendrer des transitions échantillonnées, jamais les distributions complètes.",
+ q4: "L'ordre est porteur de sens. Le seuil est déduit du lot que l'on vient de jouer, et non fixé à l'avance : c'est ce qui le fait monter tout seul, puisque de meilleurs épisodes donnent un seuil plus exigeant, qui donne de meilleurs élites. Un seuil fixé une fois pour toutes, en (a), devrait être connu avant d'avoir joué quoi que ce soit et cesserait de progresser. Entraîner avant de filtrer, en (b), détruit le mécanisme entier : le cœur de la méthode est de jeter les mauvais épisodes et de s'entraîner sur les meilleurs. La réponse (c) est la plus instructive, parce que le code calcule effectivement un retour moyen : il ne sert qu'à la journalisation. Trier sur la moyenne laisserait passer une proportion d'épisodes variable selon la forme de la distribution, là où un percentile fixe cette proportion d'avance, à 30 % du lot pour le 70e percentile.",
+ q5: "Le seuil est le 70e percentile des retours du lot, recalculé à chaque itération : il retient les 30 % d'épisodes les mieux classés, soit environ cinq épisodes sur seize. La constante ne désigne donc pas un retour, ce qui élimine la réponse (c). Vient ensuite l'aplatissement, et c'est le point que l'on oublie le plus souvent : un épisode élite de 180 pas verse 180 paires (observation, action) au jeu d'entraînement, pas une seule. Sur CartPole, où la longueur est la récompense, c'est exactement ce que l'on veut : les bons épisodes pèsent plus parce qu'ils sont plus longs. Les réponses (a) et (d), qui ne gardent qu'une paire par épisode, réduiraient la mise à jour à quelques exemples par itération. Enfin, ce qui est jeté est perdu : les onze autres épisodes ne sont stockés nulle part, et c'est le prix de l'axe « sur politique ».",
+ q6: "La fonction de perte d'entropie croisée combine le softmax et l'entropie croisée en une seule expression, numériquement plus stable que de prendre des exponentielles puis des logarithmes séparément. C'est pourquoi elle exige des sorties brutes, non normalisées. Lui donner des probabilités revient à appliquer le softmax deux fois : les valeurs étant déjà comprises entre 0 et 1, le second softmax les resserre encore vers l'uniforme, la perte sous-pénalise les erreurs, et le gradient devient faible. Rien n'est signalé, d'où l'assertion du laboratoire qui vérifie que la dernière couche est bien linéaire. La contrepartie de la règle est une discipline : c'est à vous d'appliquer le softmax, à un seul endroit, au moment de transformer les sorties brutes en probabilités pour tirer une action.",
+ q7: "La paire qui enseigne est formée de l'observation qui a servi à choisir l'action et de cette action. Enregistrer l'observation renvoyée par l'environnement associe chaque action à l'état qui l'a suivie : le réseau apprend, dans chaque état, l'action qui convenait à l'état précédent. Les formes des tenseurs sont identiques, le jeu de données reste bien constitué, la perte descend, et c'est précisément ce qui rend ce bogue coûteux. Un bogue qui empêche tout est facile à trouver ; un bogue qui dégrade vous prendra une soirée. Le niveau 2 du laboratoire vous demande de le provoquer volontairement et de comparer les deux courbes de retour moyen : l'entraînement fonctionne encore, plus lentement et moins loin. D'où l'assertion d'une ligne qui vérifie, au moment de construire l'étape, que l'observation enregistrée est bien celle qui a servi à décider.",
+ q8: "Premier maillon, arithmétique : dans un ensemble de 0 et de 1 où moins de 30 % des valeurs valent 1, la valeur sous laquelle se trouvent 70 % du lot est 0. Le seuil n'est pas « proche de zéro », il est exactement zéro, et il le restera tant que les réussites n'atteindront pas 30 % du lot. Deuxième maillon, le code : le filtre naïf écarte un épisode seulement si son retour est strictement inférieur au seuil, donc il conserve les égalités, et les 88 échecs valent exactement 0,0, soit exactement le seuil. Troisième maillon : l'ensemble des élites est le lot entier. La réponse (c) est l'erreur la plus répandue, et elle vient de la lecture de la comparaison : on croit lire « strictement supérieur » là où le code dit « pas strictement inférieur ». Reconstruire cette chaîne sur vos propres chiffres est le contenu évalué du jalon 1.",
+ q9: "Le code est juste, le réseau est bon, l'optimiseur fonctionne, et la perte descend parce qu'un réseau finit toujours par ajuster ce qu'on lui donne. Ce qui a disparu, c'est le signal qui sert à trier les exemples. Le mécanisme auto-entretenu de la méthode avait une condition cachée : le seuil ne peut monter que si les retours du lot se distinguent les uns des autres. Avec deux valeurs possibles et des échecs massivement dominants, la condition est violée, et la ligne plate est l'enregistrement, itération après itération, de cette impossibilité. Les trois autres réponses sont les réflexes à désapprendre : elles cherchent la faute dans le code, le réglage ou l'enveloppe. En apprentissage par renforcement, l'erreur la plus coûteuse est presque toujours l'inadéquation entre la méthode et la structure de la récompense, et un histogramme de 200 retours joués au hasard l'aurait annoncée en trente secondes.",
+ q10: "Un percentile est une valeur prise dans les données : il y a donc toujours au moins un épisode exactement égal au seuil, et le sens de la comparaison décide de son sort, ce qui invalide la réponse (c). Sur CartPole, où les retours sont étalés, le choix est invisible, et c'est pour cela qu'il passe inaperçu. Avec un seuil coincé à 0,0 et un lot dont tous les échecs valent exactement 0,0, ce même caractère décide si le jeu d'entraînement est fait d'échecs ou uniquement de réussites. La version stricte a une conséquence à traiter explicitement : si le lot ne contient aucune réussite, l'ensemble des élites est vide, et la boucle doit sauter la mise à jour au lieu d'appeler la perte sur un tenseur vide. Retenez la leçon de méthode : quand vous reprenez du code existant, lisez les comparaisons.",
+ q11: "Le problème posé est la rareté des réussites dans l'échantillon, et deux correctifs l'attaquent directement. Des lots d'au moins 100 épisodes au lieu de 16, simplement pour qu'il y ait quelques réussites. Et la conservation des épisodes élites sur plusieurs itérations, parce qu'un épisode réussi est une bête rare et que le jeter après une seule mise à jour est un gâchis ; la mémoire est tout de même bornée, à 500 épisodes, pour ne pas apprendre indéfiniment d'un passé lointain. Diminuer le pas d'apprentissage achète de la stabilité, pas des réussites, et monter le percentile à 90 ne garderait qu'un ou deux épisodes, ce qui rend la mise à jour plus bruyante. La réponse (b) est l'erreur la plus intéressante : le score actualisé multiplie le retour par une puissance de gamma, donc un échec de retour 0 garde un score de 0 quelle que soit sa longueur. L'actualisation ne départage que les réussites entre elles, et c'est déjà beaucoup, mais elle ne crée aucune réussite. La réponse (d) est le cinquième correctif : vrai dans la durée, sans effet sur la composition d'un lot donné.",
+ q12: "Vous venez d'isoler une variable et de mesurer son effet, et c'est exactement le geste que le jalon 1 demande. Deux causes candidates sont éliminées par construction, puisqu'elles sont identiques dans les deux exécutions : le nombre de cases de la grille, et la structure de la récompense, qui reste unique et terminale. La seule différence restante est le bruit des transitions, et aucun correctif ne le supprime. Les correctifs rendent la sélection à nouveau opérante, ce qui achète environ 55 % de réussites, puis le calcul supplémentaire n'achète plus rien : doubler le temps de calcul ne double pas la performance et, au-delà d'un certain point, ne l'améliore même plus. Ce plateau a des remèdes, du côté des mécanismes qui empêchent la politique de devenir trop confiante trop tôt, et des semaines ultérieures y reviendront avec les outils nécessaires. Et c'est bien un résultat, non un échec de votre part : le jalon note la chaîne de raisonnement, pas le taux de réussite atteint."
+};
+
+function submitQuiz() {
+ const questions = document.querySelectorAll('.question');
+ let score = 0;
+ let answered = 0;
+
+ questions.forEach((q, i) => {
+ const name = `q${i + 1}`;
+ const correct = q.dataset.correct;
+ const selected = q.querySelector(`input[name="${name}"]:checked`);
+ const feedback = q.querySelector('.feedback');
+
+ if (selected) {
+ answered++;
+ feedback.style.display = 'block';
+ if (selected.value === correct) {
+ score++;
+ feedback.className = 'feedback correct';
+ feedback.textContent = ' Correct ! ' + explanations[name];
+ } else {
+ feedback.className = 'feedback incorrect';
+ feedback.textContent = ` Incorrect. La bonne réponse est (${correct.toUpperCase()}). ` + explanations[name];
+ }
+ }
+ });
+
+ if (answered < questions.length) {
+ alert('Veuillez répondre à toutes les questions avant de valider.');
+ return;
+ }
+
+ const scoreBox = document.getElementById('score-box');
+ scoreBox.style.display = 'block';
+ document.getElementById('score-text').textContent = `${score} / ${questions.length}`;
+ const pct = Math.round((score / questions.length) * 100);
+ let msg = '';
+ if (pct >= 90) msg = ' Excellent ! Vous maîtrisez les fondements du cours.';
+ else if (pct >= 70) msg = ' Très bien ! Quelques révisions sur les points incorrects et vous serez prêt·e.';
+ else if (pct >= 50) msg = ' Pas mal ! Relisez les sections correspondantes avant de continuer.';
+ else msg = ' Prenez le temps de revoir le cours, puis réessayez.';
+ document.getElementById('score-msg').textContent = msg;
+ scoreBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+ document.getElementById('quiz-form').reset();
+ document.querySelectorAll('.feedback').forEach(f => { f.style.display = 'none'; f.textContent = ''; });
+ document.getElementById('score-box').style.display = 'none';
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
