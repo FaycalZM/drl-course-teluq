@@ -1,0 +1,1 @@
+Figure 4-6. L'évaluation de politique balayage après balayage : à droite, la politique gloutonne est déjà optimale bien avant que les valeurs de gauche aient convergé.

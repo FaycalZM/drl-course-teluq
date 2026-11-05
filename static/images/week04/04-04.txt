@@ -1,0 +1,1 @@
+Figure 4-4. Le même monde en grille, résolu : la valeur optimale de chaque case, et la politique gloutonne qui s'en déduit.

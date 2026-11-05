@@ -1,0 +1,1 @@
+Figure 4-3. Les deux diagrammes de sauvegarde de l'optimalité : l'arc qui enjambe les branches est le maximum, et sa position n'est pas la même des deux côtés.

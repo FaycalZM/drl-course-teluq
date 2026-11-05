@@ -1,0 +1,1 @@
+Figure 4-8. La falaise : un chemin optimal qui longe le bord, un chemin sûr qui prend par le haut, et une chute qui coûte 100.

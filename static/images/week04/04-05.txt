@@ -1,0 +1,1 @@
+Figure 4-5. Un état central, quatre états terminaux, et une action qui n'est exécutée qu'une fois sur trois : le support du calcul des quatre valeurs d'action.
