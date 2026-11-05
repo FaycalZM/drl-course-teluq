@@ -1,0 +1,1 @@
+Figure 2-5. Le graphe de calcul de la propagation avant : les carrés sont des variables, les cercles des opérations, l'entrée en bas à gauche.

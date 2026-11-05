@@ -1,0 +1,1 @@
+Figure 2-1. Du nombre au tenseur de dimension n : un scalaire, un vecteur, une matrice, un tenseur à trois dimensions, puis au-delà.

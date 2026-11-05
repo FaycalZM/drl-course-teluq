@@ -1,0 +1,1 @@
+Figure 2-4. Un même graphe parcouru dans les deux sens : les données descendent jusqu'à la perte, les gradients remontent vers les couches.

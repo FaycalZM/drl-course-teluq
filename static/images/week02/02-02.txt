@@ -1,0 +1,1 @@
+Figure 2-2. Un perceptron multicouche à une seule couche cachée : quatre entrées, cinq unités cachées, trois sorties.

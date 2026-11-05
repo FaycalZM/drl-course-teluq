@@ -1,0 +1,1 @@
+Figure 2-3. Les trois fonctions d'activation du cours et leurs dérivées. La dérivée de la sigmoïde plafonne à 0,25, celle de tanh atteint 1.

@@ -1,0 +1,1 @@
+Figure 2-8. Une fenêtre glisse sur l'entrée ; à chaque position, le noyau produit une seule valeur de la sortie.

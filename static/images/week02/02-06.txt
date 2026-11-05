@@ -1,0 +1,1 @@
+Figure 2-6. Le graphe que quatre lignes de code ont construit sans qu'on le demande : deux feuilles, une addition, une multiplication par deux, une somme.

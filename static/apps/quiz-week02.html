@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Quiz Semaine 2 : Apprentissage profond avec PyTorch</title>
+ <style>
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body {
+ font-family: 'Segoe UI', system-ui, sans-serif;
+ background: #f8fafc;
+ color: #1e293b;
+ padding: 1.5rem;
+ line-height: 1.6;
+ }
+ h1 {
+ font-size: 1.4rem;
+ font-weight: 700;
+ color: #0f172a;
+ margin-bottom: 0.5rem;
+ }
+ .subtitle {
+ color: #64748b;
+ font-size: 0.9rem;
+ margin-bottom: 1.5rem;
+ }
+ .question {
+ background: #fff;
+ border: 1px solid #e2e8f0;
+ border-radius: 10px;
+ padding: 1.25rem 1.5rem;
+ margin-bottom: 1.25rem;
+ transition: box-shadow 0.2s;
+ }
+ .question:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+ .question-text {
+ font-weight: 600;
+ margin-bottom: 0.85rem;
+ font-size: 0.98rem;
+ }
+ .option {
+ display: flex;
+ align-items: flex-start;
+ gap: 0.6rem;
+ padding: 0.5rem 0.75rem;
+ border-radius: 6px;
+ margin-bottom: 0.35rem;
+ cursor: pointer;
+ transition: background 0.15s;
+ font-size: 0.93rem;
+ }
+ .option-text { flex: 1; min-width: 0; }
+ .option:hover { background: #f1f5f9; }
+ .option input[type="radio"] { margin-top: 0.2rem; accent-color: #6366f1; flex-shrink: 0; }
+ .feedback {
+ margin-top: 0.85rem;
+ padding: 0.6rem 1rem;
+ border-radius: 6px;
+ font-size: 0.9rem;
+ display: none;
+ }
+ .feedback.correct { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+ .feedback.incorrect { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+ .btn-check {
+ margin-top: 1rem;
+ padding: 0.5rem 1.2rem;
+ background: #6366f1;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ font-size: 0.9rem;
+ font-weight: 600;
+ cursor: pointer;
+ transition: background 0.2s;
+ }
+ .btn-check:hover { background: #4f46e5; }
+ .score-box {
+ background: #ede9fe;
+ border: 1px solid #c4b5fd;
+ border-radius: 10px;
+ padding: 1.5rem;
+ text-align: center;
+ display: none;
+ margin-top: 1rem;
+ }
+ .score-box h2 { font-size: 1.6rem; color: #4c1d95; margin-bottom: 0.25rem; }
+ .score-box p { color: #6d28d9; font-size: 0.95rem; }
+ .btn-reset {
+ margin-top: 1rem;
+ padding: 0.5rem 1.4rem;
+ background: #7c3aed;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ cursor: pointer;
+ font-weight: 600;
+ transition: background 0.2s;
+ }
+ .btn-reset:hover { background: #6d28d9; }
+ #submit-all {
+ display: block;
+ width: 100%;
+ padding: 0.75rem;
+ background: #0f172a;
+ color: #fff;
+ border: none;
+ border-radius: 8px;
+ font-size: 1rem;
+ font-weight: 700;
+ cursor: pointer;
+ margin-top: 1.5rem;
+ transition: background 0.2s;
+ }
+ #submit-all:hover { background: #1e3a5f; }
+ </style>
+</head>
+<body>
+
+<h1>Quiz : Semaine 2</h1>
+<p class="subtitle">Apprentissage profond avec PyTorch · 12 questions</p>
+
+<form id="quiz-form">
+
+ <div class="question" data-correct="b">
+ <div class="question-text">1. Dans votre boucle d'entraînement, vous voulez tracer la perte à la fin, et vous écrivez <code>historique.append(loss_t)</code>, où <code>loss_t</code> est le tenseur scalaire renvoyé par la fonction de perte. Que se passe-t-il au bout de quelques dizaines de milliers d'itérations ?</div>
+ <label class="option"><input type="radio" name="q1" value="a" /><span class="option-text">a) Rien de particulier : un tenseur à zéro dimension est un flottant ordinaire, la liste contient donc des nombres</span></label>
+ <label class="option"><input type="radio" name="q1" value="b" /><span class="option-text">b) La mémoire ne cesse de croître : chaque tenseur conservé retient le graphe de calcul qui l'a produit, et le programme finit par être arrêté faute de mémoire. Il faut écrire <code>historique.append(loss_t.item())</code></span></label>
+ <label class="option"><input type="radio" name="q1" value="c" /><span class="option-text">c) Python lève une erreur dès la première itération, un tenseur n'étant pas stockable dans une liste</span></label>
+ <label class="option"><input type="radio" name="q1" value="d" /><span class="option-text">d) Les valeurs déjà stockées sont écrasées à chaque lot, parce que <code>loss_t</code> est modifié en place par la fonction de perte</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">2. Un perceptron multicouche reçoit 4 entrées, possède 5 unités cachées et produit 3 sorties. Combien de couches compte ce réseau, et selon quelle convention ?</div>
+ <label class="option"><input type="radio" name="q2" value="a" /><span class="option-text">a) Deux : on compte les couches qui transforment, c'est-à-dire celles qui portent des poids, et la couche d'entrée ne fait que présenter les données</span></label>
+ <label class="option"><input type="radio" name="q2" value="b" /><span class="option-text">b) Trois : on compte les rangées d'unités du schéma, entrée comprise</span></label>
+ <label class="option"><input type="radio" name="q2" value="c" /><span class="option-text">c) Trois : deux couches linéaires plus la fonction d'activation, qui compte comme une couche puisqu'elle transforme le signal</span></label>
+ <label class="option"><input type="radio" name="q2" value="d" /><span class="option-text">d) Une seule : un perceptron multicouche est toujours équivalent à un prédicteur linéaire unique</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">3. Un étudiant écrit <code>nn.Sequential(nn.Linear(4, 64), nn.Linear(64, 64), nn.Linear(64, 2))</code> et s'étonne que son réseau n'apprenne jamais autre chose qu'une tendance linéaire. Quelle fonction ce réseau calcule-t-il réellement ?</div>
+ <label class="option"><input type="radio" name="q3" value="a" /><span class="option-text">a) Une fonction linéaire par morceaux, chaque couche découpant l'espace d'entrée en régions</span></label>
+ <label class="option"><input type="radio" name="q3" value="b" /><span class="option-text">b) Une fonction affine de l'entrée, exactement équivalente à un unique <code>nn.Linear(4, 2)</code> de poids W(3)W(2)W(1) : composer des fonctions affines donne une fonction affine</span></label>
+ <label class="option"><input type="radio" name="q3" value="c" /><span class="option-text">c) Une fonction non linéaire : le produit de trois matrices n'est pas une opération linéaire</span></label>
+ <label class="option"><input type="radio" name="q3" value="d" /><span class="option-text">d) Une fonction non linéaire grâce aux biais, chaque couche ajoutant un terme constant qui courbe la sortie</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">4. Au laboratoire, vous remplacez chaque <code>nn.ReLU()</code> par <code>nn.Sigmoid()</code> dans un réseau à quatre couches cachées, sans rien changer d'autre. Qu'advient-il du gradient qui parvient à la première couche ?</div>
+ <label class="option"><input type="radio" name="q4" value="a" /><span class="option-text">a) Il explose : la sigmoïde écrasant ses sorties dans l'intervalle (0, 1), les poids doivent grandir pour compenser</span></label>
+ <label class="option"><input type="radio" name="q4" value="b" /><span class="option-text">b) Il est inchangé : la rétropropagation renormalise le gradient à chaque couche traversée</span></label>
+ <label class="option"><input type="radio" name="q4" value="c" /><span class="option-text">c) Il devient très petit : en traversant chaque activation, le gradient est multiplié terme à terme par la dérivée de la sigmoïde, qui ne dépasse jamais 0,25, donc il perd au moins les trois quarts de son amplitude par couche</span></label>
+ <label class="option"><input type="radio" name="q4" value="d" /><span class="option-text">d) Seul le gradient de la dernière couche est affecté : les couches proches de l'entrée sont les moins concernées, puisqu'elles sont les plus éloignées de la perte</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">5. Vous tapez la session suivante : <code>v1 = torch.tensor([1.0, 1.0], requires_grad=True)</code>, <code>v2 = torch.tensor([2.0, 2.0])</code>, <code>v_sum = v1 + v2</code>, <code>v_res = (v_sum * 2).sum()</code>, puis <code>v_res.backward()</code>. Quels tenseurs portent ensuite un gradient dans leur attribut <code>grad</code> ?</div>
+ <label class="option"><input type="radio" name="q5" value="a" /><span class="option-text">a) <code>v1</code> et <code>v2</code>, qui sont les deux tenseurs feuilles de ce graphe</span></label>
+ <label class="option"><input type="radio" name="q5" value="b" /><span class="option-text">b) <code>v1</code>, <code>v_sum</code> et <code>v_res</code>, puisque <code>requires_grad</code> est contagieux vers l'aval</span></label>
+ <label class="option"><input type="radio" name="q5" value="c" /><span class="option-text">c) Aucun : <code>backward()</code> ne remplit <code>grad</code> que pour les paramètres enregistrés dans un <code>nn.Module</code></span></label>
+ <label class="option"><input type="radio" name="q5" value="d" /><span class="option-text">d) <code>v1</code> seulement, avec la valeur <code>tensor([2., 2.])</code></span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">6. Un étudiant traite chaque lot dans cet ordre : <code>out_t = net(batch_x_t)</code>, <code>loss_t = perte(out_t, batch_y_t)</code>, <code>loss_t.backward()</code>, <code>optimizer.zero_grad()</code>, <code>optimizer.step()</code>. La perte ne descend pas d'un pouce et les poids ne changent jamais. Pourquoi ?</div>
+ <label class="option"><input type="radio" name="q6" value="a" /><span class="option-text">a) Le pas d'apprentissage est trop petit : Adam demande une valeur nettement supérieure à 1e-3</span></label>
+ <label class="option"><input type="radio" name="q6" value="b" /><span class="option-text">b) Il manque un appel à <code>net.train()</code> avant la boucle, sans lequel les poids restent gelés</span></label>
+ <label class="option"><input type="radio" name="q6" value="c" /><span class="option-text">c) La remise à zéro est intercalée entre <code>backward()</code> et <code>step()</code> : l'optimiseur applique donc des gradients nuls à chaque lot</span></label>
+ <label class="option"><input type="radio" name="q6" value="d" /><span class="option-text">d) La perte n'a pas été détachée du graphe, donc <code>backward()</code> ne calcule aucun gradient</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">7. Vous supprimez purement et simplement la ligne <code>optimizer.zero_grad()</code> de votre boucle. Que se passe-t-il ?</div>
+ <label class="option"><input type="radio" name="q7" value="a" /><span class="option-text">a) Une erreur est levée au deuxième appel à <code>backward()</code>, le graphe du premier lot ayant déjà été libéré</span></label>
+ <label class="option"><input type="radio" name="q7" value="b" /><span class="option-text">b) Les gradients s'additionnent d'un lot au suivant : chaque pas mélange tout l'historique, la perte se met à osciller ou à exploser, et aucune erreur n'est signalée</span></label>
+ <label class="option"><input type="radio" name="q7" value="c" /><span class="option-text">c) Rien : <code>backward()</code> écrit le nouveau gradient par-dessus l'ancien, la remise à zéro n'est qu'une précaution d'hygiène</span></label>
+ <label class="option"><input type="radio" name="q7" value="d" /><span class="option-text">d) L'entraînement devient seulement plus lent, le gradient cumulé étant divisé par le nombre de lots vus</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">8. Vous initialisez tous les poids d'une couche cachée de 64 unités à la même constante 0,1, puis vous entraînez avec Adam sur des mini-lots tirés au hasard. Qu'observez-vous dans cette couche à la fin de l'entraînement ?</div>
+ <label class="option"><input type="radio" name="q8" value="a" /><span class="option-text">a) Les 64 unités sont restées égales entre elles : elles produisent la même activation, reçoivent le même gradient, et la couche se comporte pour toujours comme une couche à une seule unité</span></label>
+ <label class="option"><input type="radio" name="q8" value="b" /><span class="option-text">b) La symétrie est brisée au bout de quelques époques par l'aléa du tirage des mini-lots, et la couche finit par apprendre normalement</span></label>
+ <label class="option"><input type="radio" name="q8" value="c" /><span class="option-text">c) Rien ne bouge du tout : un gradient identique pour tous les poids d'une couche est nécessairement nul</span></label>
+ <label class="option"><input type="radio" name="q8" value="d" /><span class="option-text">d) La couche apprend normalement, mais plus lentement, la constante 0,1 étant simplement mal dimensionnée</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">9. Votre réseau contient des couches <code>nn.Dropout(p=0.3)</code>. À chaque époque, vous calculez la perte de validation sans appeler <code>net.eval()</code>. Quel est l'effet sur la courbe de validation ?</div>
+ <label class="option"><input type="radio" name="q9" value="a" /><span class="option-text">a) Aucun : l'abandon de neurones (<em>dropout</em>) ne modifie que le calcul des gradients, pas la sortie du réseau</span></label>
+ <label class="option"><input type="radio" name="q9" value="b" /><span class="option-text">b) Aucun : le facteur 1/(1 - p) compense exactement les unités mises à zéro, donc la sortie est identique à celle du réseau complet</span></label>
+ <label class="option"><input type="radio" name="q9" value="c" /><span class="option-text">c) L'abandon reste actif pendant l'évaluation : la courbe devient bruitée et systématiquement pessimiste, puisque vous mesurez un réseau amputé au hasard à chaque passage</span></label>
+ <label class="option"><input type="radio" name="q9" value="d" /><span class="option-text">d) La courbe devient optimiste : l'abandon agit comme une régularisation supplémentaire au moment du test</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">10. Une image à un canal, de taille 28 × 28, traverse <code>nn.Conv2d(1, 16, kernel_size=5, stride=2)</code>, sans remplissage. Quelle est la taille du vecteur obtenu après aplatissement de la sortie ?</div>
+ <label class="option"><input type="radio" name="q10" value="a" /><span class="option-text">a) 1936, soit 16 × 11 × 11</span></label>
+ <label class="option"><input type="radio" name="q10" value="b" /><span class="option-text">b) 2304, soit 16 × 12 × 12</span></label>
+ <label class="option"><input type="radio" name="q10" value="c" /><span class="option-text">c) 9216, soit 16 × 24 × 24</span></label>
+ <label class="option"><input type="radio" name="q10" value="d" /><span class="option-text">d) 3136, soit 16 × 14 × 14</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">11. Vous écrivez <code>perte_b = critere(reseau_b(sortie_a.detach()), cible)</code> puis <code>perte_b.backward()</code>. Qu'est-ce que <code>detach()</code> change exactement ?</div>
+ <label class="option"><input type="radio" name="q11" value="a" /><span class="option-text">a) Il renvoie une copie de <code>sortie_a</code> sans aucun lien avec le graphe qui l'a produite : la valeur est la même, mais aucun gradient ne remonte dans <code>reseau_a</code></span></label>
+ <label class="option"><input type="radio" name="q11" value="b" /><span class="option-text">b) Il convertit le tenseur en nombre Python, comme <code>item()</code>, pour l'extraire du graphe</span></label>
+ <label class="option"><input type="radio" name="q11" value="c" /><span class="option-text">c) Il remet à zéro les gradients déjà accumulés dans <code>reseau_a</code>, à la manière d'un <code>zero_grad()</code> local</span></label>
+ <label class="option"><input type="radio" name="q11" value="d" /><span class="option-text">d) Il gèle tout le calcul situé en aval : <code>reseau_b</code> ne reçoit plus de gradient non plus, et ses poids cessent d'être mis à jour</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">12. Vous instrumentez le laboratoire avec TensorBoard. À quoi sert-il dans la pratique, et comment l'alimente-t-on ?</div>
+ <label class="option"><input type="radio" name="q12" value="a" /><span class="option-text">a) Il remplace le jeu de validation : il calcule l'écart de généralisation et interrompt l'entraînement au bon moment</span></label>
+ <label class="option"><input type="radio" name="q12" value="b" /><span class="option-text">b) Il explore les hyperparamètres à votre place et ne conserve que la meilleure exécution</span></label>
+ <label class="option"><input type="radio" name="q12" value="c" /><span class="option-text">c) Il produit un rapport une fois <code>close()</code> appelé : il faut donc attendre la fin de l'entraînement pour voir quoi que ce soit</span></label>
+ <label class="option"><input type="radio" name="q12" value="d" /><span class="option-text">d) Il affiche en temps réel les valeurs que vous lui envoyez par <code>add_scalar(nom, valeur, iteration)</code> ; comme chaque exécution écrit son propre dossier, vous pouvez superposer plusieurs exécutions sur le même graphique</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <button type="button" id="submit-all" onclick="submitQuiz()">Valider mes réponses</button>
+</form>
+
+<div class="score-box" id="score-box">
+ <h2 id="score-text"></h2>
+ <p id="score-msg"></p>
+ <button class="btn-reset" onclick="resetQuiz()"> Recommencer</button>
+</div>
+
+<script>
+const explanations = {
+ q1: "Une opération de réduction comme une fonction de perte renvoie un tenseur à zéro dimension, pas un flottant, et ce tenseur garde un lien vers le graphe qui l'a produit : le conserver retient en mémoire toutes les valeurs intermédiaires de la propagation avant. La méthode item() extrait le nombre Python et coupe ce lien. C'est pour cela que item() est le geste le plus réutilisé du cours : chaque ligne de journal, chaque valeur envoyée à TensorBoard, chaque récompense moyenne affichée passera par lui.",
+ q2: "On compte les couches qui portent des poids, donc celles qui transforment : ici une matrice 5 × 4 avec son biais, puis une matrice 3 × 5 avec le sien. La couche d'entrée ne calcule rien, elle présente les données. La réponse (d) confond ce comptage avec l'argument de l'effondrement, qui n'est vrai que si l'on retire les fonctions d'activation : avec une activation entre les deux couches, l'équivalence linéaire tombe.",
+ q3: "Trois transformations affines composées donnent une transformation affine : en substituant chaque égalité dans la suivante, on obtient o = Wx + b avec W le produit des trois matrices et b une combinaison des biais. Il existe donc un modèle à une seule couche qui calcule exactement la même fonction. L'étudiant a payé des milliers de paramètres pour rien. Les biais n'y changent rien, puisqu'une fonction affine en reste une, et le découpage en régions linéaires par morceaux est ce que produit ReLU, pas l'absence d'activation. Première chose à vérifier quand un réseau n'apprend qu'une tendance linéaire : les activations entre les couches.",
+ q4: "Le gradient traverse chaque activation en étant multiplié terme à terme par la dérivée de celle-ci. Lisez cela comme une porte : si la dérivée vaut 1, la porte est ouverte et le gradient passe intact ; si elle vaut 0,25, il perd les trois quarts de son amplitude. La dérivée de la sigmoïde plafonne à 0,25 en zéro et s'écrase des deux côtés, donc elle ne peut que rétrécir le gradient, couche après couche : 0,25 élevé à la puissance 12 vaut environ 6 fois 10 puissance moins 8. C'est le gradient évanescent, et il frappe d'abord les couches proches de l'entrée, dont le gradient traverse le plus grand nombre de matrices. La dérivée de ReLU, elle, vaut 0 ou 1 : elle annule le gradient ou le laisse passer intact, sans jamais le rétrécir.",
+ q5: "v1 et v2 sont des tenseurs feuilles, v_sum et v_res non, puisqu'ils ont un parent dans le graphe. Deux règles décident du reste. Premièrement, requires_grad est contagieux vers l'aval : v_sum en hérite de v1, c'est pourquoi la rétropropagation est possible. Deuxièmement, par économie de mémoire, les gradients ne sont stockés que sur les feuilles qui ont demandé requires_grad : v2 n'a rien demandé, les tenseurs intermédiaires ne sont pas conservés, à moins d'appeler retain_grad(). La valeur 2 se lit en français : augmenter une composante de v1 d'une unité augmente v_res de deux. Et c'est bien backward() qui enchaîne toute la règle de dérivation en chaîne, chaque nœud ayant mémorisé dans son grad_fn de quoi calculer sa dérivée locale.",
+ q6: "L'ordre causal est : propagation avant, perte, backward(), step(), puis remise à zéro. Ici zero_grad() efface les gradients juste après leur calcul et juste avant que l'optimiseur ne s'en serve : step() applique donc des gradients nuls, et les poids ne bougent pas d'un iota. Placer la remise à zéro en début de boucle est tout aussi correct, à condition qu'elle intervienne une fois par lot et avant backward(). Le symptôme du pas d'apprentissage trop petit est une perte qui descend trop lentement, pas une perte parfaitement immobile.",
+ q7: "Quand PyTorch calcule un gradient, il ne l'écrit pas dans l'attribut grad, il l'y ajoute. Cette accumulation des gradients est un choix de conception justifié : si un même tenseur intervient plusieurs fois dans un calcul, ses contributions doivent être sommées, puisque c'est ce que dit la règle de dérivation en chaîne. Mais d'un lot au suivant, elle est néfaste : le pas d'optimisation mélange l'historique, les mises à jour grossissent, la perte oscille ou explose, et rien ne plante. C'est l'erreur silencieuse la plus classique de PyTorch, et on peut appeler la remise à zéro indifféremment sur le réseau ou sur l'optimiseur.",
+ q8: "Les unités cachées d'une couche sont interchangeables : c'est une symétrie de permutation. Si tous les poids partent de la même valeur, chaque unité reçoit la même combinaison des mêmes entrées, produit la même activation, puis se voit attribuer le même gradient au retour. Les mises à jour étant identiques, les unités restent égales pour toujours, et vous payez 64 unités pour n'en utiliser qu'une. Point contre-intuitif mais essentiel : le tirage aléatoire des mini-lots ne brise pas cette symétrie, car à chaque pas les unités ont encore les mêmes poids. L'aléa doit être dans l'initialisation, et c'est justement le rôle de l'initialisation aléatoire ; l'initialisation de Xavier y ajoute la bonne échelle, une variance de 2 divisé par la somme du nombre d'entrées et du nombre de sorties, pour que l'amplitude des signaux et des gradients survive au passage de la couche.",
+ q9: "L'abandon de neurones est désactivé au moment du test : pendant l'entraînement on veut du bruit, pendant l'évaluation on veut une prédiction déterministe. net.eval() et net.train() commandent ce basculement, et c'est l'appel de l'instance qui l'applique, l'une des raisons pour lesquelles on n'appelle jamais forward() directement. Le facteur 1/(1 - p) garantit que l'espérance de l'activation est inchangée, ce qui n'est pas la même chose qu'une sortie identique : pour un tirage donné, la valeur est fausse, et la moyenne seule est juste. D'où une courbe de validation bruitée et pessimiste. Garder l'abandon actif au test existe comme usage délibéré, pour lire la dispersion des prédictions comme une mesure heuristique d'incertitude, mais c'est un choix, pas un oubli.",
+ q10: "Sans remplissage, une convolution donne une sortie de taille (n - k + 1) par côté ; avec un pas, la fenêtre saute, et la division est entière puisqu'une fenêtre à cheval sur le bord est abandonnée. Ici : partie entière de (28 - 5) divisé par 2, soit 11, plus 1 pour la position de départ, donc 12 de côté. Avec 16 canaux de sortie, la sortie est 16 × 12 × 12, soit 2304 valeurs après aplatissement. Oublier le plus 1 donne 11 × 11, ignorer le pas donne 24 × 24, diviser 28 par le pas sans tenir compte du noyau donne 14 × 14. Ce nombre est le point de contact entre la partie convolutive et la première couche dense : calculez-le au crayon, puis vérifiez-le en faisant passer un tenseur factice dans le corps convolutif seul et en lisant sa forme.",
+ q11: "La formule à retenir est : geler une valeur en constante. Un tenseur détaché n'est plus, du point de vue de la rétropropagation, le résultat d'un calcul : c'est un nombre tombé du ciel, sans rien à dériver et donc sans rien à remonter. La valeur numérique est intacte, et les paramètres de reseau_b reçoivent bien leurs gradients, puisqu'ils sont en aval de l'entrée détachée ; seul reseau_a est épargné. Ne confondez pas avec item(), qui sort un nombre Python d'un tenseur scalaire, ni avec une remise à zéro des gradients. Une semaine ultérieure réutilisera exactement ce geste, au cœur de son algorithme.",
+ q12: "TensorBoard est un petit service web : vous lui désignez un répertoire, il le surveille, et vous lisez les valeurs s'actualiser pendant que le programme tourne, ce qui est précisément ce qu'il faut quand l'entraînement se déroule sur une machine distante. L'interface utile tient en trois appels : SummaryWriter, qui crée un dossier par exécution, add_scalar avec un nom, une valeur et un numéro d'itération entier, puis close. Envoyez toujours loss_t.item() et jamais le tenseur, sous peine de fuite de mémoire, et nommez vos exécutions avec comment= pour savoir laquelle est laquelle quand vous superposerez les courbes. Ce que l'on surveille : la perte et ses composantes, la validation sur l'entraînement et sur le test, les statistiques des gradients et des poids, les valeurs produites par le réseau, le pas d'apprentissage, et la durée d'une époque. L'arrêt précoce, lui, reste une règle que vous écrivez vous-même."
+};
+
+function submitQuiz() {
+ const questions = document.querySelectorAll('.question');
+ let score = 0;
+ let answered = 0;
+
+ questions.forEach((q, i) => {
+ const name = `q${i + 1}`;
+ const correct = q.dataset.correct;
+ const selected = q.querySelector(`input[name="${name}"]:checked`);
+ const feedback = q.querySelector('.feedback');
+
+ if (selected) {
+ answered++;
+ feedback.style.display = 'block';
+ if (selected.value === correct) {
+ score++;
+ feedback.className = 'feedback correct';
+ feedback.textContent = ' Correct ! ' + explanations[name];
+ } else {
+ feedback.className = 'feedback incorrect';
+ feedback.textContent = ` Incorrect. La bonne réponse est (${correct.toUpperCase()}). ` + explanations[name];
+ }
+ }
+ });
+
+ if (answered < questions.length) {
+ alert('Veuillez répondre à toutes les questions avant de valider.');
+ return;
+ }
+
+ const scoreBox = document.getElementById('score-box');
+ scoreBox.style.display = 'block';
+ document.getElementById('score-text').textContent = `${score} / ${questions.length}`;
+ const pct = Math.round((score / questions.length) * 100);
+ let msg = '';
+ if (pct >= 90) msg = ' Excellent ! Vous maîtrisez les fondements du cours.';
+ else if (pct >= 70) msg = ' Très bien ! Quelques révisions sur les points incorrects et vous serez prêt·e.';
+ else if (pct >= 50) msg = ' Pas mal ! Relisez les sections correspondantes avant de continuer.';
+ else msg = ' Prenez le temps de revoir le cours, puis réessayez.';
+ document.getElementById('score-msg').textContent = msg;
+ scoreBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+ document.getElementById('quiz-form').reset();
+ document.querySelectorAll('.feedback').forEach(f => { f.style.display = 'none'; f.textContent = ''; });
+ document.getElementById('score-box').style.display = 'none';
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

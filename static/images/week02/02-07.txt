@@ -1,0 +1,1 @@
+Figure 2-7. Le même réseau avant et après l'abandon : deux unités cachées ont disparu pour cette itération, et seront peut-être présentes à la suivante.
