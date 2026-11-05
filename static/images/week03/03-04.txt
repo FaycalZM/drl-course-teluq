@@ -1,0 +1,1 @@
+Figure 3-4. Le seuil des élites reste à 0,0 pendant toute l’exécution : le symptôme, et presque le diagnostic.

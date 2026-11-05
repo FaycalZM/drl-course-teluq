@@ -1,0 +1,1 @@
+Figure 3-5. Sur CartPole, les retours se répartissent sur une plage continue : le percentile y découpe une vraie élite.

@@ -1,0 +1,1 @@
+Figure 3-3. FrozenLake : une grille de 4 × 4 cases, un départ en haut à gauche, l'objectif en bas à droite, et quatre trous à éviter.

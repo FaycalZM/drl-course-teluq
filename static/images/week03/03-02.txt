@@ -1,0 +1,1 @@
+Figure 3-2. Quatre épisodes de longueurs différentes. La récompense totale d'un épisode est la somme de ses récompenses.
