@@ -1,0 +1,1 @@
+Figure 8-7. Parallélisme de gradients. Même disposition, et deux différences : ce sont des gradients qui circulent au lieu de transitions, et la perte est calculée chez les enfants. Le processus central ne fait plus qu'additionner et avancer d'un pas, ce qui est l'opération légère.

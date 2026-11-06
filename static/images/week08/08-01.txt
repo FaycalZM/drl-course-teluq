@@ -1,0 +1,1 @@
+Figure 8-1. Le même réseau qu'en semaine 5, une sortie par action, et une interprétation entièrement différente : les sorties, normalisées, forment une distribution de probabilité sur les actions. L'agent ne prend plus la plus grande, il tire dedans, et il prendra donc l'action à 0,17 dans un peu moins d'un cas sur six.

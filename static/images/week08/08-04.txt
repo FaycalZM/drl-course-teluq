@@ -1,0 +1,1 @@
+Figure 8-4. Seconde façon, et celle qu'on emploie en pratique : un tronc commun, puis deux têtes. Les couches partagées apprennent une fois les caractéristiques utiles aux deux tâches, et c'est là que les paramètres de l'acteur et ceux du critique se recouvrent physiquement sans se confondre.

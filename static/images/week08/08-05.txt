@@ -1,0 +1,1 @@
+Figure 8-5. Un seul agent, un seul réseau, et plusieurs environnements qui alimentent la même boucle d'entraînement. C'est le dispositif synchrone, celui que le laboratoire implémente : il décorrèle les échantillons sans réclamer un seul processus supplémentaire.

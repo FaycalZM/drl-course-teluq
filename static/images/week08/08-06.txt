@@ -1,0 +1,1 @@
+Figure 8-6. Parallélisme de données. Les processus enfants jouent et expédient leurs transitions ; le processus central calcule la perte, met à jour les poids, et les rediffuse à tout le monde. Tout le calcul lourd reste au centre, qui devient le goulot d'étranglement.

@@ -1,0 +1,1 @@
+Figure 8-3. Première façon de câbler un acteur et un critique : deux réseaux indépendants, qui reçoivent la même observation et ne partagent rien. L'un produit une distribution sur les actions, l'autre un seul nombre.
