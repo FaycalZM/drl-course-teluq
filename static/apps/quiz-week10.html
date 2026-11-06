@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Quiz Semaine 10 : Régions de confiance : TRPO, PPO, ACKTR, SAC</title>
+ <style>
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body {
+ font-family: 'Segoe UI', system-ui, sans-serif;
+ background: #f8fafc;
+ color: #1e293b;
+ padding: 1.5rem;
+ line-height: 1.6;
+ }
+ h1 {
+ font-size: 1.4rem;
+ font-weight: 700;
+ color: #0f172a;
+ margin-bottom: 0.5rem;
+ }
+ .subtitle {
+ color: #64748b;
+ font-size: 0.9rem;
+ margin-bottom: 1.5rem;
+ }
+ .question {
+ background: #fff;
+ border: 1px solid #e2e8f0;
+ border-radius: 10px;
+ padding: 1.25rem 1.5rem;
+ margin-bottom: 1.25rem;
+ transition: box-shadow 0.2s;
+ }
+ .question:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+ .question-text {
+ font-weight: 600;
+ margin-bottom: 0.85rem;
+ font-size: 0.98rem;
+ }
+ .option {
+ display: flex;
+ align-items: flex-start;
+ gap: 0.6rem;
+ padding: 0.5rem 0.75rem;
+ border-radius: 6px;
+ margin-bottom: 0.35rem;
+ cursor: pointer;
+ transition: background 0.15s;
+ font-size: 0.93rem;
+ }
+ .option-text { flex: 1; min-width: 0; }
+ .option:hover { background: #f1f5f9; }
+ .option input[type="radio"] { margin-top: 0.2rem; accent-color: #6366f1; flex-shrink: 0; }
+ .feedback {
+ margin-top: 0.85rem;
+ padding: 0.6rem 1rem;
+ border-radius: 6px;
+ font-size: 0.9rem;
+ display: none;
+ }
+ .feedback.correct { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+ .feedback.incorrect { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+ .btn-check {
+ margin-top: 1rem;
+ padding: 0.5rem 1.2rem;
+ background: #6366f1;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ font-size: 0.9rem;
+ font-weight: 600;
+ cursor: pointer;
+ transition: background 0.2s;
+ }
+ .btn-check:hover { background: #4f46e5; }
+ .score-box {
+ background: #ede9fe;
+ border: 1px solid #c4b5fd;
+ border-radius: 10px;
+ padding: 1.5rem;
+ text-align: center;
+ display: none;
+ margin-top: 1rem;
+ }
+ .score-box h2 { font-size: 1.6rem; color: #4c1d95; margin-bottom: 0.25rem; }
+ .score-box p { color: #6d28d9; font-size: 0.95rem; }
+ .btn-reset {
+ margin-top: 1rem;
+ padding: 0.5rem 1.4rem;
+ background: #7c3aed;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ cursor: pointer;
+ font-weight: 600;
+ transition: background 0.2s;
+ }
+ .btn-reset:hover { background: #6d28d9; }
+ #submit-all {
+ display: block;
+ width: 100%;
+ padding: 0.75rem;
+ background: #0f172a;
+ color: #fff;
+ border: none;
+ border-radius: 8px;
+ font-size: 1rem;
+ font-weight: 700;
+ cursor: pointer;
+ margin-top: 1.5rem;
+ transition: background 0.2s;
+ }
+ #submit-all:hover { background: #1e3a5f; }
+ </style>
+</head>
+<body>
+
+<h1>Quiz : Semaine 10</h1>
+<p class="subtitle">Régions de confiance : TRPO, PPO, ACKTR, SAC · 12 questions</p>
+
+<form id="quiz-form">
+
+ <div class="question" data-correct="c">
+ <div class="question-text">1. Un camarade résume l'ouverture de la semaine ainsi : un pas de politique trop grand, c'est un dépassement comme en apprentissage supervisé, et cela se rattrape au pas suivant. Qu'est-ce qui rend ce pas <strong>irrécupérable</strong> ici, et quelle sortie la semaine refuse-t-elle explicitement ?</div>
+ <label class="option"><input type="radio" name="q1" value="a" /><span class="option-text">a) Le pas est irrécupérable parce que la perte cesse d'être dérivable dès que le rapport entre les deux politiques sort de sa bande : plus aucun gradient ne circule, donc plus aucune mise à jour ne peut ramener la politique. La sortie que la semaine refuse est l'écrêtage, trop grossier pour une politique gaussienne</span></label>
+ <label class="option"><input type="radio" name="q1" value="b" /><span class="option-text">b) Le pas est irrécupérable parce que le pas d'apprentissage était trop grand, et c'est tout : un pas dix fois plus petit fait disparaître le problème, et c'est bien la solution que la semaine adopte. Ce qu'elle refuse, en revanche, c'est l'écrêtage du gradient, qui déforme la direction du pas sans en borner l'effet</span></label>
+ <label class="option"><input type="radio" name="q1" value="c" /><span class="option-text">c) Le pas dégrade la politique, et <strong>la politique dégradée collecte le lot dont la mise à jour suivante se nourrit</strong>. En apprentissage supervisé, le pas suivant retrouve les mêmes données et le gradient vous ramène ; ici, une politique abîmée visite de mauvais états, produit une expérience qui n'enseigne rien de ce qu'il faudrait réapprendre, et la mise à jour d'après part de ce lot. Le mauvais pas ne dégrade pas seulement la politique, il <em>choisit les données</em> du pas d'après. Et la sortie refusée est celle que tout le monde propose en premier : réduire le pas d'apprentissage, qui achète de la sécurité en renonçant à converger</span></label>
+ <label class="option"><input type="radio" name="q1" value="d" /><span class="option-text">d) Le pas est irrécupérable parce que le tampon de rejeu conserve les transitions produites par la politique abîmée et les ressert pendant des heures : c'est l'âge des données qui fait le dégât, et non le pas lui-même. La sortie refusée est d'agrandir le tampon, qui ne ferait que prolonger la contamination</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">2. La semaine remplace « réduire le pas » par « contraindre le pas ». Sur quelle grandeur la contrainte porte-t-elle exactement, et pourquoi un pas d'apprentissage ne peut-il pas en tenir lieu ?</div>
+ <label class="option"><input type="radio" name="q2" value="a" /><span class="option-text">a) Elle porte sur la norme du déplacement des poids, ce qui est précisément ce qu'un pas d'apprentissage borne ; la seule différence est que la contrainte la borne exactement là où le pas d'apprentissage ne la borne qu'en moyenne, et c'est l'écrêtage du gradient de la semaine 8 appliqué à la politique</span></label>
+ <label class="option"><input type="radio" name="q2" value="b" /><span class="option-text">b) Elle porte sur le déplacement dans l'<strong>espace des politiques</strong>, mesuré par une divergence entre les deux distributions d'actions, moyennée sur les états visités. Un réseau profond est fortement non linéaire : deux jeux de poids très proches peuvent décrire deux comportements très différents, de sorte qu'un pas d'apprentissage, qui borne un déplacement de <em>poids</em>, ne borne rien de ce qui compte. La zone de l'espace des paramètres où l'écart de politique reste sous un budget fixé d'avance s'appelle une <strong>région de confiance</strong>, et elle donne son nom à la famille</span></label>
+ <label class="option"><input type="radio" name="q2" value="c" /><span class="option-text">c) Elle porte sur la variance du gradient de politique, qui est la vraie cause de l'effondrement : un gradient très dispersé produit des pas de direction aléatoire, et borner sa variance borne le dégât. C'est la raison pour laquelle on normalise l'avantage avant de l'employer</span></label>
+ <label class="option"><input type="radio" name="q2" value="d" /><span class="option-text">d) Elle porte sur l'entropie de la politique, qu'on empêche de descendre sous un seuil : une politique qui garde de l'entropie reste large, donc elle ne peut pas s'effondrer sur une action unique, et c'est exactement ce que la prime d'entropie de la semaine 8 faisait déjà</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">3. Au jalon 3, vous obtenez 2 500 sur le guépard sous PyBullet et vous voulez placer ce chiffre à côté d'un 4 718 publié pour le même corps sous MuJoCo. Que vaut cette comparaison, et quel second piège de banc d'essai la semaine transmet-elle ?</div>
+ <label class="option"><input type="radio" name="q3" value="a" /><span class="option-text">a) Elle est valide : c'est le même corps et la même récompense d'avancement, et les deux simulateurs ne diffèrent que par la vitesse de simulation, d'un facteur trois environ. Le second piège est donc uniquement de ne pas comparer des durées en heures d'un moteur physique à l'autre</span></label>
+ <label class="option"><input type="radio" name="q3" value="b" /><span class="option-text">b) Elle est valide à condition d'égaliser le nombre de pas d'entraînement des deux côtés, puisque les scores de ce banc d'essai croissent encore à 100 millions de pas. Le second piège est le nombre d'environnements parallèles, qui change la corrélation des lots et donc la vitesse apparente d'apprentissage</span></label>
+ <label class="option"><input type="radio" name="q3" value="c" /><span class="option-text">c) Elle n'est pas valide, parce que les deux exécutions n'ont pas la même graine de départ : avec dix graines de chaque côté et un intervalle, les deux chiffres redeviennent comparables. Le second piège est le critère d'arrêt, qui doit être fixé à l'avance</span></label>
+ <label class="option"><input type="radio" name="q3" value="d" /><span class="option-text">d) Elle est <strong>vide</strong> : la version PyBullet du guépard fournit à l'agent 26 nombres d'observation, la version MuJoCo en fournit 17. Ce ne sont pas deux implémentations d'un même modèle, ce sont deux modèles différents, avec des dynamiques et des échelles de récompense différentes, même quand les courbes portent le même nom et les mêmes axes. Second piège : une condition de terminaison bien intentionnée peut enfermer un entraînement dans un minimum local, un contrôle de santé interrompant l'épisode dès que le corps s'incline, de sorte que l'agent n'observe jamais rien d'autre que des débuts d'épisode ; la parade a été de le désactiver. D'où la règle de lecture : un chiffre de banc d'essai sans sa version d'environnement n'est pas une mesure</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">4. PPO dérive le <strong>rapport</strong> entre la nouvelle et l'ancienne politique au lieu de la log-probabilité de l'action jouée. D'où vient ce rapport, qu'autorise-t-il exactement, et que ne donne-t-il pas ?</div>
+ <label class="option"><input type="radio" name="q4" value="a" /><span class="option-text">a) C'est l'<strong>échantillonnage préférentiel</strong> de la semaine 3 : pour estimer une espérance sous une distribution alors que les échantillons viennent d'une autre, on pondère par le quotient des deux. Le rapport repondère donc un lot collecté sous une politique périmée, et c'est ce qui autorise plusieurs <em>époques</em> de minilots sur une même longue trajectoire là où la semaine 8 jetait chaque transition après un pas. Deux précisions comptent. Au point où la politique courante est encore celle de la collecte, le rapport vaut 1 et son gradient coïncide exactement avec celui de la semaine 8 : ce n'est pas un nouveau gradient, c'est le même muni d'un certificat de péremption. Et l'ancienne log-densité est une constante, donc elle doit être détachée du graphe. Ce que le rapport ne donne pas : aucune borne. Maximisé seul, il pousse la probabilité de toute action à avantage positif aussi haut qu'il peut</span></label>
+ <label class="option"><input type="radio" name="q4" value="b" /><span class="option-text">b) Il est préféré parce qu'un quotient de densités est numériquement plus stable qu'un logarithme, et parce qu'il rend la méthode <em>hors politique</em> : une fois le rapport en place, un tampon de rejeu devient utilisable comme en semaine 9, et chaque transition peut resservir indéfiniment</span></label>
+ <label class="option"><input type="radio" name="q4" value="c" /><span class="option-text">c) Il vient de la contrainte de région de confiance, dont il est la forme échantillonnée : le rapport <em>est</em> une divergence entre les deux politiques, donc le dériver borne déjà le déplacement, et c'est pour cette raison que l'écrêtage reste une précaution facultative que les implémentations rapides omettent</span></label>
+ <label class="option"><input type="radio" name="q4" value="d" /><span class="option-text">d) Il autorise plusieurs époques parce qu'il est recalculé à chaque minilot avec les paramètres courants au numérateur comme au dénominateur, de sorte que le lot ne vieillit jamais. L'ancienne log-densité doit donc rester attachée au graphe, pour que les deux politiques s'ajustent ensemble</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">5. Sur un échantillon dont l'avantage est <strong>négatif</strong>, le rapport a dérivé vers 1,4, donc bien au-dessus de la bande avec <em>ε</em> = 0,2. Que fait l'objectif écrêté sur cet échantillon, et quelle règle résume les deux signes d'avantage ?</div>
+ <label class="option"><input type="radio" name="q5" value="a" /><span class="option-text">a) Il est plat des deux côtés au-delà de la bande, par construction du minimum : l'échantillon ne contribue plus au gradient, quel que soit le signe de l'avantage. C'est la symétrie que la bande installe, et c'est ce qui borne la mise à jour dans les deux sens</span></label>
+ <label class="option"><input type="radio" name="q5" value="b" /><span class="option-text">b) <strong>Rien n'est écrêté de ce côté-là.</strong> Pour un avantage négatif, la mise à jour veut <em>réduire</em> la probabilité de l'action, donc pousser le rapport vers la gauche : c'est le côté gauche qui s'aplatit, à 1 moins <em>ε</em>. Un rapport de 1,4 a fait l'inverse, il a rendu plus probable une action mauvaise ; le minimum retient alors le terme non écrêté, l'objectif continue de descendre, le gradient est non nul et l'échantillon est pénalisé de plein droit. D'où la règle : <strong>seul le côté vers lequel la mise à jour veut aller est aplati</strong>, et le rappel garde toute sa force dans l'autre sens</span></label>
+ <label class="option"><input type="radio" name="q5" value="c" /><span class="option-text">c) Il est écrêté, parce que 1,4 est hors de la bande et que l'écrêtage ne regarde que la valeur du rapport : le gradient de cet échantillon est nul, et le seul moyen de ramener la politique est l'arrêt précoce sur la divergence moyenne</span></label>
+ <label class="option"><input type="radio" name="q5" value="d" /><span class="option-text">d) Il est écrêté du côté droit, à 1 plus <em>ε</em>, parce que le minimum inverse les deux branches quand l'avantage change de signe : l'asymétrie existe bien, mais elle est l'inverse de celle qu'on lit pour un avantage positif, et c'est ce retournement que la figure de la section 10.2 met en évidence</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">6. Votre exécution de PPO diverge, et vos journaux montrent que le rapport est sorti de la bande sur une part importante des échantillons. Un camarade vous dit que c'est impossible, puisque l'écrêtage borne la mise à jour. Que corrigez-vous ?</div>
+ <label class="option"><input type="radio" name="q6" value="a" /><span class="option-text">a) Qu'il a raison sur le mécanisme et tort sur la cause : l'écrêtage borne bien le rapport, donc si vous observez des rapports hors bande, c'est que votre appel à <code>clamp</code> porte sur l'avantage au lieu de porter sur le rapport. Corrigez la ligne et la bande redevient infranchissable</span></label>
+ <label class="option"><input type="radio" name="q6" value="b" /><span class="option-text">b) Qu'il a raison : la seule façon d'obtenir un rapport hors bande est de normaliser les avantages <em>après</em> l'écrêtage au lieu d'avant, ce qui remet à l'échelle les deux termes du minimum et déplace la bande effective</span></label>
+ <label class="option"><input type="radio" name="q6" value="c" /><span class="option-text">c) Qu'il a tort parce que l'écrêtage ne concerne que l'objectif de l'acteur : la perte du critique n'est pas écrêtée, et c'est elle qui a emmené les poids partagés hors de la bande. La parade est donc un pas d'apprentissage unique pour les deux têtes</span></label>
+ <label class="option"><input type="radio" name="q6" value="d" /><span class="option-text">d) Qu'il confond un <strong>retrait d'incitation</strong> et une borne dure. L'écrêtage agit comme un régularisateur : il supprime l'intérêt qu'aurait la politique à changer beaucoup, et <em>ε</em> dit jusqu'où la nouvelle politique peut s'écarter de l'ancienne <em>tout en y gagnant encore quelque chose</em>. Il n'interdit rien. Un pas d'optimiseur un peu grand, ou un gradient venu d'un autre terme de la perte, emmène parfaitement le rapport au-delà de la bande, et une politique trop éloignée de celle de la collecte reste possible. La parade employée par les mises en œuvre sérieuses est l'<strong>arrêt précoce</strong> : on mesure à chaque époque la divergence moyenne avec la politique de collecte, et dès qu'un seuil est franchi on cesse les pas de gradient sur cette trajectoire et on repart collecter</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">7. Dans votre code d'estimation généralisée de l'avantage, vous remplacez <em>λ</em> = 0,95 par <em>λ</em> = 1 et vous relancez. Qu'avez-vous obtenu, et quels pièges d'écriture guettent ces deux équations ?</div>
+ <label class="option"><input type="radio" name="q7" value="a" /><span class="option-text">a) Les poids deviennent des puissances de <em>γ</em> seul, la somme des résidus temporels se télescope, et vous retombez exactement sur l'<strong>avantage de la semaine 8</strong>, celui qui déroule la trajectoire jusqu'au bout : plus de variance, et seul l'ultime terme de valeur porte encore le biais du critique. À l'autre extrémité, <em>λ</em> = 0 ne laisse que le premier terme, c'est-à-dire le résidu à un pas, de faible variance et entièrement biaisé par le critique. Trois pièges d'écriture : le facteur d'actualisation de la somme est le <em>produit</em> <em>γλ</em> et non <em>γ</em> élevé à la puissance <em>λ</em> ; l'exposant du dernier terme vaut <em>T</em> moins <em>t</em> moins 1, et vous le verrez parfois imprimé avec un plus ; et à un état terminal, c'est la <em>valeur de l'état suivant</em> qui disparaît du résidu, jamais la récompense, la somme devant en outre repartir de zéro</span></label>
+ <label class="option"><input type="radio" name="q7" value="b" /><span class="option-text">b) Vous avez annulé tous les termes sauf le premier : <em>λ</em> = 1 ramène l'avantage au résidu temporel à un pas, donc à l'estimation la moins bruitée et la plus biaisée. C'est <em>λ</em> = 0 qui redonne le déroulement complet de la semaine 8, et le réglage usuel 0,95 se lit donc comme « presque un seul pas »</span></label>
+ <label class="option"><input type="radio" name="q7" value="c" /><span class="option-text">c) Vous avez mis le critique hors circuit : avec <em>λ</em> = 1, l'avantage devient le retour actualisé de l'épisode sans aucune soustraction de valeur, donc vous êtes revenu à une méthode de type REINFORCE, et la variance du gradient explose pour cette raison</span></label>
+ <label class="option"><input type="radio" name="q7" value="d" /><span class="option-text">d) Vous avez écrit une somme qui ne converge plus : le facteur d'actualisation de la série vaut alors 1, donc la somme des résidus diverge sur un épisode long. Le réglage usuel 0,95 est précisément là pour garantir la convergence, et <em>λ</em> = 1 est interdit pour cette raison</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">8. TRPO pose le problème sans approximation. Quelle quantité maximise-t-il, sur quoi la contrainte porte-t-elle <em>exactement</em>, et comment reconnaît-on une formule qui circule sous le nom de divergence de Kullback-Leibler sans en être une ?</div>
+ <label class="option"><input type="radio" name="q8" value="a" /><span class="option-text">a) Il maximise le rendement actualisé de la nouvelle politique, ce qui suppose de la jouer pour la mesurer ; la contrainte borne la divergence <em>maximale</em>, c'est-à-dire l'écart dans le pire état rencontré ; et la somme des probabilités fois le logarithme des probabilités de l'autre loi, avec un signe moins devant, est bien la divergence KL, écrite dans la convention la plus répandue</span></label>
+ <label class="option"><input type="radio" name="q8" value="b" /><span class="option-text">b) Il maximise l'objectif écrêté, dont il est l'ancêtre direct ; la contrainte borne la norme du gradient naturel, puisque c'est elle qui fixe la longueur du pas ; et une divergence KL se reconnaît au signe négatif placé devant sa somme</span></label>
+ <label class="option"><input type="radio" name="q8" value="c" /><span class="option-text">c) Il maximise l'<strong>objectif de substitution</strong>, c'est-à-dire le rapport entre les deux politiques pondéré par l'avantage estimé sous l'ancienne, donc très exactement l'objectif <em>non écrêté</em> de PPO. La contrainte, elle, borne une divergence <strong>moyenne</strong> : pour chaque état on compare les deux distributions d'actions, puis on moyenne cette comparaison sur les états que l'ancienne politique visite réellement. Elle demande donc que les deux politiques se ressemblent <em>là où l'agent va</em>, et non partout. Quant au test de reconnaissance, il tient en une ligne : une divergence KL contient un <strong>quotient</strong> de probabilités ; l'expression sans quotient est l'<strong>entropie croisée</strong>, qui ne vaut pas zéro quand les deux lois coïncident et qui ne peut donc pas servir de budget dans une contrainte</span></label>
+ <label class="option"><input type="radio" name="q8" value="d" /><span class="option-text">d) Il maximise l'objectif de substitution, et la contrainte borne la divergence <em>maximale</em> sur tous les états, version plus sévère mais parfaitement calculable puisqu'il suffit de prendre le maximum sur le lot ; et l'entropie croisée ne diffère de la divergence KL que par une constante, de sorte que les deux sont interchangeables à l'intérieur d'une contrainte</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">9. Quelle est la relation exacte entre les deux méthodes à région de confiance, et pourquoi TRPO ne forme-t-il jamais l'inverse de sa matrice de courbure ?</div>
+ <label class="option"><input type="radio" name="q9" value="a" /><span class="option-text">a) PPO est la version hors politique de TRPO : l'écrêtage remplace la contrainte parce que les transitions viennent d'un tampon de rejeu et qu'une contrainte sur les états visités n'y aurait plus de sens. Et l'inverse n'est pas formé parce qu'il faudrait le recalculer à chaque minilot</span></label>
+ <label class="option"><input type="radio" name="q9" value="b" /><span class="option-text">b) TRPO est PPO auquel on a ajouté un gradient naturel et une prime d'entropie, donc l'ordre historique suit l'ordre de complexité. Et l'inverse n'est pas formé parce qu'il n'existe pas : la courbure d'une divergence estimée sur un lot fini est singulière, et c'est à cela que sert le terme d'amortissement</span></label>
+ <label class="option"><input type="radio" name="q9" value="c" /><span class="option-text">c) Les deux méthodes maximisent deux objectifs différents, l'un écrêté et l'autre de substitution, et elles contrôlent deux grandeurs différentes, un rapport d'un côté et une divergence de l'autre : c'est pourquoi leurs résultats diffèrent autant sur le banc d'essai. Et l'inverse n'est pas formé parce que la méthode du gradient conjugué est plus précise qu'une inversion directe</span></label>
+ <label class="option"><input type="radio" name="q9" value="d" /><span class="option-text">d) <strong>PPO est TRPO dans lequel la méthode du gradient conjugué et la recherche linéaire par rebroussement ont été remplacées par un simple écrêtage du rapport.</strong> L'objectif maximisé est le même au symbole près, la grandeur contrôlée est la même ; seul le <em>mécanisme de contrôle</em> change, TRPO posant une contrainte explicite et payant pour la respecter là où PPO renonce à la contrainte et supprime seulement l'incitation à la violer. Et la matrice n'est jamais inversée pour une raison de taille : son côté est le nombre de paramètres de la politique, soit dix milliards de coefficients pour un réseau de cent mille paramètres. On n'a d'ailleurs pas besoin de l'inverse, mais d'un seul <em>vecteur</em>, la solution du système linéaire correspondant, et le gradient conjugué l'obtient en ne demandant qu'un produit de la matrice par un vecteur, chacun calculé par deux rétropropagations</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">10. ACKTR promet la courbure du second ordre à un coût praticable. Ce qui a été mesuré est une instabilité sur les quatre configurations du banc d'essai, avec deux explications ouvertes que rien ne permet de séparer. Que démontre ce résultat, et que ne démontre-t-il pas ?</div>
+ <label class="option"><input type="radio" name="q10" value="a" /><span class="option-text">a) Il démontre que la méthode ne fonctionne pas et que ses résultats publiés ne sont pas reproductibles : le reste du code était inchangé et seul l'optimiseur a bougé, donc la responsabilité est établie et la conclusion est permise</span></label>
+ <label class="option"><input type="radio" name="q10" value="b" /><span class="option-text">b) Il ne démontre rien, puisque la cause n'est pas établie : une mesure dont on ne sait pas expliquer le résultat n'est pas une mesure, et elle n'aurait pas dû être rapportée. La règle de rédaction qui en découle est de ne publier que ce que l'on sait expliquer</span></label>
+ <label class="option"><input type="radio" name="q10" value="c" /><span class="option-text">c) Il démontre que <strong>cette méthode, dans cette mise en œuvre et avec ce réglage</strong>, s'est révélée instable sur ces quatre configurations. Il démontre aussi quelque chose de plus large : une méthode du second ordre apporte une dépendance supplémentaire, un optimiseur spécialisé que l'écosystème standard ne fournit pas, et cette dépendance est un coût réel qui se paie en instabilité quand elle est adaptée à la main. Il <strong>ne démontre pas</strong> que l'idée ne fonctionne pas, ni que ses auteurs se sont trompés : un échec de reproduction est une mesure sur un dispositif complet, qui comprend le code, le réglage, l'environnement et la personne, et on n'en extrait pas un verdict sur la seule idée</span></label>
+ <label class="option"><input type="radio" name="q10" value="d" /><span class="option-text">d) Il démontre que la courbure n'apporte rien en apprentissage par renforcement, puisque le gradient naturel de TRPO souffre du même défaut sur la fourmi : la conclusion à tirer est que les méthodes du premier ordre suffisent, et c'est pour cela que le cours n'enseigne que celles-là</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">11. Un camarade décrit la méthode qui ferme la semaine comme « PPO avec une prime d'entropie ». Combien d'erreurs, et où vit exactement le terme d'entropie ?</div>
+ <label class="option"><input type="radio" name="q11" value="a" /><span class="option-text">a) Une seule erreur, et elle porte sur le nom : le terme est bien ajouté à la perte de l'acteur avec son coefficient, comme en semaine 8, mais il s'y ajoute deux fois, une fois côté acteur et une fois côté critique. Le reste de la description est juste, la méthode étant sur politique et son écart-type restant un paramètre global</span></label>
+ <label class="option"><input type="radio" name="q11" value="b" /><span class="option-text">b) Presque tout est à corriger. La filiation d'abord : cette méthode ne descend pas des gradients de politique de la semaine 8 mais du DDPG de la semaine 9. Elle est <strong>hors politique</strong>, elle apprend depuis un tampon de rejeu, sa politique est <strong>stochastique</strong>, et elle reprend le <strong>double Q écrêté</strong> de la semaine 9, sa cible retenant le minimum des deux critiques cibles. Le terme d'entropie ensuite : il ne vit pas dans une perte, il est <em>à l'intérieur de la somme actualisée de l'objectif</em>, au même rang que la récompense. C'est pour cela qu'il change la définition de la valeur d'un état, donc les cibles de Bellman, et qu'on le retrouve dans la cible des critiques et pas seulement dans l'objectif de l'acteur. Un troisième point ferme la description : l'écart-type est ici une fonction de l'état, sans quoi l'entropie de la politique ne dépendrait pas de l'état et l'agent ne pourrait pas apprendre <em>où</em> il a besoin d'être incertain</span></label>
+ <label class="option"><input type="radio" name="q11" value="c" /><span class="option-text">c) Deux erreurs : la méthode est hors politique et non sur politique, et son coefficient d'entropie est le plus souvent ajusté automatiquement plutôt que fixé à la main. Le terme, lui, reste bien un régularisateur ajouté à la perte de l'acteur, ce qui laisse les fonctions de valeur et les cibles exactement ce qu'elles étaient en semaine 9</span></label>
+ <label class="option"><input type="radio" name="q11" value="d" /><span class="option-text">d) La description est exacte à un détail près, le signe : l'entropie est maximisée et non pénalisée. Les deux méthodes sont deux variantes de la même famille sur politique, l'une écrêtant un rapport et l'autre payant l'entropie, et la seule différence pratique est que celle-ci n'a pas besoin d'écrêtage puisque son entropie l'empêche de trop bouger</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">12. Vous choisissez entre une méthode sur politique et une méthode hors politique pour un projet où chaque observation demande une manipulation de robot réel, et vous lisez le Tableau 10-1 pour vous décider. Que ce tableau vous dit-il, et que faut-il refuser d'en tirer ?</div>
+ <label class="option"><input type="radio" name="q12" value="a" /><span class="option-text">a) Il vous dit qu'<strong>aucune des cinq méthodes ne gagne partout</strong>, et le compromis, lui, est chiffré à côté : la méthode hors politique mesurée atteint un même niveau avec deux fois moins d'observations, et traite dix fois moins d'observations que la méthode sur politique de référence dans le même temps de calcul. Des observations coûteuses justifient donc de payer en calcul, et c'est votre cas. Deux refus, en revanche. Les deux cases sans nombre ne sont pas des expériences manquantes : les deux exécutions ont eu lieu, l'une sans aucune amélioration de récompense, l'autre avec une politique qui parvient tout juste à tenir le corps debout, et c'est le rapport d'un meilleur score qui a été jugé sans objet. Et la dernière ligne ne peut pas être attribuée à la méthode dont elle porterait l'étiquette : le code qui a produit ces quatre nombres n'a pas de terme d'entropie dans l'objectif de son acteur et escalade le premier critique au lieu du minimum des deux. Ces nombres mesurent donc bien une méthode hors politique à tampon de rejeu, et c'est tout ce qu'ils mesurent</span></label>
+ <label class="option"><input type="radio" name="q12" value="b" /><span class="option-text">b) Il vous dit que la méthode hors politique domine, puisqu'elle détient le meilleur chiffre de tout le tableau : c'est donc elle qu'il faut choisir, et vous pouvez citer ce record comme son résultat. Les deux cases sans nombre signalent deux exécutions qui n'ont pas été lancées, faute de temps de calcul disponible</span></label>
+ <label class="option"><input type="radio" name="q12" value="c" /><span class="option-text">c) Il ne vous dit rien d'utilisable, parce qu'aucune de ses vingt cases ne porte d'intervalle et que chacune est une exécution unique. La décision doit donc se prendre sur le seul critère robuste, le nombre de paramètres de la méthode, et les deux cases sans nombre sont des entraînements qui ont divergé</span></label>
+ <label class="option"><input type="radio" name="q12" value="d" /><span class="option-text">d) Il vous dit que des observations coûteuses appellent une méthode <em>sur politique</em> : une méthode sur politique jette ses données après usage, donc elle en consomme moins, alors qu'une méthode hors politique réutilise chaque transition des dizaines de fois et a besoin d'un tampon énorme, donc de beaucoup plus d'observations. Les deux cases sans nombre sont les exécutions où ce besoin n'a pas pu être satisfait</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <button type="button" id="submit-all" onclick="submitQuiz()">Valider mes réponses</button>
+</form>
+
+<div class="score-box" id="score-box">
+ <h2 id="score-text"></h2>
+ <p id="score-msg"></p>
+ <button class="btn-reset" onclick="resetQuiz()"> Recommencer</button>
+</div>
+
+<script>
+const explanations = {
+ q1: "Tenez cette distinction, parce que les six sections de la semaine en découlent. Un apprentissage supervisé qui fait un mauvais pas retrouve au pas suivant les mêmes exemples, les mêmes étiquettes, et un gradient qui le ramène : le jeu d'entraînement ne sait pas que vos poids se sont dégradés. Ici, le pas suivant travaille sur un lot que la politique abîmée a elle-même collecté, et c'est la seule boucle du cours où une erreur se nourrit d'elle-même sans aucun mécanisme de rappel. La réponse (b) est la fausse sortie que tout le monde propose en premier, et la semaine la refuse explicitement : réduire le pas d'apprentissage réduit bien le risque, mais il ralentit la convergence dans la même proportion, et sur une tâche qui demande des dizaines de millions d'interactions, ralentir sensiblement la convergence n'est pas une gêne, c'est un abandon. Vous achèteriez de la sécurité au tarif fixé par le plus mauvais pas que vous craignez, pendant toute la durée de l'entraînement. La réponse (a) invente un défaut de dérivabilité : l'objectif écrêté est dérivable par morceaux, et le gradient d'un échantillon écrêté est nul sans que rien ne cesse d'être calculable, de sorte que le danger ne vient pas de là. La réponse (d) accuse un tampon de rejeu qui n'existe pas dans cette famille : la méthode de la section 10.2 est sur politique, elle jette sa trajectoire après usage, et l'effondrement se produirait exactement de la même façon sans aucune mémoire des transitions. Gardez enfin la reformulation qui ouvre la suite : le problème n'est pas la taille du pas dans l'espace des paramètres, c'est son effet dans l'espace des politiques.",
+ q2: "Toute la semaine tient dans ce déplacement de la question. Deux jeux de poids séparés par un millionième peuvent décrire un agent qui marche et un agent qui tombe, parce qu'un réseau profond est fortement non linéaire : un pas d'apprentissage borne un déplacement de poids et ne borne donc rien de ce qui compte. La grandeur à contraindre est l'écart entre les deux politiques, mesuré pour chaque état entre les deux distributions d'actions, puis moyenné sur les états que l'ancienne politique visite réellement ; la zone où cet écart reste sous un budget fixé d'avance est une région de confiance. La réponse (a) est l'erreur de référentiel, et c'est la plus utile à avoir faite une fois : l'écrêtage du gradient de la semaine 8 et un pas d'apprentissage travaillent tous les deux dans l'espace des paramètres, et aucun des deux ne dit quoi que ce soit sur le comportement obtenu. La réponse (c) nomme une pratique réelle, la normalisation de l'avantage, mais la met à la place de la contrainte : réduire la variance d'un gradient ne limite pas l'effet d'un pas moyen parfaitement représentatif et parfaitement destructeur. La réponse (d) anticipe la section 10.5 en la déformant : une entropie plancher garde la politique large, ce qui est une tout autre affaire que de borner le déplacement entre deux versions successives, et la semaine 8 posait d'ailleurs cette prime à côté d'une perte sans toucher à l'objectif. Retenez le verbe : la semaine cesse de réduire le pas et commence à le contraindre.",
+ q3: "C'est la question de méthode de la semaine, et elle est placée avant toute équation pour une raison : le jalon 3 est le premier moment du cours où vous comparerez vos propres courbes à des chiffres venus d'ailleurs. Deux modèles qui exposent 26 et 17 nombres d'observation ne sont pas deux versions d'un même problème, ce sont deux problèmes, avec des dynamiques et des échelles de récompense différentes ; et les deux pièges se combinent de la pire façon, en produisant des courbes qui ont l'air comparables, avec les mêmes noms et les mêmes axes, et dont la comparaison est vide. La réponse (a) ne retient du second simulateur que sa vitesse, qui est réelle mais sans rapport : un facteur trois sur le débit de transitions change votre facture en heures, pas la définition de la tâche. La réponse (b) propose une correction qui ne corrige rien : égaliser le nombre de pas met côte à côte deux mesures faites sur deux tâches, ce qui est précisément le défaut. La réponse (c) est la plus intéressante à écarter, parce qu'elle invoque une exigence que le cours impose vraiment depuis le jalon 2, plusieurs graines avec intervalles. Des graines répondent à la variabilité d'exécution, elles ne rendent pas comparables deux environnements différents, et aucun nombre de répétitions ne répare un changement de problème. Le réflexe à acquérir est de chercher le numéro de version, le simulateur et la dimension de l'observation avant de regarder la hauteur des courbes.",
+ q4: "Le rapport n'est pas une invention de cette semaine, c'est la semaine 3 qui revient : on pondère par un quotient de distributions pour exploiter des échantillons tirés sous une loi qui n'est plus la bonne. Faites une fois la vérification qui rassure : dérivez l'objectif pondéré au point où la politique courante est encore celle de la collecte ; le dénominateur est une constante, et comme le gradient du logarithme est le gradient divisé par la valeur, vous retombez exactement sur le gradient de la semaine 8. Ce que le rapport ajoute n'est donc pas une direction nouvelle, c'est une date de péremption lisible : il vaut 1 au départ et s'en écarte à mesure que la politique bouge. La réponse (d) porte l'erreur de code la plus coûteuse de la section : si l'ancienne log-densité reste attachée au graphe, le gradient remonte dans le dénominateur et vous optimisez une quantité que vous n'avez pas écrite ; cette log-densité a été calculée à la collecte et elle est une constante pour toute l'exploitation de la trajectoire. La réponse (b) confond la réutilisation d'un lot sur dix époques avec l'apprentissage hors politique : la trajectoire est jetée à la fin, la collecte suivante se fait sous la politique mise à jour, et cette méthode reste sur politique. La réponse (c) prend le rapport pour une divergence, alors qu'il n'est ni borné ni symétrique et qu'il ne contrôle rien par lui-même ; maximisé seul, il pousse la probabilité de toute action à avantage positif aussi haut qu'il peut, ce qui est très exactement le grand pas de l'introduction. Les deux idées sont donc indissociables : l'écrêtage rend les époques multiples sûres, et les époques multiples rendent l'écrêtage utile.",
+ q5: "C'est le point le plus subtil de la semaine, et il se vérifie à la main en dix secondes. Posez un avantage négatif et un rapport de 1,4 : le terme non écrêté vaut 1,4 fois l'avantage, le terme écrêté vaut 1,2 fois l'avantage, et comme l'avantage est négatif, c'est le premier qui est le plus petit. Le minimum retient donc le terme non écrêté, l'objectif continue de descendre, et le gradient tire franchement le rapport vers le bas. Dit autrement, la branche à avantage négatif s'écrit comme un maximum entre le rapport et 1 moins epsilon, multiplié par l'avantage : c'est le plancher qui agit, jamais le plafond. La réponse (c) est la lecture la plus naturelle et la plus fausse : l'écrêtage ne regarde pas seulement la valeur du rapport, il intervient à travers un minimum dont l'issue dépend du signe de l'avantage, et c'est tout l'intérêt de la figure de la section 10.2. La réponse (a) installe une prison symétrique que la formule ne construit pas : si les deux côtés étaient plats, une politique qui aurait dérivé dans la mauvaise direction n'aurait plus aucun rappel, et rien ne la ramènerait. La réponse (d) retourne correctement l'idée d'asymétrie mais place le plafond du mauvais côté. Gardez la formulation en une ligne : seul le côté vers lequel la mise à jour veut aller est aplati, et la bande supprime la récompense de l'excès dans la direction de l'excès, en laissant toute sa force au rappel dans l'autre sens.",
+ q6: "Voici le piège de la semaine, et il se loge dans une phrase que l'on lit partout : l'écrêtage limiterait la taille de la mise à jour. Ce n'est pas ce qu'il fait. Il retire une incitation, et epsilon dit jusqu'où la nouvelle politique peut s'éloigner de l'ancienne en y gagnant encore quelque chose ; au-delà, l'objectif ne l'encourage plus, il ne l'interdit pas. Un étudiant qui retient la borne dure cherchera son bogue au mauvais endroit la première fois qu'une exécution divergera, et c'est exactement la situation décrite. La réponse (a) écrit ensuite la correction de code dans le mauvais sens : écrêter l'avantage au lieu du rapport serait une autre méthode, et même parfaitement écrit, votre appel au serrage n'agit que sur un des deux termes du minimum, pas sur la valeur que le rapport prendra au pas suivant. La réponse (b) invente un ordre d'opérations décisif : la normalisation de l'avantage change l'échelle des gradients et constitue déjà un biais accepté pour la stabilité, mais elle ne crée pas de rapports hors bande. La réponse (c) s'effondre sur l'architecture de la semaine : l'acteur et le critique sont ici deux réseaux séparés sans aucun poids commun, ce qui est le deuxième écart de la section 10.1 et ce qui rend justement possibles deux pas d'apprentissage distincts. Le diagnostic utile coûte deux lignes : journalisez la moyenne du logarithme du rapport, qui estime la divergence avec la politique de collecte, et la fraction des échantillons sortis de la bande, qui vous dit quelle part de votre minilot ne contribue plus au gradient. Si cette fraction atteint la moitié dès la troisième époque, vos époques suivantes paient du calcul pour rien.",
+ q7: "Ce curseur est la meilleure façon de relier cette semaine à la précédente. Avec lambda égal à 1, les poids de la somme deviennent des puissances de gamma, les résidus se télescopent, et il ne reste que le déroulement complet de la trajectoire moins la valeur de l'état de départ : c'est mot pour mot l'avantage de la semaine 8, donc la semaine 8 est le cas particulier lambda égal à 1 de ce que vous écrivez ici. À l'autre bout, lambda égal à 0 ne laisse que le résidu temporel du pas courant, de faible variance et entièrement tributaire du critique. Le réglage usuel 0,95 est un point entre les deux, très légèrement du côté de la variance, et vous reconnaîtrez dans ce curseur les traces d'éligibilité du cours précédent. La réponse (b) échange les deux extrémités, et c'est l'erreur à ne pas faire en réglant : elle vous ferait croire que vous réduisez la variance alors que vous l'augmentez. La réponse (c) oublie que le premier résidu contient déjà la soustraction de la valeur de l'état courant : même à lambda égal à 1, le critique reste présent comme référence, et l'estimation n'est pas un retour brut. La réponse (d) confond les deux facteurs : la somme est actualisée par le produit de gamma et de lambda, qui vaut encore 0,99 quand lambda vaut 1, de sorte que rien ne diverge. Et vérifiez l'exposant de tête : le terme d'indice t porte l'exposant 0, celui d'indice t plus k porte l'exposant k, donc le dernier porte T moins t moins 1. C'est le genre de contrôle qui vous sauvera un jour, parce que la forme fautive s'imprime.",
+ q8: "Deux acquis dans cette question, et le second vaut bien au-delà de la semaine. Premier acquis : les deux méthodes à région de confiance maximisent la même chose. L'objectif de substitution porte ce nom parce qu'il remplace ce qu'on veut mesurer, le rendement de la nouvelle politique, par ce qu'on peut mesurer avec les anciens échantillons, et il n'est fidèle qu'aussi longtemps que les deux politiques visitent à peu près les mêmes états : d'où une contrainte, et non une préférence. Second acquis : cette contrainte porte sur une divergence moyenne sur les états visités, et la réponse (d) encode précisément la confusion qui circule. La version maximale demanderait que les deux politiques soient proches dans tous les états, y compris ceux qu'on ne visite presque jamais ; elle est distinguée explicitement de la version moyenne dans la formulation d'origine, et c'est la version moyenne qui est mise en œuvre, parce que l'autre est impraticable. La réponse (a) ajoute une seconde faute en demandant de jouer la nouvelle politique pour l'évaluer, ce qui est exactement ce que la construction cherche à éviter. La réponse (b) place la contrainte sur la norme du gradient naturel, alors que le gradient naturel est la solution du problème contraint et non son objet. Et la mise en garde sur la formule : l'expression sans quotient est l'entropie croisée, qui vaut la divergence KL plus l'entropie de la première loi ; cette entropie varie avec la politique que vous optimisez, donc ce n'est même pas un décalage constant, et comme elle ne s'annule pas quand les deux lois coïncident, un étudiant qui la coderait obtiendrait un budget qui ne vaut jamais zéro, donc une contrainte qui ne se relâche jamais et une méthode qui n'avance plus.",
+ q9: "C'est la phrase pour laquelle le cours a inversé l'ordre des dates, et elle définit les deux méthodes l'une par l'autre. Comptez ce qui est commun : l'objectif maximisé, au symbole près, et la grandeur contrôlée, l'écart entre l'ancienne et la nouvelle politique. Ce qui diffère est le mécanisme, et le prix de chacun est très parlant : une contrainte explicite coûte une courbure, une double dérivation, un gradient conjugué et une recherche linéaire ; un retrait d'incitation coûte une ligne de serrage. La réponse (a) fait de l'écrêtage une affaire de tampon de rejeu, alors que cette famille reste sur politique. La réponse (b) inverse la filiation, ce qui est l'erreur que l'inversion de l'ordre de lecture est censée éviter : la méthode à contrainte explicite est la plus ancienne, et l'écrêtage est la simplification qui a suivi. La réponse (c) supprime la parenté qui fait tout l'intérêt du rapprochement, et elle se trompe sur le motif technique : le gradient conjugué n'est pas choisi pour sa précision mais parce qu'il ne demande jamais la matrice, seulement une fonction qui rende son produit par un vecteur, obtenu en dérivant la divergence, en faisant le produit scalaire avec ce vecteur, puis en dérivant ce scalaire une seconde fois. Deux passes de rétropropagation, aucune matrice. Et retenez les quatre mouvements dans l'ordre, parce qu'ils expliquent pourquoi la recherche linéaire est obligatoire : on développe l'objectif au premier ordre et la contrainte au second, on résout ce problème approché, on constate que le pas optimal du problème approché peut violer la contrainte ou même ne rien améliorer, et on rebrousse jusqu'à ce que les deux conditions soient vérifiées.",
+ q10: "Cette section est la plus courte de la semaine et c'est celle qui vous servira le plus longtemps, parce qu'elle vous montre à quoi ressemble un résultat négatif correctement établi. Une méthode publiée, un banc d'essai standard, le reste du code inchangé, une instabilité partout, et l'aveu que la cause n'est pas connue : deux explications restent ouvertes, un réglage insuffisant ou des erreurs dans l'adaptation d'un optimiseur tiers, et rien ne permet de les séparer. La réponse (a) franchit le pas qu'il ne faut pas franchir : un échec de reproduction est une mesure sur un dispositif complet, et le dispositif comprend le code, le réglage, l'environnement et la personne, de sorte qu'on n'en extrait pas un verdict sur la seule idée. La réponse (b) commet la faute inverse, et c'est celle que le jalon 3 sanctionne : écarter une mesure parce qu'on ne sait pas l'expliquer, c'est régler jusqu'à obtenir un chiffre présentable puis ne rapporter que la dernière exécution, et c'est ce qui rend une bonne partie des comparaisons publiées inutilisables. Un résultat négatif avec son protocole et l'aveu de ce qui reste inexpliqué vaut plus de points qu'une courbe flatteuse sans intervalle. La réponse (d) généralise à toute la notion de courbure ce qui ne concerne qu'une mise en œuvre : la correction par la courbure est bel et bien ce qui donne le gradient naturel, et l'approximation structurée de l'information de Fisher par factorisation de Kronecker reste une idée défendable, simplement hors de portée d'un exposé honnête dans ce cours. Et je ne veux pas lire « prometteur mais délicat » : écrivez ce que vous avez mesuré, avec quel réglage, et quelles explications vous n'avez pas pu distinguer.",
+ q11: "La réponse (c) est la plus proche du vrai et la plus instructive à écarter, parce qu'elle place correctement la méthode hors politique et se trompe quand même sur l'essentiel. La prime d'entropie de la semaine 8 est un terme ajouté à une perte : elle ne change ni la fonction de valeur, ni la cible, ni rien d'autre, c'est un régularisateur posé à côté. La régularisation par l'entropie de cette section est à l'intérieur de la somme actualisée, au même rang que la récompense, donc elle change ce que signifie la valeur d'un état, donc elle change les fonctions de valeur et les cibles de Bellman. C'est pour cela que le terme apparaît dans la cible des critiques et pas seulement dans l'objectif de l'acteur, et c'est la raison pour laquelle le coefficient d'entropie a une unité interprétable : il convertit de l'entropie en récompense. La réponse (a) laisse passer deux affirmations que la section contredit, la méthode étant hors politique et son écart-type étant une sortie du réseau ; et ce second point n'est pas cosmétique, puisqu'un écart-type indépendant de l'état donne une entropie indépendante de l'état, ce qui retire son sens à l'idée centrale. La réponse (d) fond les deux familles en une, alors que la filiation passe par la route déterministe de la semaine 9 : tampon de rejeu, réseaux cibles, double Q écrêté. Notez enfin les trois différences avec la semaine 9, parce qu'elles sont la passation exacte entre les deux semaines : la cible porte un terme d'entropie, l'action de l'état suivant est tirée fraîchement dans la politique courante et non produite par une politique cible, et il n'y a aucun lissage explicite de la politique cible, le bruit de l'échantillonnage suffisant.",
+ q12: "Le compromis qui ferme le module 3 se lit dans le bon sens : une méthode hors politique réutilise chaque transition des dizaines de fois, donc elle atteint un niveau donné avec moins d'observations, et elle fait beaucoup plus de calcul par observation, donc elle traite dix fois moins de transitions dans le même temps. La réponse (d) retourne exactement cette logique, et c'est l'erreur à ne pas faire au moment de choisir : réutiliser des échantillons est ce qui économise des observations, pas ce qui en réclame. La question à se poser avant de choisir n'est donc pas laquelle des méthodes est la meilleure, c'est ce qui est rare chez vous, le calcul ou les observations ; avec un robot réel au bout de la boucle, la réponse est écrite d'avance. Deux lectures de tableau viennent ensuite. Une case vide est une décision de rapport et non une absence de donnée : l'expérience peut n'avoir pas été tentée, avoir été tentée et échoué, ou avoir été tentée et son résultat jugé non rapportable, et ces trois situations autorisent des conclusions opposées, ce qui condamne la réponse (b) autant que la réponse (c). Et une colonne doit parfois être attribuée à autre chose que son titre : le code qui a produit la dernière ligne n'a pas de terme d'entropie dans l'objectif de son acteur et escalade le premier critique au lieu du minimum des deux, de sorte que citer son meilleur chiffre comme un record de l'acteur-critique doux serait transmettre une mesure fausse avec la voix du cours derrière. La forme du compromis survit à cette correction, parce que moins d'observations et plus de calcul est une propriété de toute la famille hors politique à tampon de rejeu ; l'attribution d'un record, non. La réponse (c) a enfin raison sur un point qu'il faut garder : aucune des vingt cases ne porte d'intervalle, chacune est une exécution, et c'est pourquoi ce tableau ne permet pas de classer les cinq méthodes. Il permet de lire la forme d'un compromis, et c'est tout ce que je lui demande."
+};
+
+function submitQuiz() {
+ const questions = document.querySelectorAll('.question');
+ let score = 0;
+ let answered = 0;
+
+ questions.forEach((q, i) => {
+ const name = `q${i + 1}`;
+ const correct = q.dataset.correct;
+ const selected = q.querySelector(`input[name="${name}"]:checked`);
+ const feedback = q.querySelector('.feedback');
+
+ if (selected) {
+ answered++;
+ feedback.style.display = 'block';
+ if (selected.value === correct) {
+ score++;
+ feedback.className = 'feedback correct';
+ feedback.textContent = ' Correct ! ' + explanations[name];
+ } else {
+ feedback.className = 'feedback incorrect';
+ feedback.textContent = ` Incorrect. La bonne réponse est (${correct.toUpperCase()}). ` + explanations[name];
+ }
+ }
+ });
+
+ if (answered < questions.length) {
+ alert('Veuillez répondre à toutes les questions avant de valider.');
+ return;
+ }
+
+ const scoreBox = document.getElementById('score-box');
+ scoreBox.style.display = 'block';
+ document.getElementById('score-text').textContent = `${score} / ${questions.length}`;
+ const pct = Math.round((score / questions.length) * 100);
+ let msg = '';
+ if (pct >= 90) msg = ' Excellent ! Vous maîtrisez les fondements du cours.';
+ else if (pct >= 70) msg = ' Très bien ! Quelques révisions sur les points incorrects et vous serez prêt·e.';
+ else if (pct >= 50) msg = ' Pas mal ! Relisez les sections correspondantes avant de continuer.';
+ else msg = ' Prenez le temps de revoir le cours, puis réessayez.';
+ document.getElementById('score-msg').textContent = msg;
+ scoreBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+ document.getElementById('quiz-form').reset();
+ document.querySelectorAll('.feedback').forEach(f => { f.style.display = 'none'; f.textContent = ''; });
+ document.getElementById('score-box').style.display = 'none';
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
