@@ -1,0 +1,1 @@
+Figure 6-1. Quatre états, une seule action possible dans chacun, trois récompenses sur les transitions : la chaîne la plus simple où l'on puisse compter combien de balayages il faut pour qu'une valeur remonte jusqu'au départ.

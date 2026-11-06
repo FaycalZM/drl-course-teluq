@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Quiz Semaine 6 : Bibliothèques haut niveau et extensions de DQN</title>
+ <style>
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body {
+ font-family: 'Segoe UI', system-ui, sans-serif;
+ background: #f8fafc;
+ color: #1e293b;
+ padding: 1.5rem;
+ line-height: 1.6;
+ }
+ h1 {
+ font-size: 1.4rem;
+ font-weight: 700;
+ color: #0f172a;
+ margin-bottom: 0.5rem;
+ }
+ .subtitle {
+ color: #64748b;
+ font-size: 0.9rem;
+ margin-bottom: 1.5rem;
+ }
+ .question {
+ background: #fff;
+ border: 1px solid #e2e8f0;
+ border-radius: 10px;
+ padding: 1.25rem 1.5rem;
+ margin-bottom: 1.25rem;
+ transition: box-shadow 0.2s;
+ }
+ .question:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+ .question-text {
+ font-weight: 600;
+ margin-bottom: 0.85rem;
+ font-size: 0.98rem;
+ }
+ .option {
+ display: flex;
+ align-items: flex-start;
+ gap: 0.6rem;
+ padding: 0.5rem 0.75rem;
+ border-radius: 6px;
+ margin-bottom: 0.35rem;
+ cursor: pointer;
+ transition: background 0.15s;
+ font-size: 0.93rem;
+ }
+ .option-text { flex: 1; min-width: 0; }
+ .option:hover { background: #f1f5f9; }
+ .option input[type="radio"] { margin-top: 0.2rem; accent-color: #6366f1; flex-shrink: 0; }
+ .feedback {
+ margin-top: 0.85rem;
+ padding: 0.6rem 1rem;
+ border-radius: 6px;
+ font-size: 0.9rem;
+ display: none;
+ }
+ .feedback.correct { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+ .feedback.incorrect { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+ .btn-check {
+ margin-top: 1rem;
+ padding: 0.5rem 1.2rem;
+ background: #6366f1;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ font-size: 0.9rem;
+ font-weight: 600;
+ cursor: pointer;
+ transition: background 0.2s;
+ }
+ .btn-check:hover { background: #4f46e5; }
+ .score-box {
+ background: #ede9fe;
+ border: 1px solid #c4b5fd;
+ border-radius: 10px;
+ padding: 1.5rem;
+ text-align: center;
+ display: none;
+ margin-top: 1rem;
+ }
+ .score-box h2 { font-size: 1.6rem; color: #4c1d95; margin-bottom: 0.25rem; }
+ .score-box p { color: #6d28d9; font-size: 0.95rem; }
+ .btn-reset {
+ margin-top: 1rem;
+ padding: 0.5rem 1.4rem;
+ background: #7c3aed;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ cursor: pointer;
+ font-weight: 600;
+ transition: background 0.2s;
+ }
+ .btn-reset:hover { background: #6d28d9; }
+ #submit-all {
+ display: block;
+ width: 100%;
+ padding: 0.75rem;
+ background: #0f172a;
+ color: #fff;
+ border: none;
+ border-radius: 8px;
+ font-size: 1rem;
+ font-weight: 700;
+ cursor: pointer;
+ margin-top: 1.5rem;
+ transition: background 0.2s;
+ }
+ #submit-all:hover { background: #1e3a5f; }
+ </style>
+</head>
+<body>
+
+<h1>Quiz : Semaine 6</h1>
+<p class="subtitle">Bibliothèques haut niveau et extensions de DQN · 12 questions</p>
+
+<form id="quiz-form">
+
+ <div class="question" data-correct="c">
+ <div class="question-text">1. La première moitié de la semaine lit une bibliothèque spécialisée que le cours n'adoptera jamais. Qu'êtes-vous censé en retenir dans six mois, et que retire des mains le sélecteur d'actions <em>ε</em>-glouton ?</div>
+ <label class="option"><input type="radio" name="q1" value="a" /><span class="option-text">a) Les noms de classes et l'interface, puisque les laboratoires suivants s'appuieront dessus. Le sélecteur est la classe qui porte le réseau et calcule les valeurs d'action pour un lot d'observations</span></label>
+ <label class="option"><input type="radio" name="q1" value="b" /><span class="option-text">b) Une seule chose : qu'une bibliothèque clé en main résout le problème en dix lignes. Le sélecteur <em>ε</em>-glouton est un raccourci d'écriture qui fait exactement ce que faisait le <code>if random() &lt; eps</code> de la semaine 5, ni plus ni moins</span></label>
+ <label class="option"><input type="radio" name="q1" value="c" /><span class="option-text">c) Cinq objets et, pour chacun, une phrase disant ce qu'il cache : un sélecteur d'actions, un agent, une source d'expérience, un tampon de rejeu, un réseau cible. Le sélecteur <em>ε</em>-glouton enveloppe un autre sélecteur et porte <em>ε</em> comme attribut : le tirage aléatoire sort de la boucle principale, et un calendrier d'exploration devient une affectation par trame au lieu d'un argument passé de main en main</span></label>
+ <label class="option"><input type="radio" name="q1" value="d" /><span class="option-text">d) Les cinq objets, mais la leçon principale est de performance : le sélecteur met les observations en lot pour le processeur graphique, et c'est cette mise en lot qui justifie d'en faire un objet séparé</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">2. L'environnement jouet de la source d'expérience : l'observation compte de 0 à 4, la récompense est égale à l'action jouée, l'épisode fait exactement dix pas, et l'agent joue toujours l'action 1. Vous demandez <code>steps_count=2</code>, avec une actualisation de 1 pour que la trace reste lisible. Que portent les deux dernières transitions d'un épisode, et pourquoi cette structure rend-elle le passage à <em>n</em> étapes immédiat ?</div>
+ <label class="option"><input type="radio" name="q2" value="a" /><span class="option-text">a) Les deux portent une récompense de 2 et un état final réel : la source ne peut pas savoir que l'épisode se termine avant d'avoir joué le pas suivant, et c'est le masque terminal de la perte qui s'en occupera plus tard</span></label>
+ <label class="option"><input type="radio" name="q2" value="b" /><span class="option-text">b) La première porte une récompense de 2, la seconde une récompense de 1, et toutes deux ont un état final absent. La queue de l'épisode est livrée même incomplète, et elle est payée juste, puisque la dernière transition n'a qu'un pas derrière elle. Comme la récompense est déjà accumulée et le cas terminal déjà encodé par l'absence d'état final, passer à <em>n</em> étapes ne demande plus que de dire <em>n</em> à la source et d'actualiser l'état final par γ<sup>n</sup> dans la perte</span></label>
+ <label class="option"><input type="radio" name="q2" value="c" /><span class="option-text">c) Une seule transition sort, avec une récompense de 2 et un état final absent : la source écarte les sous-trajectoires incomplètes, et c'est ce qui garantit que tous les tuples livrés ont la même longueur</span></label>
+ <label class="option"><input type="radio" name="q2" value="d" /><span class="option-text">d) Deux transitions de récompense 1 chacune, puisqu'une transition premier-dernier ne garde que la récompense du premier pas et laisse à la perte le soin de sommer les suivantes</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">3. Vous reprenez un code de contrôle continu dont la synchronisation douce est écrite avec un coefficient <em>τ</em> = 0,005 qui pèse les <em>nouveaux</em> poids. Vous recopiez ce 0,005 dans votre propre méthode, où le coefficient <em>α</em><sub>sync</sub> pèse l'<em>ancienne</em> cible. Que va-t-il se passer ?</div>
+ <label class="option"><input type="radio" name="q3" value="a" /><span class="option-text">a) Rien de visible : les deux conventions sont équivalentes puisque les deux coefficients somment à 1, et seul compte l'effet cumulé sur la durée de l'entraînement</span></label>
+ <label class="option"><input type="radio" name="q3" value="b" /><span class="option-text">b) La cible va bouger deux cents fois trop lentement : elle restera collée à son initialisation pendant tout l'entraînement, et l'agent n'apprendra rien</span></label>
+ <label class="option"><input type="radio" name="q3" value="c" /><span class="option-text">c) L'assertion du fragment refusera la valeur, puisqu'un coefficient de mélange doit rester supérieur à 0,9 pour que la cible reste une cible</span></label>
+ <label class="option"><input type="radio" name="q3" value="d" /><span class="option-text">d) Votre cible gardera un demi-pour-cent de son ancienne valeur et prendra 99,5 % des poids du réseau entraîné, à chaque pas : c'est une copie presque brutale répétée à chaque pas, donc la réparation de la semaine 5 est supprimée, la cible redevient mobile et l'entraînement se déstabilise sans qu'aucune exception ne soit levée. La transcription correcte est <em>α</em><sub>sync</sub> = 1 − <em>τ</em> = 0,995</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">4. Vos quatre variantes vivent dans quatre fichiers écrits séparément, chacune avec des hyperparamètres réglés pour elle et sa propre graine, et vous comparez une exécution par variante. Que mesure cette expérience ?</div>
+ <label class="option"><input type="radio" name="q4" value="a" /><span class="option-text">a) Elle mesure correctement les quatre variantes : chacune est implémentée proprement, et c'est bien chacune dans son réglage le plus favorable qu'il faut comparer</span></label>
+ <label class="option"><input type="radio" name="q4" value="b" /><span class="option-text">b) Elle les mesure, à une réserve près : il faudrait lisser les quatre courbes de la même façon avant de les superposer, et le reste est sans conséquence</span></label>
+ <label class="option"><input type="radio" name="q4" value="c" /><span class="option-text">c) Elle ne mesure rien, et le remède est d'allonger le budget : avec assez de trames, les différences d'hyperparamètres s'effacent et l'ordre des courbes devient fiable</span></label>
+ <label class="option"><input type="radio" name="q4" value="d" /><span class="option-text">d) Elle ne mesure rien d'attribuable. Une étude d'ablation est une expérience contrôlée : un socle de code unique, les mêmes hyperparamètres, les mêmes graines, le même nombre de pas, le même lissage, et une seule chose qui change par variante. Et puisque l'écart entre deux variantes est souvent du même ordre que l'écart entre deux graines de la même variante, il faut plusieurs graines pour dire si l'écart mesuré dépasse la dispersion</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">5. Vous passez au DQN à <em>n</em> étapes : <code>steps_count=3</code> sur la source d'expérience, et vous laissez <code>gamma=0.99</code> dans le calcul de la perte. Rien ne plante, les courbes montent un peu. Qu'avez-vous entraîné ?</div>
+ <label class="option"><input type="radio" name="q5" value="a" /><span class="option-text">a) Une fonction de valeur qui n'est celle d'aucun problème. La source actualise les récompenses intermédiaires avec γ, c'est son travail, mais le terme d'amorçage porte sur un état situé trois pas plus loin : il doit être actualisé par γ³ = 0,970, pas par γ. L'écart est assez petit pour passer inaperçu sur CartPole et assez grand pour abîmer la convergence sur un problème à long horizon, et aucune exception ne le signale</span></label>
+ <label class="option"><input type="radio" name="q5" value="b" /><span class="option-text">b) Rien d'anormal : la source a déjà appliqué γ à chaque récompense intermédiaire, donc l'actualisation est complète et la perte doit garder γ pour le dernier terme</span></label>
+ <label class="option"><input type="radio" name="q5" value="c" /><span class="option-text">c) Une variante correcte mais plus lente : avec γ au lieu de γ³, l'état final est surpondéré, ce qui équivaut à un facteur d'actualisation plus grand donc à un horizon plus long, et il suffit de baisser γ pour compenser</span></label>
+ <label class="option"><input type="radio" name="q5" value="d" /><span class="option-text">d) Une erreur qui se verra tout de suite : les récompenses accumulées sur trois pas sont trois fois plus grandes, la perte explose, et le gradient diverge dès les premières itérations</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">6. Parmi ces quatre cibles, écrites pour une transition non terminale, laquelle est celle du double DQN ?</div>
+ <label class="option"><input type="radio" name="q6" value="a" /><span class="option-text">a) <code>y = r + γ max_a' Q_θ⁻(s', a')</code> : le réseau cible choisit et évalue, et ses poids figés suffisent déjà à séparer les deux rôles</span></label>
+ <label class="option"><input type="radio" name="q6" value="b" /><span class="option-text">b) <code>y = r + γ Q_θ(s', argmax_a' Q_θ⁻(s', a'))</code> : l'indice vient du réseau cible, la valeur vient du réseau entraîné</span></label>
+ <label class="option"><input type="radio" name="q6" value="c" /><span class="option-text">c) <code>y = r + γ Q_θ⁻(s', argmax_a' Q_θ(s', a'))</code> : l'indice vient du réseau entraîné, la valeur vient du réseau cible, et il n'y a plus de <code>max</code> dans l'expression</span></label>
+ <label class="option"><input type="radio" name="q6" value="d" /><span class="option-text">d) <code>y = r + γ max_a' Q_θ⁻(s', argmax_a'' Q_θ(s', a''))</code> : l'indice vient du réseau entraîné et la valeur du réseau cible, sur laquelle on reprend un <code>max</code> pour ne pas perdre le caractère optimal de la cible</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">7. Vous gardez mille états témoins, jamais utilisés pour l'apprentissage, et vous y suivez la moyenne de <code>max_a Q_θ(s,a)</code> pendant deux entraînements. La courbe du réseau Q profond ordinaire monte, dépasse un certain niveau, puis redescend ; celle de la version double croît plus régulièrement. Que pouvez-vous conclure, et surtout que ne pouvez-vous pas conclure ?</div>
+ <label class="option"><input type="radio" name="q7" value="a" /><span class="option-text">a) Que la surestimation est supprimée : le résultat de non-biais garantit que la valeur lue sur la seconde estimation est non biaisée, et la courbe le confirme</span></label>
+ <label class="option"><input type="radio" name="q7" value="b" /><span class="option-text">b) Que la séparation <em>réduit</em> la surestimation, et rien de plus. Le résultat de non-biais porte sur deux estimations indépendantes dans un problème à un seul état, alors qu'un réseau cible est une copie récente du réseau entraîné, donc tout sauf indépendant. Et la mesure ne dit rien du temps d'entraînement : sur le jeu de référence, le gain de vitesse du double DQN est faible, et après réglage il a même demandé un peu plus de parties que la référence</span></label>
+ <label class="option"><input type="radio" name="q7" value="c" /><span class="option-text">c) Que l'entraînement double sera plus rapide : une estimation plus juste des valeurs se traduit mécaniquement par une meilleure politique, donc par une convergence plus courte</span></label>
+ <label class="option"><input type="radio" name="q7" value="d" /><span class="option-text">d) Qu'il faut se fier à la courbe de récompense plutôt qu'à ce diagnostic : deux agents dont les valeurs diffèrent d'une constante jouent la même politique, donc la moyenne sur les états témoins ne mesure rien d'utile</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">8. Pour un état donné, votre réseau duel doit représenter <code>Q(s,·) = [1, 2, 3, 4]</code>. Deux sorties possibles : (i) <code>V(s) = 0</code> et <code>A(s,·) = [1, 2, 3, 4]</code> ; (ii) <code>V(s) = 2,5</code> et <code>A(s,·) = [−1,5 ; −0,5 ; 0,5 ; 1,5]</code>. Qu'est-ce qui les distingue, et laquelle la soustraction de la moyenne retient ?</div>
+ <label class="option"><input type="radio" name="q8" value="a" /><span class="option-text">a) Rien ne les distingue : les deux redonnent les mêmes valeurs d'action, donc la même perte, et la soustraction de la moyenne ne sert qu'à stabiliser numériquement les sorties des deux têtes</span></label>
+ <label class="option"><input type="radio" name="q8" value="b" /><span class="option-text">b) La première est fausse parce que ses avantages sont tous positifs, ce qu'un avantage n'a pas le droit d'être : la contrainte sert à garantir qu'un avantage reste négatif ou nul</span></label>
+ <label class="option"><input type="radio" name="q8" value="c" /><span class="option-text">c) La seconde est retenue parce qu'elle minimise l'amplitude des avantages : à décomposition équivalente, le réseau préfère la plus petite, et c'est cette préférence que la soustraction de la moyenne récompense</span></label>
+ <label class="option"><input type="radio" name="q8" value="d" /><span class="option-text">d) Les deux donnent la même somme, donc la même perte, et il en existe une infinité d'autres : la décomposition n'est pas identifiable, et rien dans la perte ne distingue la bonne. La soustraction de la moyenne des avantages impose la contrainte qui rend la décomposition unique, et c'est la seconde qui la vérifie : la valeur de l'état devient la moyenne de ses valeurs d'action, 2,5, et les avantages deviennent des écarts à cette moyenne. Avec la première, la quantité notée <code>V(s)</code> n'est pas la valeur de l'état, donc l'apprendre une fois pour toutes n'apprend rien d'utile</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">9. Vous remplacez les deux couches linéaires de la tête par des couches bruitées, puis vous supprimez le sélecteur <em>ε</em>-glouton, son calendrier et ses trois hyperparamètres. En quoi l'exploration a-t-elle changé de nature ?</div>
+ <label class="option"><input type="radio" name="q9" value="a" /><span class="option-text">a) Elle est devenue une quantité apprise, portée par les poids eux-mêmes, au lieu d'un nombre unique piloté par le numéro de trame. Dans <code>w = μ + σ·ε</code>, <code>μ</code> et <code>σ</code> reçoivent un gradient alors que <code>ε</code> est tiré et jamais entraîné : le réseau apprend l'amplitude du bruit, couche par couche et poids par poids. L'agent reste purement glouton et explore quand même, parce que sa sortie n'est plus déterministe, et le bruit de la dernière couche peut remonter en cours d'entraînement</span></label>
+ <label class="option"><input type="radio" name="q9" value="b" /><span class="option-text">b) Elle est devenue dirigée : le réseau décide désormais où il a besoin d'explorer davantage, puisque le bruit est appris état par état</span></label>
+ <label class="option"><input type="radio" name="q9" value="c" /><span class="option-text">c) Elle n'a pas changé de nature, seulement d'écriture : le bruit sur les poids produit en moyenne le même taux d'actions non gloutonnes qu'un <em>ε</em>, et l'on a simplement remplacé trois hyperparamètres par un, l'écart-type initial</span></label>
+ <label class="option"><input type="radio" name="q9" value="d" /><span class="option-text">d) Elle a disparu en mode entraînement et subsiste en mode évaluation : une couche bruitée n'injecte du bruit que lorsque le réseau n'est pas en train d'apprendre, et c'est pour cela que le calendrier peut être supprimé</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">10. Votre tampon priorisé tire chaque transition avec une probabilité proportionnelle à sa priorité élevée à la puissance <em>α</em><sub>PER</sub>, et vous n'avez pas écrit les poids <code>w_i</code>. Que manque-t-il, et que restaure <em>β</em> = 1 ?</div>
+ <label class="option"><input type="radio" name="q10" value="a" /><span class="option-text">a) Il ne manque rien d'essentiel : les priorités sont la méthode, et les poids ne servent qu'à empêcher qu'une transition de grande erreur TD produise un gradient trop grand, ce qu'un écrêtage du gradient fait déjà</span></label>
+ <label class="option"><input type="radio" name="q10" value="b" /><span class="option-text">b) Il manque la normalisation des poids par leur maximum, sans laquelle certaines transitions pèsent plus de 1 ; <em>β</em> = 1 est précisément la valeur qui garantit cette normalisation</span></label>
+ <label class="option"><input type="radio" name="q10" value="c" /><span class="option-text">c) Il manque la moitié qui rend la méthode correcte. Tirer selon la priorité change la distribution des données, donc les gradients ne sont plus des estimations non biaisées de celui que l'on voulait descendre : ils sont systématiquement tirés vers les transitions difficiles. Les poids <code>w_i = (N · P(i))^(−β)</code> sont de l'échantillonnage préférentiel et compensent ce biais ; à <em>β</em> = 0 il n'y a aucune correction, à <em>β</em> = 1 le biais est entièrement compensé et l'espérance du gradient redevient celle du tirage uniforme</span></label>
+ <label class="option"><input type="radio" name="q10" value="d" /><span class="option-text">d) Il manque le réglage de <em>α</em><sub>PER</sub> : avec <em>α</em><sub>PER</sub> = 1, le tirage est exactement proportionnel à la priorité et le biais se résorbe de lui-même, les poids n'étant utiles qu'aux valeurs intermédiaires de l'exposant</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">11. Vous activez quatre réparations en même temps. Quelle est la seule paire qui tire en sens contraire, et qu'est-ce qui explique que les autres s'empilent sans se gêner ?</div>
+ <label class="option"><input type="radio" name="q11" value="a" /><span class="option-text">a) Le dépliage de Bellman et le tampon de rejeu. Le dépliage suppose que les actions jouées aux pas suivants étaient bonnes, donc il veut des données fraîches ; le tampon existe pour garder des données anciennes, et plus il est grand, plus la probabilité de tirer une sous-trajectoire jouée par une mauvaise politique est élevée. Les autres s'empilent parce qu'elles interviennent à des endroits différents du même programme : l'architecture duale touche la structure du réseau, les réseaux bruités ses couches, la priorisation l'échantillonnage, le dépliage la cible</span></label>
+ <label class="option"><input type="radio" name="q11" value="b" /><span class="option-text">b) L'architecture duale et les réseaux bruités : les deux modifient le réseau, donc la soustraction de la moyenne des avantages et le bruit sur les poids se disputent la même sortie, et il faut choisir l'une ou l'autre</span></label>
+ <label class="option"><input type="radio" name="q11" value="c" /><span class="option-text">c) Le double DQN et l'architecture duale : le premier sépare le choix et l'évaluation, la seconde sépare la valeur et l'avantage, et deux séparations simultanées rendent la décomposition non identifiable</span></label>
+ <label class="option"><input type="radio" name="q11" value="d" /><span class="option-text">d) Aucune paire : les cinq réparations sont strictement indépendantes, et c'est pourquoi la combinaison publiée les retient toutes les cinq sans réserve</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">12. La distribution du temps de trajet en voiture a une moyenne de 35,43 minutes et une bosse vers 90 minutes ; celle du train a une moyenne de 40,54 minutes et son pire cas est d'une heure. Que fera un agent qui ne manipule que des espérances, et que dit l'égalité <em>en distribution</em> de <code>Z(s,a) = R(s,a) + γ Z(s',a')</code> ?</div>
+ <label class="option"><input type="radio" name="q12" value="a" /><span class="option-text">a) Il sait déjà faire le bon choix : il suffit de retrancher à la valeur une pénalité proportionnelle à la variance des récompenses observées. Et l'égalité en distribution signifie que les deux membres ont la même moyenne</span></label>
+ <label class="option"><input type="radio" name="q12" value="b" /><span class="option-text">b) Il prendra la voiture, systématiquement, parce que 35,43 est plus petit que 40,54, et il n'a aucun moyen de préférer un pire cas d'une heure à un pire cas d'une heure et demie : la moyenne a jeté la variance, et dans un processus de décision markovien cette perte se compose pas après pas. L'égalité en distribution dit que la variable aléatoire de gauche et celle de droite suivent la même loi, non qu'elles prennent la même valeur ; l'équation ordinaire s'obtient en prenant l'espérance des deux côtés</span></label>
+ <label class="option"><input type="radio" name="q12" value="c" /><span class="option-text">c) Il prendra le train, puisque sa distribution est visiblement la plus étroite des deux figures. Et l'égalité en distribution signifie que l'égalité n'est vraie qu'en moyenne, à un terme d'erreur près</span></label>
+ <label class="option"><input type="radio" name="q12" value="d" /><span class="option-text">d) Il ne pourra pas choisir du tout, les deux moyennes étant trop proches : la version distributionnelle sert à départager des actions de moyennes voisines, et l'égalité en distribution signifie que l'on compare les deux membres atome par atome</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <button type="button" id="submit-all" onclick="submitQuiz()">Valider mes réponses</button>
+</form>
+
+<div class="score-box" id="score-box">
+ <h2 id="score-text"></h2>
+ <p id="score-msg"></p>
+ <button class="btn-reset" onclick="resetQuiz()"> Recommencer</button>
+</div>
+
+<script>
+const explanations = {
+ q1: "Ce que la première moitié de la semaine vous demande n'est pas une interface, c'est un vocabulaire. Cinq objets, et pour chacun une phrase disant ce qu'il cache : le sélecteur d'actions, qui transforme une sortie de réseau en action et vous retire le tirage aléatoire ; l'agent, qui va d'un lot d'observations à un lot d'actions et vous retire la mise en lot et le transfert vers le périphérique de calcul ; la source d'expérience, qui vous retire la boucle de jeu entière et sept gestes qu'elle cache ; le tampon de rejeu, qui vous retire la gestion de la capacité et du tirage ; le réseau cible, qui vous retire la copie périodique des poids. Vous avez écrit les cinq la semaine dernière, sans leur donner de nom, et c'est tout ce que fait la section 6.2 : nommer cinq choses que vous connaissez déjà, pour pouvoir ensuite les remplacer une par une. Le test est celui-ci : un étudiant qui ne réouvrira jamais cette bibliothèque doit pouvoir réciter la liste dans six mois. Voilà pourquoi la réponse (a) est la mauvaise façon de travailler ici, puisque les laboratoires des semaines 7 à 15 reviennent à PyTorch et Gymnasium simples. Le sélecteur ε-glouton mérite l'attention parce qu'il enseigne le plus par unité de longueur : il enveloppe un autre sélecteur, et il porte ε comme attribut. Écrire selecteur.epsilon = 0.0 suffit alors à rendre l'agent purement glouton, et tout le calendrier d'exploration se réduit à une affectation par trame, au lieu d'un argument passé de main en main depuis la boucle principale jusqu'au cœur de la fonction qui joue un pas. La réponse (b) sous-estime ce déplacement : le if n'a pas disparu, il a changé de lieu, et c'est le changement de lieu qui rend la substitution possible. La réponse (d) attribue au sélecteur le travail de l'agent : c'est l'agent qui met en lot, et le lot est une décision de performance, puisque traiter plusieurs observations en un seul passage est très souvent beaucoup plus rapide. Gardez enfin la raison pour laquelle cette section arrive avant le catalogue : les cinq réparations de la semaine sont des substitutions, on remplace un tampon par un autre, une couche par une autre, une tête par deux, et une substitution n'est bon marché que si la pièce qu'on remplace était déjà une pièce.",
+ q2: "La trace est le meilleur argument de la section, parce qu'elle est entièrement prévisible : c'est pour cela que l'environnement jouet est délibérément ennuyeux. Avec steps_count=2 et un agent qui joue toujours l'action 1, la plupart des transitions portent une récompense de 2, puisque deux pas à 1 ont été accumulés par la source et non par votre perte. Puis l'épisode se termine, et deux transitions sortent coup sur coup avec un état final absent, la première portant encore 2 et la seconde seulement 1. La queue est donc payée, et elle est payée juste : la dernière transition n'a qu'un pas derrière elle, donc elle n'a qu'une récompense. C'est le geste numéro 6 des sept que cache une seule itération, celui que presque tout le monde écrit mal la première fois : à la fin d'un épisode il reste dans la file des sous-trajectoires plus courtes que la longueur demandée, et il faut les livrer quand même. La réponse (c) les jette, et un code qui suppose une longueur fixe plante ou, pire, apprend sur des données tronquées sans rien signaler. La réponse (d) laisse la somme des récompenses à la perte, c'est-à-dire exactement le travail que la transition premier-dernier a pris en charge. La réponse (a) est la plus instructive à écarter : le cas terminal n'est pas signalé par un drapeau posé à côté de l'état, il est encodé dans l'état final, par son absence. C'est le masque terminal de la semaine 5, déplacé dans la structure de données. Et voilà pourquoi cette sous-section vaut sa place dans la semaine : puisque la récompense est déjà accumulée et que le cas terminal est déjà encodé, le passage à n étapes ne demande plus que deux choses, dire n à la source et actualiser l'état final par γ puissance n dans la perte. Deux paramètres, aucune ligne de logique. Retenez aussi le détail d'interface qui surprend à la première lecture : une transition élémentaire ne porte qu'un seul drapeau de fin, vrai en cas de terminaison comme en cas de troncature, parce que pour le calcul d'une cible les deux produisent le même masque.",
+ q3: "Faites l'arithmétique une fois, c'est la seule façon de ne plus se tromper. Avec α_sync = 0,1, un paramètre de cible valant 1,2039 et un paramètre source valant 2,2039 donnent 2,1039, c'est-à-dire 0,1 fois 1,2039 plus 0,9 fois 2,2039 : le coefficient pèse l'ancienne cible, et son complément pèse la nouvelle. Donc α_sync = 0,005 garde un demi-pour-cent de l'ancienne cible et prend 99,5 % des poids du réseau entraîné, à chaque pas. Vous n'avez pas écrit une cible lente, vous avez écrit une copie presque brutale répétée à chaque pas : la réparation de la semaine 5 est supprimée, la cible redevient mobile, l'agent se remet à courir après sa propre queue, et aucune exception n'est levée. La transcription correcte est α_sync = 1 − τ = 0,995. La réponse (b) est le réflexe inverse, et il est très répandu, parce qu'il suppose la convention la plus courante, celle où le coefficient pèse les nouveaux poids. La réponse (a) traite les deux écritures comme interchangeables alors qu'elles sont complémentaires. La réponse (c) espère un garde-fou : l'assertion du fragment n'exige qu'un coefficient strictement positif et au plus égal à 1, et 0,005 passe sans bruit. Retenez la règle sous cette forme, elle vous évitera une soirée en semaine 11 : un α_sync proche de 0 et un τ proche de 1 font la même chose, une copie presque brutale. Et retenez le coût, parce qu'il est réel : une synchronisation douce touche tous les paramètres à chaque pas, là où une copie ne coûte rien pendant mille pas puis coûte une seule recopie. Dernier rappel de notation, parce que c'est la semaine où la lettre α travaille trop : α nu est le pas d'apprentissage, et tout autre α porte un indice.",
+ q4: "Posez la question à l'envers, comme la section 6.5 : qu'est-ce qui rend une comparaison valide ? Pas la qualité de chaque implémentation prise à part. Ce qui la rend valide est que les programmes soient identiques partout sauf à l'endroit étudié : même tampon, même optimiseur, même pas d'apprentissage, même calendrier d'exploration, même critère d'arrêt, même mise en lot, et le même lissage au moment de tracer. D'où le socle commun, un seul fichier importé par toutes les variantes, après quoi une variante n'est plus qu'un script de trente lignes qui change une chose. Quatre scripts écrits séparément, même tous corrects, produisent quatre nombres incomparables, et c'est l'erreur de méthode la plus répandue de tout ce domaine. La réponse (a) en est la version élégante : régler les hyperparamètres par variante mesure le couple variante plus réglage, et non la variante. La réponse (b) prend le lissage pour le seul problème, alors qu'il n'en est qu'un parmi six. La réponse (c) espère qu'un budget plus long effacera les écarts de réglage, ce qui n'arrive pas : un pas d'apprentissage différent ne converge pas plus lentement vers le même comportement, il converge autrement. Et il reste la moitié que l'on oublie toujours, les graines. Sur CartPole, l'écart entre deux variantes est souvent du même ordre que l'écart entre deux exécutions de la même variante : un écart n'est donc un résultat que s'il dépasse votre dispersion, d'où trois graines, la médiane tracée par configuration et l'intervalle entre les exécutions extrêmes en bande claire. Ajoutez-y l'assertion sur le nombre de paramètres du réseau duel : deux chemins donnent un réseau plus gros, et sans cette précaution vous attribueriez à la méthode le gain d'un réseau plus gros, alors qu'en réduisant la largeur des têtes la comparaison devient équitable par construction. Retenez la formule : dans une ablation, ce qui est commun compte autant que ce qui diffère. Et retenez la conséquence, qui est la compétence évaluée de la semaine : un résultat nul correctement établi vaut mieux qu'un écart impressionnant obtenu sur une seule exécution.",
+ q5: "Rien ne plante, et c'est la signature du piège le plus coûteux de la semaine. La source d'expérience actualise les récompenses intermédiaires avec γ, c'est son travail et elle le fait bien. Mais le terme d'amorçage de la perte porte sur un état situé n pas plus loin : il doit donc être actualisé par γ puissance n. Avec γ = 0,99 et n = 3, l'écart entre 0,99 et 0,970 est assez petit pour passer inaperçu sur CartPole et assez grand pour abîmer la convergence sur un problème à long horizon, et votre agent apprend alors une fonction de valeur qui n'est celle d'aucun problème. La réponse (b) est exactement la méprise à lever : oui, la source a actualisé les récompenses intermédiaires, non, cela n'actualise pas l'état final, qui est au bout de la chaîne et non dedans. La réponse (c) propose de compenser en baissant γ, ce qui change l'horizon du problème au lieu de corriger la cible. La réponse (d) attend un désastre visible ; il n'y en a pas, et c'est précisément pourquoi le volet évalué du laboratoire vous demande de montrer par un test que votre configuration à trois pas utilise bien γ³. Profitez de cette question pour réviser ce que le dépliage achète et ce qu'il paie. Acheté : la propagation. Sur une chaîne de trois transitions, une cible à un pas demande trois balayages pour que l'information atteigne le premier état, une cible à deux pas en demande deux, et c'est une meilleure efficacité d'échantillon. Payé : l'approximation. Des trois équations de la section, celle qui approxime est le passage de la deuxième à la troisième, le moment où le maximum intermédiaire a été remplacé par l'action que le tampon avait sous la main. Au début de l'entraînement, la politique de comportement est quasi aléatoire, donc cette supposition est fausse presque partout, chaque pas de dépliage en ajoute une, et le tampon aggrave la chose puisqu'il garde des transitions jouées par des politiques anciennes. Voilà pourquoi le dépliage rend le DQN partiellement sur politique, pourquoi n reste petit, deux ou trois, et pourquoi le nombre de parties nécessaires sur le jeu de référence dessine un creux au lieu de décroître.",
+ q6: "L'idée tient en une phrase : choisir l'action du prochain état avec le réseau entraîné, et lire la valeur de cette action sur le réseau cible. La réponse (c) l'écrit, et notez surtout ce qu'elle ne contient plus : il n'y a plus de max dans l'expression. C'est normal, et c'est le point que je vous demande de savoir défendre : l'argmax a déjà désigné une action, il n'y a donc plus rien sur quoi maximiser. La réponse (d) remet ce max en place, et c'est la plus utile des trois erreurs, parce qu'elle est celle que l'on écrit spontanément en recopiant la cible de la semaine 5 : un maximum sur un ensemble à un seul élément ne fait rien, et la lettre d'action y serait liée deux fois, une fois par l'argmax et une fois par le max. La réponse (a) est la cible de la semaine 5 : le même réseau y répond aux deux questions, quelle action choisir et combien elle valait, et c'est ce cumul des deux rôles qui fabrique le biais. Des poids figés n'y changent rien, puisque c'est le même bruit d'estimation qui sert à choisir et à évaluer. La réponse (b) inverse simplement les rôles ; elle n'est pas absurde, et c'est bien pour cela qu'il faut savoir lequel des deux réseaux fournit quoi. En code, la différence tient à deux caractères : max(1) rend un couple, la version de la semaine 5 en prend la moitié d'indice 0, qui est la valeur, et la version double prend la moitié d'indice 1, qui est l'indice de l'action, sur le réseau entraîné, puis va lire la valeur à cet indice sur le réseau cible avec gather. Même structure dans le cas tabulaire du double Q-learning : une estimation fournit l'indice, l'autre la valeur, et l'on tire à pile ou face laquelle des deux est mise à jour. Sachez enfin dire d'où vient tout cela, en trois phrases : si toutes les valeurs d'action vraies d'un état sont nulles et que nos estimations sont bruitées de part et d'autre, le maximum des valeurs vraies vaut zéro alors que le maximum des estimations est positif. Un maximum d'estimations n'est pas une estimation du maximum, cela porte un nom, le biais de maximisation, et cela n'a besoin ni de réseau de neurones ni d'amorçage : le défaut était déjà dans le Q-learning tabulaire de la semaine 4.",
+ q7: "La courbe qui monte, dépasse un niveau puis redescend est la trace d'un réseau qui a cru à des valeurs qu'il a ensuite dû démentir, et c'est exactement ce que la théorie annonçait. Mais surveillez la force de la conclusion, parce que c'est le point où ce genre de raisonnement dérape. Le résultat de non-biais porte sur deux estimations indépendantes dans un problème à un seul état : l'une choisit, l'autre évalue, et l'espérance de la seconde en l'action choisie par la première est la vraie valeur de cette action. Un réseau cible, lui, n'est pas indépendant du réseau entraîné, c'en est une copie récente. La séparation réduit donc la surestimation, et la courbe montre une réduction : écrivez réduit, jamais élimine, et c'est tout l'écart entre les réponses (b) et (a). La réponse (c) fait une inférence de plus, et la mesure la démentit : sur le jeu de référence, l'effet du double DQN sur le temps d'entraînement est faible, et après réglage des hyperparamètres il a demandé un peu plus de parties que la référence. Le défaut est réel, la mesure le montre, et le gain de vitesse n'est pas garanti ; les deux affirmations sont vraies en même temps, et c'est le genre de résultat qu'un cours doit transmettre. La raison tient en une phrase à retenir : la surestimation ne nuit au retour que si elle change l'ordre des valeurs d'action, et une surestimation à peu près uniforme ne change pas l'argument du maximum. La réponse (d) part précisément de cette phrase et en tire la mauvaise conséquence : c'est parce que la récompense ne montre rien qu'il faut un diagnostic, et le diagnostic est celui-ci, mille états tirés au hasard avant l'entraînement, jamais utilisés pour apprendre, sur lesquels on moyenne périodiquement le maximum des valeurs d'action. Comme l'ensemble ne change pas, la courbe mesure l'évolution de ce que le réseau croit valoir, indépendamment de ce qu'il gagne. Deux prudences pour finir. Une seule graine ne permet pas de conclure, et le volet D du laboratoire vous posera la question dans ces termes. Et ce biais n'est pas réglé pour de bon : vous le retrouverez en semaine 11, dans le contrôle continu, où il faudra deux critiques entiers pour le contenir.",
+ q8: "Les deux décompositions donnent la même somme, donc les mêmes valeurs d'action, donc exactement la même perte. Et il y en a une infinité d'autres : V(s) = 100 avec des avantages de −99 à −96 marche aussi bien, et c'est une absurdité complète. On dit que la décomposition n'est pas identifiable, et c'est le cœur de la section. Un réseau non contraint prendra n'importe laquelle de ces solutions, ce qui ruine le bénéfice attendu : si la quantité notée V(s) n'est pas la valeur de l'état, l'apprendre une fois pour toutes n'apprend rien d'utile, et le réseau continue d'apprendre la mauvaise nouvelle séparément pour chaque action. Une seule contrainte suffit à rétablir l'unicité, celle de moyenne nulle de l'avantage. Avec elle, la décomposition de 1, 2, 3, 4 devient unique : la valeur de l'état est la moyenne de ses valeurs d'action, 2,5, et les avantages sont des écarts à cette moyenne, ce qui est exactement le sens que le mot avantage doit avoir. La réponse (a) voit juste sur la perte et rate la conclusion : la soustraction n'est pas une commodité numérique, c'est ce qui fait exister la séparation. La réponse (b) invente une règle de signe, alors qu'un avantage peut être positif ou négatif et que son amplitude n'est bornée par rien. La réponse (c) imagine une préférence apprise, alors que la contrainte est imposée par l'architecture, en soustrayant la moyenne à l'intérieur du réseau. Si vous ne retenez qu'une phrase : une architecture duale sans la soustraction de la moyenne n'est pas une architecture duale, c'est un réseau à deux têtes qui ne sépare rien. Deux conséquences pratiques. La ligne qui porte l'équation est avantage.mean(dim=1, keepdim=True), et la dimension est le piège : la dimension 1 est celle des actions, donc on obtient une moyenne par échantillon du lot, qui dépend de l'état, alors que moyenner sur la dimension 0 donnerait une moyenne par action sur tout le lot, ce qui n'a aucun sens dans l'équation et s'écrit en changeant un caractère. Et le diagnostic qui vérifie tout cela en une seule courbe : sur un ensemble d'états fixé, la moyenne des avantages doit rester collée à zéro, à quelques centièmes près, tandis que la valeur croît franchement. Si l'avantage moyen dérive, votre soustraction est mal branchée, et vous le saurez en une courbe plutôt qu'en trois jours. Gardez enfin le schéma de raisonnement, parce qu'il resservira partout : dès qu'on écrit une quantité comme une somme de deux quantités apprises, il faut dire ce qui empêche l'une d'absorber l'autre.",
+ q9: "Ce qui change est la nature de la quantité qui pilote l'exploration. Un calendrier de ε est une fonction du numéro de trame, la même dans tous les états, écrite à la main avant l'entraînement par quelqu'un qui ne sait pas encore ce que l'agent va découvrir, et il demande trois nombres de plus à régler. Un réseau bruité remplace cela par des paramètres : dans w = μ + σ·ε, les deux premiers sont entraînables et reçoivent un gradient, le troisième est un tirage aléatoire renouvelé régulièrement et jamais entraîné. Le réseau n'apprend donc pas le bruit, il apprend son amplitude, couche par couche et poids par poids : si une couche a besoin d'être précise, son σ descend vers zéro ; si elle gagne à rester floue, son σ reste grand. Et l'exploration apparaît sans qu'on l'ait programmée, puisque des poids bruités donnent des valeurs d'action bruitées, donc des argmax qui varient d'un passage à l'autre : l'agent reste purement glouton et explore quand même. La réponse (b) est la confusion la plus fréquente et elle survalorise beaucoup le procédé : il n'y a ici aucune notion de nouveauté, aucun compteur de visites, aucune curiosité, donc le ciblage de l'exploration n'est pas appris, seulement son amplitude. La réponse (c) rabat la méthode sur un changement d'écriture, et le diagnostic la contredit : en suivant le rapport signal sur bruit de chaque couche, c'est-à-dire la moyenne quadratique des μ divisée par celle des σ, on voit la dernière couche devenir nettement déterministe, puis, après environ 450 000 trames, redevenir plus bruitée. Aucun calendrier écrit à la main ne fait cela, puisqu'un ε décroît et ne remonte jamais. La réponse (d) inverse les deux modes : en entraînement la couche utilise μ + σ·ε, en évaluation elle n'utilise que μ. C'est le second sens que prend la ligne reseau.eval() de la semaine dernière, qui coupe désormais l'exploration et remplace exactement ε = 0. Deux pièges de code valent le détour. Le bruit s'enregistre comme tampon de module et non comme paramètre, sans quoi l'optimiseur se met à entraîner le bruit et la méthode perd tout sens. Et le bruit doit être retiré régulièrement : cela ne se produit pas tout seul, et certaines implémentations exigent un appel explicite sans le documenter. Terminez par la question d'unité, qui est le réflexe de la semaine : sur le jeu de référence, la version bruitée atteint le seuil en environ 250 parties contre 400 pour la référence, et elle tourne à environ 194 trames par seconde contre 240, parce que le tirage du bruit et le calcul des poids effectifs coûtent à chaque passage avant. Plus rapide en quoi ?",
+ q10: "La priorisation est deux choses, et qui n'en implémente qu'une a écrit une méthode fausse. Première moitié, le tirage : la priorité d'un échantillon mesure sa surprise, c'est-à-dire l'erreur qu'il produit dans la mise à jour de Bellman, et l'exposant α_PER règle l'agressivité du procédé. Lisez-le par ses bornes, c'est la meilleure façon de lire cette formule : à 0 toutes les puissances valent 1, le tirage redevient uniforme et vous retrouvez exactement le tampon de la semaine 5 ; à 1 la probabilité est proportionnelle à la priorité. La valeur usuelle est 0,6, plus près de l'uniforme que du proportionnel, parce qu'à trop se concentrer sur un petit sous-ensemble du tampon on perd l'indépendance des données et on surapprend ce sous-ensemble. Seconde moitié, et c'est elle que nomme la réponse (c) : en tirant selon P(i) plutôt qu'uniformément, nous avons changé la distribution des données, donc nos gradients ne sont plus des estimations non biaisées de celui que nous voulions descendre, ils sont systématiquement tirés vers les transitions difficiles. Les poids de correction sont de l'échantillonnage préférentiel, celui de la semaine 3 que la semaine 5 avait délibérément laissé de côté : puisque nous avons tiré selon la mauvaise distribution, nous repondérons chaque échantillon par le rapport entre celle que nous voulions et celle que nous avons employée. À β = 0, aucune correction. À β = 1, le biais est entièrement compensé et l'espérance du gradient redevient celle du tirage uniforme. On part quand même de 0,4 pour monter vers 1 sur cent mille trames, parce qu'au début le gradient est de toute façon très bruité et le biais est le moindre des problèmes, alors qu'à la fin il devient le problème principal. La réponse (a) est la demi-méthode, et c'est l'erreur de lecture que je veux désamorcer : un écrêtage de gradient ne corrige aucun biais de distribution, il borne une amplitude. La réponse (b) confond la correction et sa normalisation : les poids d'un lot sont bien divisés par leur maximum, ce qui place le plus grand à 1 et garantit que la repondération ne fait jamais grossir un gradient, mais cette normalisation n'est pas β. La réponse (d) croit qu'un tirage plus agressif se corrige de lui-même, alors que c'est l'inverse : plus α_PER est grand, plus le biais à compenser est fort. Trois détails d'implémentation à ne pas perdre. Une transition neuve reçoit la priorité maximale du tampon, pour être tirée vite au moins une fois. La perte quadratique de la bibliothèque ne prend pas de poids par échantillon, donc le carré s'écrit à la main. Et la quantité écrite dans les priorités est l'écart non pondéré, en valeur absolue et détaché du graphe, augmenté de dix puissance moins cinq pour qu'une transition parfaitement prédite ne disparaisse pas du tirage : le poids corrige un biais de tirage, il ne mesure pas la surprise, et confondre les deux fait boucler le tampon sur lui-même. Dernier avertissement, et il dépasse cette section : la courbe de perte baisse visiblement quand on active la priorisation, et cela ne prouve rien. En apprentissage supervisé, la perte est l'objectif ; en apprentissage par renforcement, la perte est un diagnostic, et la seule courbe qui décide est celle du retour. Notez pour finir que cet exposant porte toujours son indice : α nu reste le pas d'apprentissage, et les deux vivent dans le même bloc d'hyperparamètres.",
+ q11: "Regardez où chaque réparation intervient, c'est le critère qui explique tout. L'architecture duale touche la structure du réseau et laisse intactes la perte, le tampon et la cible. Les réseaux bruités touchent ses couches. Le tampon priorisé touche l'échantillonnage. Le dépliage de Bellman touche la cible. Quatre points d'intervention distincts, et c'est pour cela qu'elles s'empilent : la composabilité n'est pas un miracle, c'est la conséquence du fait que ces méthodes réparent des défauts situés à des endroits différents du même programme. Retenez le critère à l'envers, il vous servira à lire bien d'autres combinaisons : deux améliorations qui touchent la même pièce ne se composent pas gratuitement, et c'est le cas du double DQN et du dépliage, qui modifient tous les deux la cible. La tension de la réponse (a) est d'une autre nature et c'est la seule interaction franchement négative de la semaine : le dépliage a supprimé un maximum intermédiaire en supposant que l'action jouée au pas suivant était la bonne, donc il veut des données fraîches, tandis que le tampon de rejeu existe pour garder des données anciennes, et plus il est grand, plus la probabilité de tirer une sous-trajectoire jouée par une mauvaise politique est élevée. La réparation du défaut numéro 5 abîme donc en partie celle que la semaine 5 avait installée pour la corrélation des données, et c'est la nuance qu'il faut savoir énoncer. La réponse (b) est démentie par la combinaison elle-même, qui place des couches bruitées dans les deux chemins de l'architecture duale : une structure et des couches ne se disputent rien. La réponse (c) emprunte le mot identifiable à l'architecture duale pour un usage qui n'a pas de sens, puisque la contrainte de moyenne nulle rend la décomposition unique quelle que soit la façon de calculer la cible. La réponse (d) est l'excès d'optimisme que la semaine corrige deux fois : d'abord parce que la tension existe, ensuite parce que la combinaison publiée, l'agent nommé Rainbow, n'en retient que quatre, le dépliage, l'architecture duale, les réseaux bruités et le tampon priorisé. Le double DQN et la version distributionnelle en sont écartés, faute d'apport mesurable sur l'environnement d'essai : nous avons étudié cinq réparations et le système combiné en embarque quatre. Voilà la leçon de méthode de la semaine entière, et c'est le sens du laboratoire comme du jalon à venir : on n'empile pas des améliorations parce qu'elles sont publiées, on les empile après avoir mesuré celles qui servent sur son problème. Le prix, pour finir, puisque c'est devenu un réflexe de lecture : le système combiné atteint son score maximal en quelques dizaines de parties contre quatre cents pour la référence, et il est plus lent, son débit passant de 170 à 130 trames par seconde à cause du tirage en temps linéaire du tampon priorisé.",
+ q12: "Faites les deux calculs, celui de l'agent et le vôtre. L'agent ne connaît que des moyennes : 35,43 contre 40,54, la voiture gagne, et il prendra la voiture systématiquement, sans hésitation. Vous, vous regardez le pire cas, une heure en train contre une heure et demie en voiture, et si vous avez une réunion importante vous prenez le train, et vous avez raison. Le mot qui nomme ce que la moyenne a jeté est variance, et un agent qui ne manipule que des espérances est structurellement incapable de ce raisonnement. Dans un processus de décision markovien, l'effet se compose : chaque pas ajoute son aléa, et travailler avec des récompenses moyennes revient à perdre, pas après pas, une grande quantité d'information sur la dynamique réelle de l'environnement. La généralisation tient en une ligne, et c'est son élégance : on reprend l'équation de Bellman et on remplace chaque nombre par la distribution correspondante, Z étant la distribution du retour et R celle de la récompense immédiate. Un seul symbole y est nouveau, l'égalité en distribution, et il ne dit pas que les deux membres prennent la même valeur mais qu'ils suivent la même loi. Les deux opérations de droite changent donc de sens : multiplier une distribution par γ contracte son support vers zéro, et ajouter la distribution des récompenses est une convolution. L'équation de Bellman ordinaire est le cas particulier obtenu en prenant l'espérance des deux côtés. La réponse (a) propose une pénalité de variance : ce serait une autre méthode, et elle ne rend pas l'espérance suffisante, elle lui adjoint une statistique choisie à la main. La réponse (c) tombe dans le piège de lecture des deux figures, dont les axes horizontaux ne couvrent pas la même plage, 20 à 100 minutes d'un côté et 33 à 62 de l'autre : au premier regard la distribution du train paraît la plus large, ce qui inverse exactement la conclusion. Lisez les chiffres, pas la forme, une bosse à 90 minutes d'un côté et une bosse à 60 de l'autre. La réponse (d) fait de la méthode un départageur de moyennes voisines, alors que l'exemple est construit pour que la moyenne tranche nettement et tranche mal. Les limites de ce que cette ouverture vous demande, pour finir, et elles sont volontaires : savoir énoncer l'équation, dire ce que signifie l'égalité en distribution, expliquer avec les deux trajets pourquoi une moyenne jette de l'information, et nommer la perte employée, l'entropie croisée que vous connaissez depuis la semaine 3 plutôt que la métrique de Wasserstein, qui avait pourtant la meilleure justification théorique. La version concrète, qui représente chaque distribution par cinquante et un atomes sur un intervalle fixé, ne vous est pas demandée : sa projection est le code le plus délicat de toute cette famille de méthodes, et elle ne vous apprendrait rien de plus sur l'apprentissage par renforcement."
+};
+
+function submitQuiz() {
+ const questions = document.querySelectorAll('.question');
+ let score = 0;
+ let answered = 0;
+
+ questions.forEach((q, i) => {
+ const name = `q${i + 1}`;
+ const correct = q.dataset.correct;
+ const selected = q.querySelector(`input[name="${name}"]:checked`);
+ const feedback = q.querySelector('.feedback');
+
+ if (selected) {
+ answered++;
+ feedback.style.display = 'block';
+ if (selected.value === correct) {
+ score++;
+ feedback.className = 'feedback correct';
+ feedback.textContent = ' Correct ! ' + explanations[name];
+ } else {
+ feedback.className = 'feedback incorrect';
+ feedback.textContent = ` Incorrect. La bonne réponse est (${correct.toUpperCase()}). ` + explanations[name];
+ }
+ }
+ });
+
+ if (answered < questions.length) {
+ alert('Veuillez répondre à toutes les questions avant de valider.');
+ return;
+ }
+
+ const scoreBox = document.getElementById('score-box');
+ scoreBox.style.display = 'block';
+ document.getElementById('score-text').textContent = `${score} / ${questions.length}`;
+ const pct = Math.round((score / questions.length) * 100);
+ let msg = '';
+ if (pct >= 90) msg = ' Excellent ! Vous maîtrisez les fondements du cours.';
+ else if (pct >= 70) msg = ' Très bien ! Quelques révisions sur les points incorrects et vous serez prêt·e.';
+ else if (pct >= 50) msg = ' Pas mal ! Relisez les sections correspondantes avant de continuer.';
+ else msg = ' Prenez le temps de revoir le cours, puis réessayez.';
+ document.getElementById('score-msg').textContent = msg;
+ scoreBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+ document.getElementById('quiz-form').reset();
+ document.querySelectorAll('.feedback').forEach(f => { f.style.display = 'none'; f.textContent = ''; });
+ document.getElementById('score-box').style.display = 'none';
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

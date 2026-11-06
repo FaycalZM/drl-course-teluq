@@ -1,0 +1,1 @@
+Figure 6-2. Depuis l'état A, aller à gauche est toujours une erreur, et le Q-learning ordinaire le fait pourtant presque toujours au début et encore 5 % de fois de trop à la fin ; séparer le choix de l'action de son évaluation ramène la courbe à l'optimum. Taux d'exploration 0,1, pas d'apprentissage 0,1, aucune actualisation, moyenne sur 10 000 exécutions.

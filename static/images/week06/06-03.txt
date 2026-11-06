@@ -1,0 +1,1 @@
+Figure 6-3. La moyenne de la valeur que le réseau s'attribue sur mille états témoins, au fil des heures d'entraînement sur un jeu Atari : la version ordinaire monte au-delà de ce qu'elle finira par admettre puis redescend, la version qui sépare choix et évaluation croît plus régulièrement.
