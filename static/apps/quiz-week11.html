@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Quiz Semaine 11 : Exploration avancée</title>
+ <style>
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body {
+ font-family: 'Segoe UI', system-ui, sans-serif;
+ background: #f8fafc;
+ color: #1e293b;
+ padding: 1.5rem;
+ line-height: 1.6;
+ }
+ h1 {
+ font-size: 1.4rem;
+ font-weight: 700;
+ color: #0f172a;
+ margin-bottom: 0.5rem;
+ }
+ .subtitle {
+ color: #64748b;
+ font-size: 0.9rem;
+ margin-bottom: 1.5rem;
+ }
+ .question {
+ background: #fff;
+ border: 1px solid #e2e8f0;
+ border-radius: 10px;
+ padding: 1.25rem 1.5rem;
+ margin-bottom: 1.25rem;
+ transition: box-shadow 0.2s;
+ }
+ .question:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+ .question-text {
+ font-weight: 600;
+ margin-bottom: 0.85rem;
+ font-size: 0.98rem;
+ }
+ .option {
+ display: flex;
+ align-items: flex-start;
+ gap: 0.6rem;
+ padding: 0.5rem 0.75rem;
+ border-radius: 6px;
+ margin-bottom: 0.35rem;
+ cursor: pointer;
+ transition: background 0.15s;
+ font-size: 0.93rem;
+ }
+ .option-text { flex: 1; min-width: 0; }
+ .option:hover { background: #f1f5f9; }
+ .option input[type="radio"] { margin-top: 0.2rem; accent-color: #6366f1; flex-shrink: 0; }
+ .feedback {
+ margin-top: 0.85rem;
+ padding: 0.6rem 1rem;
+ border-radius: 6px;
+ font-size: 0.9rem;
+ display: none;
+ }
+ .feedback.correct { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+ .feedback.incorrect { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+ .btn-check {
+ margin-top: 1rem;
+ padding: 0.5rem 1.2rem;
+ background: #6366f1;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ font-size: 0.9rem;
+ font-weight: 600;
+ cursor: pointer;
+ transition: background 0.2s;
+ }
+ .btn-check:hover { background: #4f46e5; }
+ .score-box {
+ background: #ede9fe;
+ border: 1px solid #c4b5fd;
+ border-radius: 10px;
+ padding: 1.5rem;
+ text-align: center;
+ display: none;
+ margin-top: 1rem;
+ }
+ .score-box h2 { font-size: 1.6rem; color: #4c1d95; margin-bottom: 0.25rem; }
+ .score-box p { color: #6d28d9; font-size: 0.95rem; }
+ .btn-reset {
+ margin-top: 1rem;
+ padding: 0.5rem 1.4rem;
+ background: #7c3aed;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ cursor: pointer;
+ font-weight: 600;
+ transition: background 0.2s;
+ }
+ .btn-reset:hover { background: #6d28d9; }
+ #submit-all {
+ display: block;
+ width: 100%;
+ padding: 0.75rem;
+ background: #0f172a;
+ color: #fff;
+ border: none;
+ border-radius: 8px;
+ font-size: 1rem;
+ font-weight: 700;
+ cursor: pointer;
+ margin-top: 1.5rem;
+ transition: background 0.2s;
+ }
+ #submit-all:hover { background: #1e3a5f; }
+ </style>
+</head>
+<body>
+
+<h1>Quiz : Semaine 11</h1>
+<p class="subtitle">Exploration avancée · 12 questions</p>
+
+<form id="quiz-form">
+
+ <div class="question" data-correct="d">
+ <div class="question-text">1. Vous entraînez un agent sur une tâche à récompense parcimonieuse. Après cinq heures de calcul, votre compteur d'atteintes du but affiche <strong>zéro</strong>. Un camarade vous conseille de passer à une méthode plus récente, à meilleure efficacité d'échantillon. Que lui répondez-vous ?</div>
+ <label class="option"><input type="radio" name="q1" value="a" /><span class="option-text">a) Qu'il a raison sur le principe et presque raison sur le choix : c'est bien l'efficacité d'échantillon qui décide ici, et une méthode hors politique à tampon de rejeu, qui ressert chaque transition des dizaines de fois, extraira de ce même jeu de données ce que la vôtre n'a pas su y voir. La phrase charnière de la semaine est que l'exploration décide de la <em>vitesse</em> de convergence</span></label>
+ <label class="option"><input type="radio" name="q1" value="b" /><span class="option-text">b) Qu'il a raison : zéro atteinte du but en cinq heures est le symptôme d'un entraînement instable, et une méthode mieux régularisée franchira la barrière. L'exploration reste un réglage parmi d'autres, et c'est bien pour cela qu'elle arrive en ouverture de module et non en ouverture de cours</span></label>
+ <label class="option"><input type="radio" name="q1" value="c" /><span class="option-text">c) Qu'il a tort, parce que le problème est le facteur d'actualisation : une récompense obtenue au bout de plusieurs centaines de pas est écrasée par <em>γ</em> avant d'atteindre les premiers états. Relevez <em>γ</em> à 0,999 et le signal traversera, sans rien changer à l'exploration</span></label>
+ <label class="option"><input type="radio" name="q1" value="d" /><span class="option-text">d) Qu'<strong>aucune méthode ne peut rien ici</strong>, et que c'est la seule situation du cours où le soin apporté à l'algorithme ne rachète rien du tout. Si l'agent ne voit jamais une bonne récompense, la méthode la plus efficace du domaine apprendra une seule chose, qu'il n'existe aucun moyen d'obtenir une bonne récompense : le jeu de données ne contient pas l'événement à apprendre. La question de cette semaine est donc <em>antérieure</em> à celle des quatre précédentes : non pas laquelle des méthodes apprend le mieux, mais y a-t-il quelque chose à apprendre dans les données que l'agent produit</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">2. La section 11.1 instruit le procès de la méthode <em>ε</em>-gloutonne, et la première accusation est que ses actions aléatoires <strong>biaisent</strong> l'estimation des valeurs d'action. Ce biais existe-t-il, et dans quel cas exactement ?</div>
+ <label class="option"><input type="radio" name="q2" value="a" /><span class="option-text">a) <strong>Non pour la cible à un pas, oui pour une cible dépliée.</strong> Dans la cible à un pas, l'action réellement jouée n'apparaît pas à droite : on y lit la récompense observée, l'état suivant observé et un <strong>maximum sur les actions disponibles dans cet état suivant</strong>. L'action jouée ne sert qu'à désigner la sortie du réseau que l'on corrige. En revanche, dès que la cible déplie <em>n</em> étapes, les récompenses intermédiaires ont été obtenues en jouant les actions de la politique de comportement, le maximum qui aurait dû précéder chacune a été supprimé par l'approximation, et le biais est réel, proportionnel au nombre de pas dépliés</span></label>
+ <label class="option"><input type="radio" name="q2" value="b" /><span class="option-text">b) Oui, et l'argument est celui du tampon de rejeu : une transition produite par une action aléatoire y reste stockée longtemps, et tant qu'elle ressort dans les lots l'agent apprend de mauvaises valeurs d'action. C'est la raison pour laquelle le calendrier de <em>ε</em> doit décroître vite et pour laquelle les vieux échantillons doivent être chassés du tampon</span></label>
+ <label class="option"><input type="radio" name="q2" value="c" /><span class="option-text">c) Non, dans aucun cas, et la propriété qui le garantit est la <em>décroissance</em> de <em>ε</em> : en fin d'entraînement la politique de collecte est devenue gloutonne, les transitions aléatoires ont été poussées hors du tampon, et la cible redevient non biaisée. Le biais est donc transitoire par construction, y compris sur une cible dépliée</span></label>
+ <label class="option"><input type="radio" name="q2" value="d" /><span class="option-text">d) Oui dans tous les cas, parce que l'équation de Bellman suppose un comportement optimal sur toute la suite de la trajectoire : la cible à un pas en hérite autant que la cible à <em>n</em> étapes, et la seule parade est de maintenir <em>ε</em> très bas dès le début de l'entraînement</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">3. Si l'accusation de biais ne tient pas pour la cible à un pas, que faut-il alors reprocher à la méthode <em>ε</em>-gloutonne, et pourquoi le nageur de la section 11.1 ne traverse-t-il pas sa rivière ?</div>
+ <label class="option"><input type="radio" name="q3" value="a" /><span class="option-text">a) Qu'<em>ε</em> est un hyperparamètre réglé à la main, donc un calendrier arbitraire. Le nageur ne traverse pas parce que son <em>ε</em> était trop petit et s'est refermé trop tôt ; un calendrier mieux choisi, ou simplement plus long, le ferait traverser</span></label>
+ <label class="option"><input type="radio" name="q3" value="b" /><span class="option-text">b) Que ses actions aléatoires sont tirées <em>uniformément</em> parmi les actions disponibles, donc qu'elles ignorent les valeurs déjà apprises. Le nageur ne traverse pas parce qu'il nage parfois vers la gauche alors que la valeur de l'action droite est plus élevée, et une exploration pondérée par les valeurs d'action corrigerait exactement ce défaut</span></label>
+ <label class="option"><input type="radio" name="q3" value="c" /><span class="option-text">c) Son <strong>incohérence</strong>. Avec du hasard injecté dans la trajectoire, la politique de collecte change à <em>chaque pas</em> : la trajectoire ne cesse de basculer de la politique courante à une politique aléatoire, de sorte que ce que l'agent exécute n'est jamais une politique, mais une alternance de deux politiques tirée au sort pas par pas. Toute région isolée qui ne s'atteint que par une <strong>séquence d'actions coordonnées</strong> devient alors inaccessible, et la couverture de l'espace d'états s'effondre. Le nageur échoue non par faiblesse, mais parce qu'il reprend sa décision vingt fois au lieu de la prendre une fois</span></label>
+ <label class="option"><input type="radio" name="q3" value="d" /><span class="option-text">d) Que le hasard injecté dans la trajectoire augmente la <em>variance</em> du gradient : chaque action aléatoire produit une transition hors distribution, donc un terme de gradient bruité. Le nageur ne traverse pas parce que son réseau ne converge pas, et la parade est celle de la semaine 10, borner le pas</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">4. Vous recopiez dans votre carnet les trois comptages de la section 11.2 : l'état 6 est visité <strong>0</strong> fois, puis <strong>0</strong> fois, puis <strong>5</strong> fois. En quelle unité les trois exécutions sont-elles exprimées, et comment le vérifiez-vous sans rien relancer ?</div>
+ <label class="option"><input type="radio" name="q4" value="a" /><span class="option-text">a) En <strong>épisodes</strong>, qui est l'unité naturelle d'un comptage de visites, chaque épisode comptant pour une visite de l'état où il se termine. Les cinq visites représentent donc 0,05 % des dix mille épisodes simulés, et à dix pas par épisode l'agent a consommé cent mille pas d'environnement</span></label>
+ <label class="option"><input type="radio" name="q4" value="b" /><span class="option-text">b) En <strong>pas</strong>, et l'addition le vérifie : chaque ligne du tableau somme exactement à 100, à 1 000 et à 10 000, parce qu'un comptage de visites par état somme au nombre de pas effectués et jamais au nombre d'épisodes. Un second chemin confirme la lecture : cinq visites annoncées comme 0,05 % du total, c'est 5 sur 10 000. À dix pas par épisode, ces trois exécutions valent donc <strong>10, 100 et 1 000 épisodes</strong>, et lire « épisodes » en tête de colonne attribuerait à l'agent dix fois plus d'expérience qu'il n'en a eu</span></label>
+ <label class="option"><input type="radio" name="q4" value="c" /><span class="option-text">c) En pas, mais la proportion ne se vérifie pas de cette façon : les 0,05 % se rapportent au nombre de visites de l'état 1, qui sert de référence au tableau, donc à 5 sur 4 056. Et l'addition des lignes ne prouve rien, puisque l'agent peut rester sur place sans qu'aucun compteur bouge</span></label>
+ <label class="option"><input type="radio" name="q4" value="d" /><span class="option-text">d) En épisodes pour les deux premières lignes et en pas pour la troisième : c'est l'incohérence d'unité que la semaine signale, seule la troisième ligne permettant le calcul des 0,05 %. Les deux premières doivent être multipliées par dix avant toute comparaison</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">5. La section 11.3 range les trois familles d'exploration dirigée par leur <strong>point d'attache</strong>, et la Figure 11-2 les place sur une même boucle. Où chacune agit-elle, et pourquoi ce critère plutôt que leur effet ?</div>
+ <label class="option"><input type="radio" name="q5" value="a" /><span class="option-text">a) Le bruit sur les poids et la prime de comptage agissent au même endroit, puisque les deux modifient la politique de collecte, tandis que la prime d'erreur de prédiction agit sur la <em>fonction de valeur</em>, qu'elle corrige par un terme d'erreur ajouté au critique. La figure sépare donc une famille de politique de deux familles de valeur</span></label>
+ <label class="option"><input type="radio" name="q5" value="b" /><span class="option-text">b) Les trois agissent sur la récompense, et c'est justement ce que la figure montre : les réseaux bruités ajoutent une récompense implicite proportionnelle à l'amplitude de bruit apprise, le comptage une prime explicite, la distillation une prime mesurée. Ce qui les sépare est l'origine du nombre ajouté, et non un point d'attache</span></label>
+ <label class="option"><input type="radio" name="q5" value="c" /><span class="option-text">c) Le bruit placé sur les <strong>poids</strong> change <em>qui agit</em> : il perturbe la fonction qui choisit les actions, donc la politique elle-même. Les deux primes, celle du comptage et celle de l'erreur de prédiction, changent <em>ce que vaut le fait d'arriver quelque part</em> : elles s'ajoutent à la récompense, au même endroit de la boucle. Le critère est le point d'attache parce que, dans une perte, les deux primes sont <strong>indiscernables</strong>, les deux ajoutant un nombre positif avec un code identique au caractère près, et qu'elles lisent pourtant deux quantités entièrement différentes, un compteur du passé d'un côté, l'erreur d'un prédicteur sur l'observation courante de l'autre</span></label>
+ <label class="option"><input type="radio" name="q5" value="d" /><span class="option-text">d) Les trois agissent sur la politique de collecte, et la figure les sépare par leur <em>coût</em> : un tirage de bruit est gratuit, un comptage demande une table, un prédicteur demande un réseau et une perte de plus. C'est ce classement par coût qui décide de la famille à essayer en premier</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">6. Vous transposez les réseaux bruités de la méthode de valeur vers PPO, et vous appelez le tirage du bruit <strong>à chaque pas de collecte</strong>. Qu'avez-vous cassé, et quelle est la bonne fréquence dans chaque famille ?</div>
+ <label class="option"><input type="radio" name="q6" value="a" /><span class="option-text">a) Rien n'est cassé : la fréquence de tirage est un détail d'implémentation, et tirer plus souvent augmente simplement la diversité des échantillons. Les deux familles tirent le bruit à chaque passe avant, et la seule contrainte réelle est de ne pas le tirer pendant l'évaluation</span></label>
+ <label class="option"><input type="radio" name="q6" value="b" /><span class="option-text">b) Vous avez rendu <strong>indéfinissable l'ancienne politique du rapport</strong>. Un lot sur politique est <em>une</em> trajectoire collectée par <em>une</em> politique, et c'est ce qui donne un sens au rapport entre la nouvelle et l'ancienne politique de la semaine 10 ; en retirant le bruit tous les pas, vous changez de politique au milieu du lot. Hors politique, où les transitions sont réutilisées depuis un tampon et où la cohérence d'une trajectoire n'est pas la grandeur qui compte, le bruit se tire <strong>à chaque itération d'entraînement</strong> ; sur politique, <strong>une fois par lot de 2 048 transitions</strong>, ce qui est exactement ce qui fait de lui une exploration cohérente</span></label>
+ <label class="option"><input type="radio" name="q6" value="c" /><span class="option-text">c) Vous avez cassé la décroissance de l'exploration : un tirage par pas empêche l'amplitude apprise de converger, donc l'agent reste bruyant jusqu'au dernier pas. Hors politique, le bruit se tire une fois par lot d'entraînement ; sur politique, une fois par époque de minilots</span></label>
+ <label class="option"><input type="radio" name="q6" value="d" /><span class="option-text">d) Vous avez cassé l'estimation de l'avantage : un bruit retiré à chaque pas rend le critique bruité, donc les cibles bruitées, et c'est précisément pour cela que le bruit ne doit vivre que dans l'acteur. La fréquence correcte est d'un tirage par <em>épisode</em>, dans les deux familles, pour que les politiques de collecte restent comparables</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">7. Dans le volet C, vous passez par mégarde les paramètres du réseau de <strong>référence</strong> à l'optimiseur. Que mesure votre prime ensuite, et quelle distinction la section 11.3 vous demande de tenir entre les deux familles de prime ?</div>
+ <label class="option"><input type="radio" name="q7" value="a" /><span class="option-text">a) La prime devient <em>négative</em> sur les observations familières, parce que la référence, qui a trois couches, apprend plus vite que le prédicteur, qui n'en a qu'une. Il faut alors l'écrêter à zéro, et la distinction à tenir est celle d'un prédicteur sous-dimensionné et d'un prédicteur surdimensionné</span></label>
+ <label class="option"><input type="radio" name="q7" value="b" /><span class="option-text">b) La prime devient plus informative, puisque les deux réseaux s'ajustent ensemble aux observations rencontrées, et c'est d'ailleurs la raison pour laquelle le prédicteur est volontairement plus faible que la référence. La distinction à tenir est que cette prime mesure la rareté et non la surprise : un état jamais visité a toujours une erreur de prédiction élevée</span></label>
+ <label class="option"><input type="radio" name="q7" value="c" /><span class="option-text">c) La prime cesse de <em>décroître</em>, donc le problème modifié ne se rapproche jamais du problème d'origine. C'est le seul effet, et il se corrige en diminuant <em>c</em>. La distinction à tenir est celle des deux écritures de la prime, la différence absolue et l'erreur quadratique</span></label>
+ <label class="option"><input type="radio" name="q7" value="d" /><span class="option-text">d) La prime <strong>s'effondre vers zéro partout</strong>, y compris dans les états jamais visités : la référence apprend à être prévisible, les deux réseaux convergent l'un vers l'autre, et votre dispositif redevient celui du volet A, en plus lent. Le réseau figé n'est pas une précaution de style, c'est la condition de fonctionnement de la méthode. Quant à la distinction : cette prime mesure la <strong>surprise</strong>, pas la <strong>rareté</strong>. Un état rarement visité dont la sortie se devine par interpolation ne surprend pas le prédicteur et ne paie presque rien, là où un comptage de visites l'aurait payé plein tarif</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">8. La section 11.4 avance une affirmation que le cours prend à son compte, sur ce que la prime fait au <strong>problème</strong>. Laquelle, et à quelles conditions la prime reste-t-elle tolérable ?</div>
+ <label class="option"><input type="radio" name="q8" value="a" /><span class="option-text">a) Qu'un processus de décision markovien est défini, entre autres, par sa <strong>fonction de récompense</strong> : modifier la récompense définit donc un <em>autre</em> processus, et nos méthodes cherchent consciencieusement la politique optimale de celui-là, qui n'a aucune raison d'être celle du problème d'origine. Une prime assez grande rend préférable une visite éternelle d'états neufs à toute tentative de terminer la tâche, et l'agent qui en résulte n'est pas défectueux : il est optimal pour la récompense qu'on lui a effectivement donnée. Deux propriétés du montage la rendent tolérable ici, et ce sont des <strong>accidents</strong> et non des garanties : la prime décroît quand le compteur monte, et la sélection finale se fait sur un retour de test mesuré <em>sans</em> enveloppe</span></label>
+ <label class="option"><input type="radio" name="q8" value="b" /><span class="option-text">b) Que la prime rend la récompense non stationnaire et viole l'hypothèse markovienne : elle dépend du nombre de visites passées, c'est-à-dire de l'historique, et le processus cesse d'être un processus de décision markovien. Elle reste tolérable parce que le hachage à trois décimales rend cette dépendance négligeable</span></label>
+ <label class="option"><input type="radio" name="q8" value="c" /><span class="option-text">c) Que la prime fausse les courbes d'entraînement, qui montent plus haut que les courbes d'évaluation. La politique optimale, elle, n'est pas touchée, puisque la prime décroît et finit par s'annuler ; la prime reste donc tolérable dès lors que vous étiquetez vos courbes comme mesurées sous enveloppe</span></label>
+ <label class="option"><input type="radio" name="q8" value="d" /><span class="option-text">d) Que la prime appartient au critique et non à l'environnement : l'ajouter dans une enveloppe mélange deux flux que les deux têtes de valeur gardent séparés, et c'est donc une erreur d'implémentation. Elle reste tolérable tant que <em>c</em> est inférieur à l'échelle de la récompense extrinsèque, ce qui garantit que l'optimum ne bouge pas</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">9. Votre courbe d'entraînement, mesurée sous enveloppe de prime, monte régulièrement, et votre retour d'évaluation reste collé à <em>-200</em>. Vous placez alors cette courbe d'entraînement à côté de celle de la méthode de référence, qui n'a pas de prime. Qu'est-ce qui est faux dans ce qui précède ?</div>
+ <label class="option"><input type="radio" name="q9" value="a" /><span class="option-text">a) Rien n'est faux dans la comparaison, qui met côte à côte deux entraînements, donc deux grandeurs de même nature. Ce qui est faux est le diagnostic : une courbe d'entraînement qui monte alors que l'évaluation stagne est la définition du surapprentissage, et il faut réduire la taille des réseaux</span></label>
+ <label class="option"><input type="radio" name="q9" value="b" /><span class="option-text">b) La comparaison est <strong>vide</strong>, et l'écart entre vos deux courbes n'est ni un bogue ni du surapprentissage : les deux mesurent deux grandeurs différentes, dont l'une contient la prime et l'autre non. Une courbe obtenue sous enveloppe n'est à l'échelle d'aucun autre dispositif, ni d'une courbe de test, ni d'une courbe dont le <em>c</em> diffère, ni d'une courbe sans prime du tout. <strong>Seule la courbe d'évaluation, mesurée sur un environnement sans enveloppe, est à l'échelle du problème d'origine</strong>, et c'est sur elle que toute comparaison entre méthodes doit se faire. Votre évaluation à <em>-200</em> dit par ailleurs quelque chose de net : la voiture n'a pas atteint le drapeau</span></label>
+ <label class="option"><input type="radio" name="q9" value="c" /><span class="option-text">c) Le diagnostic est bon, l'écart venant de la prime, mais la comparaison est fausse pour une autre raison : ce sont deux familles de méthodes différentes, et les courbes d'entraînement d'une méthode de valeur et d'une méthode sur politique ne se comparent jamais, quelle que soit la récompense mesurée</span></label>
+ <label class="option"><input type="radio" name="q9" value="d" /><span class="option-text">d) La comparaison est licite à condition que les deux exécutions aient le même <em>c</em>, et la méthode de référence a <em>c</em> = 0, qui est une valeur comme une autre. L'écart entre les deux courbes mesure donc exactement l'effet de la prime, et c'est la mesure que la section 11.6 rapporte</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">10. La section 11.6 quitte la méthode de valeur pour une méthode de politique, et deux de ses trois raisons sont réutilisables bien au-delà de la semaine. Laquelle porte sur une <strong>récompense qui change en cours d'entraînement</strong> ?</div>
+ <label class="option"><input type="radio" name="q10" value="a" /><span class="option-text">a) Une méthode de valeur a appris des <strong>valeurs numériques</strong> : si la récompense change, il faut les <em>réapprendre</em>, et ce temps est perdu. Or la prime change la récompense à chaque visite, par construction. Une méthode sur politique, elle, ne stocke aucune valeur de référence pour les anciennes transitions : une récompense plus élevée met simplement <strong>plus de poids</strong> sur l'échantillon correspondant dans le gradient de politique. Ce n'est pas un argument de performance, c'est un argument de <em>compatibilité entre deux mécanismes</em>, et il vaut pour tout dispositif qui touche à la récompense pendant l'entraînement : prime d'exploration, façonnage, normalisation adaptative, modèle de récompense appris</span></label>
+ <label class="option"><input type="radio" name="q10" value="b" /><span class="option-text">b) Les deux familles souffrent exactement de la même façon, puisque les deux estiment une fonction de valeur. La vraie raison du changement est ailleurs : c'est la dilution des échantillons rares dans un tampon de rejeu, et c'est la seule des trois raisons qui parle de la récompense</span></label>
+ <label class="option"><input type="radio" name="q10" value="c" /><span class="option-text">c) Une méthode sur politique recalcule ses avantages à chaque époque, donc elle absorbe une récompense modifiée sans réapprentissage, alors qu'une méthode de valeur devrait vider son tampon de rejeu à chaque changement d'échelle. La parade, du côté de la méthode de valeur, est donc de vider le tampon périodiquement</span></label>
+ <label class="option"><input type="radio" name="q10" value="d" /><span class="option-text">d) Une méthode de politique est insensible à l'échelle de la récompense, le gradient de politique étant invariant si l'on multiplie la récompense par une constante positive, alors qu'une méthode de valeur apprend des valeurs absolues. C'est pour cette raison que la prime peut être ajoutée sans régler <em>c</em> dans une méthode sur politique</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">11. Vous lisez le <strong>Tableau 11-1</strong> pour choisir une méthode d'exploration. Que dit-il exactement sur la découverte du but et sur la résolution de la tâche ?</div>
+ <label class="option"><input type="radio" name="q11" value="a" /><span class="option-text">a) Que les deux familles résolvent la tâche dès qu'elles reçoivent une extension d'exploration, la méthode de valeur avec un comptage d'états et la méthode de politique avec un comptage ou une distillation, et que seule la méthode de référence échoue complètement. La découverte la plus rapide appartient à la distillation, à trente-six minutes</span></label>
+ <label class="option"><input type="radio" name="q11" value="b" /><span class="option-text">b) Que <em>trois</em> exécutions sur sept ont résolu la tâche, deux avec une méthode de politique et une avec une méthode de valeur, celle du comptage d'états, passée très près du seuil avant de le franchir. La découverte la plus rapide, dix minutes, lui appartient également, ce qui en fait la meilleure ligne du tableau</span></label>
+ <label class="option"><input type="radio" name="q11" value="c" /><span class="option-text">c) Que la vitesse de découverte prédit la réussite : les deux exécutions qui résolvent la tâche sont aussi celles qui trouvent le but le plus vite, trente-six minutes contre une heure pour la méthode de politique sans dispositif d'exploration. C'est le classement unique que le tableau établit, et il est utilisable tel quel pour choisir</span></label>
+ <label class="option"><input type="radio" name="q11" value="d" /><span class="option-text">d) Que ses <strong>deux colonnes sont indépendantes</strong>, et c'est sa meilleure observation. La méthode de référence ne découvre le but <em>pas une seule fois</em>, ni en cent mille pas, ni en cinq heures d'agent purement aléatoire. La découverte la plus rapide de toutes, <strong>dix minutes</strong>, appartient à une exécution qui n'a jamais résolu la tâche. Et <strong>deux exécutions sur sept</strong> l'ont résolue, toutes les deux avec une méthode de politique : le comptage d'états et la distillation de réseau aléatoire. Trouver le but vite et résoudre la tâche sont deux réussites différentes, et elles ont deux classements</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">12. Sur le jeu de sous-marin de la section 11.7, quelle méthode arrive en tête, et que ce renversement <strong>interdit-il</strong> de conclure ?</div>
+ <label class="option"><input type="radio" name="q12" value="a" /><span class="option-text">a) Les réseaux bruités, dont le bruit cohérent sur les poids est exactement ce qu'il faut pour découvrir une compétence rare ; la méthode <em>ε</em>-gloutonne arrive deuxième. Ce que le renversement interdit est de comparer deux tâches dont les observations ne sont pas de même nature, l'une vectorielle et l'autre en image</span></label>
+ <label class="option"><input type="radio" name="q12" value="b" /><span class="option-text">b) La distillation de réseau aléatoire, qui confirme ici l'avantage qu'elle avait sur la tâche précédente, où elle est la plus économique des deux réussites, et qui est aussi la seule à découvrir la remontée à la surface. Ce que le renversement interdit est d'employer un comptage de visites sur une observation en image, le hachage n'y fonctionnant plus</span></label>
+ <label class="option"><input type="radio" name="q12" value="c" /><span class="option-text">c) La méthode <em>ε</em>-gloutonne, c'est-à-dire exactement celle qui, sur la voiture, n'a pas trouvé le but une seule fois en cinq heures : retour moyen de <strong>18</strong> en treize heures, et la seule dont quelques épisodes découvrent la remontée à la surface, là où les trois variantes de la méthode de politique n'enregistrent aucune progression. Ce qui est interdit : tenir un classement de méthodes d'exploration pour <strong>transférable</strong> d'un environnement à un autre. Les deux mesures sont bonnes toutes les deux, et la conclusion honnête d'une comparaison est parfois que la comparaison était <em>locale</em></span></label>
+ <label class="option"><input type="radio" name="q12" value="d" /><span class="option-text">d) Aucune, puisque les cinq exécutions stagnent au même retour moyen de 4 : c'est un résultat nul, et ce qu'il interdit est d'en conclure quoi que ce soit, le dispositif étant trop peu réglé pour départager quelque méthode que ce soit</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <button type="button" id="submit-all" onclick="submitQuiz()">Valider mes réponses</button>
+</form>
+
+<div class="score-box" id="score-box">
+ <h2 id="score-text"></h2>
+ <p id="score-msg"></p>
+ <button class="btn-reset" onclick="resetQuiz()"> Recommencer</button>
+</div>
+
+<script>
+const explanations = {
+ q1: "La phrase charnière de la semaine met en jeu tout ce que le cours a construit avant elle : si votre agent ne voit jamais une bonne récompense, vous pouvez disposer de la méthode la plus efficace du domaine, la seule chose qu'elle apprendra est qu'il n'existe aucun moyen d'obtenir une bonne récompense. Le choix de la méthode cesse d'avoir une importance, parce que rien ne s'apprend d'un jeu de données où la chose à apprendre ne se produit jamais. La réponse (a) est la confusion la plus instructive, et c'est pour cela qu'elle est écrite ici : l'efficacité d'échantillon dit combien d'information une méthode extrait d'un échantillon donné, elle ne crée pas une information absente, et un tampon qui ressert mille fois des transitions toutes payées pareil ressert mille fois la même absence. La réponse (b) traite l'exploration comme un réglage, ce qu'elle est effectivement sous une récompense dense, et la semaine passe sept sections à montrer qu'elle devient ailleurs une condition de possibilité. La réponse (c) nomme un phénomène réel, l'écrasement d'une récompense lointaine par l'actualisation, mais cet argument suppose qu'une récompense a été rencontrée quelque part : ici il n'y a rien à propager, et un facteur d'actualisation plus proche de 1 propagerait très fidèlement l'absence. Gardez enfin la nuance qui évite le contresens inverse : même sous une récompense dense, une meilleure exploration donne une convergence plus rapide et un entraînement plus stable, parce que l'échantillon est plus varié donc moins corrélé. L'exploration est une amélioration partout, et une condition de possibilité là où la récompense est rare.",
+ q2: "Retenez d'abord le contrôle, parce qu'il s'applique seul à n'importe quelle méthode que vous lirez après ce cours : écrivez la cible, et cherchez-y l'action réellement jouée. Dans la cible à un pas, elle n'apparaît qu'à gauche, comme l'index de la sortie du réseau que l'on corrige ; à droite, il n'y a que la récompense observée, l'état suivant observé et un maximum sur les actions disponibles dans cet état suivant. Que l'action ait été choisie gloutonnement, au hasard ou par un étudiant appuyant sur une touche, la cible est la même : c'est exactement ce que veut dire hors politique, et c'est pour cette raison qu'un réseau Q profond a le droit d'avoir un tampon de rejeu. La réponse (b) est l'accusation telle qu'elle circule, et son argument se retourne contre elle : si les actions aléatoires du passé biaisaient la cible, le tampon lui-même serait indéfendable, et avec lui les semaines 5, 6 et 9. La réponse (d) commet la même erreur sans la nuancer : l'équation de Bellman ne suppose rien sur l'action jouée, elle prend le maximum sur les actions de l'état suivant. La réponse (c) acquitte pour une mauvaise raison, et c'est pire qu'une erreur : la décroissance de epsilon ne garantit rien, le biais à un pas ne disparaît pas parce que le tampon se vide, il n'existait pas, et surtout cet acquittement laisse passer la moitié honnête de l'accusation. Car elle existe : sous un dépliage à n étapes, les récompenses intermédiaires sont celles de la politique de comportement, et la semaine 6 l'avait déjà nommé en disant qu'un tel dépliage rend la méthode partiellement sur politique, avec la consigne pratique qui en découle, rester modeste dans le choix de n. Le compte exact est donc : pas de biais à un pas, biais réel et proportionnel au dépliage, et ce n'est pas pour ce motif que la semaine change de méthode d'exploration.",
+ q3: "Le défaut n'est pas le hasard, c'est l'incohérence, et c'est l'idée qui organise la semaine entière. Une région isolée ne s'atteint que par une séquence d'actions coordonnées, et une politique qui se retire au sort à chaque pas ne peut pas mener une séquence à son terme. D'où le couple de mots que la semaine coine : une exploration non dirigée espère que le hasard apportera quelque chose de neuf, une exploration dirigée dispose d'une quantité calculée qui pousse vers ce qui n'a pas été vu. La réponse (b) est la plus intéressante à écarter, parce qu'elle propose une amélioration réelle et qu'elle rate le mécanisme : une exploration pondérée par les valeurs d'action reste retirée au sort à chaque pas, donc reste incohérente, et le nageur ne traverse toujours pas. La réponse (a) fait du calendrier la question, alors que la section 11.5 mesure le dispositif le plus favorable qu'on puisse imaginer, epsilon maintenu à 1 jusqu'à la première réussite, et qu'il échoue aussi, cinq heures durant. La réponse (d) accuse la variance du gradient, sujet bien réel des semaines 8 et 10 et sans rapport ici : le problème n'est pas que l'apprentissage soit bruité, c'est que les données ne contiennent pas la région visée. Gardez l'image du nageur, parce qu'elle reviendra en section 11.5 sous la forme d'une voiture : vingt brasses dans la même direction, une décision reprise vingt fois, et un échec qui ne doit rien à la force du nageur.",
+ q4: "Le contrôle d'unité tient en une addition, et je veux que vous la fassiez une fois : 40 plus 39 plus 17 plus 3 plus 1 plus 0 font exactement 100, et les deux autres lignes somment exactement à 1 000 et à 10 000. Un comptage de visites par état somme toujours au nombre de pas effectués, jamais au nombre d'épisodes, puisque chaque pas incrémente exactement un compteur. Un second chemin confirme la lecture : cinq visites annoncées comme 0,05 pour cent du total, c'est 5 sur 10 000. La réponse (a) est l'erreur que la semaine vous demande de ne jamais commettre, et elle n'est pas anodine : elle attribue à l'agent dix fois plus d'expérience qu'il n'en a eu, sur l'unique mesure qui porte l'argument de la semaine. La réponse (c) choisit un dénominateur plausible et faux, et sa seconde moitié l'est aussi : rester sur place consomme un pas et incrémente le compteur de l'état où l'agent se trouve. La réponse (d) invente une incohérence d'unité à l'intérieur de ce tableau ; une telle ligne existe bien dans la semaine, mais ailleurs, dans le Tableau 11-1, dont la ligne des réseaux bruités est en pas d'entraînement quand ses voisines sont en épisodes. Lisez enfin la cinquième colonne avec la sixième : l'état 5 est visité une fois en cent pas et deux fois en mille pas, donc l'agent ne s'approche pas du but pour échouer de peu, il ne s'en approche pas du tout. La raison est structurelle, et elle vaut pour toute la semaine : avancer demande de choisir droite, une fois sur deux, puis de réussir, avec probabilité 0,35, alors que reculer demande seulement de choisir gauche, ce qui n'échoue jamais. Le progrès est improbable et incertain, la régression est tout aussi probable et parfaitement fiable.",
+ q5: "Le point d'attache est la bonne façon de ranger ces trois familles, et il prévient la confusion la plus coûteuse de la semaine. Le bruit sur les poids ne modifie pas une action, il modifie la fonction qui choisit les actions : un réseau dont les poids sont perturbés est un autre réseau, donc une autre politique, cohérente avec elle-même sur tout l'espace d'états. Les deux primes, elles, s'ajoutent à la récompense au même endroit de la boucle, et dans une perte elles sont indiscernables, les deux faisant monter la cible avec un code identique au caractère près. Elles diffèrent entièrement par la quantité lue : un compteur de ce que l'agent a déjà vu d'un côté, c'est-à-dire une mémoire explicite du passé, et l'erreur d'un prédicteur sur l'observation courante de l'autre, c'est-à-dire une mémoire logée dans des poids. La réponse (b) range les réseaux bruités avec les primes, alors qu'il n'y a dans cette méthode aucune récompense ajoutée, aucun compteur et aucune notion de nouveauté : ce qui est appris est une amplitude de bruit par poids. La réponse (a) fait entrer une prime par le critique, alors que les deux primes entrent par la récompense, et la section 11.4 dit précisément que rien en aval de l'enveloppe ne peut distinguer les deux termes de la somme. La réponse (d) propose un classement par coût, qui est réel et sans rapport avec la question : il ne vous dirait pas ce que chaque famille mesure, et c'est ce que vous devez savoir avant d'en choisir une. Un mot enfin sur le statut de cette liste : ce sont les trois idées sur lesquelles reposent la plupart des méthodes d'exploration dirigée que vous rencontrerez, ce n'est pas un inventaire complet, et la section 11.7 nomme ce qui reste dehors.",
+ q6: "La fréquence de tirage du bruit est le détail technique le plus réutilisable de la section 11.6, et il relie cette semaine à la précédente. Un lot sur politique est une trajectoire collectée par une politique, et c'est ce qui donne un sens au rapport entre la nouvelle et l'ancienne politique : retirer le bruit en cours de collecte rend l'ancienne politique du rapport indéfinissable. Hors politique, la question ne se pose pas dans ces termes, puisque les transitions sont réutilisées depuis un tampon et que la cohérence d'une trajectoire n'est pas la grandeur qui compte : le bruit se tire à chaque itération d'entraînement. Sur politique, il se tire une fois par lot de 2 048 transitions, et c'est exactement ce qui fait de lui une exploration cohérente, puisque 2 048 transitions entières sont alors collectées par une seule politique prélevée dans un ensemble. La réponse (a) traite la fréquence comme un détail d'implémentation, alors qu'elle décide de la propriété pour laquelle cette méthode figure dans une semaine consacrée à l'exploration. La réponse (d) nomme une décision réelle, le bruit dans l'acteur seulement, et la place au mauvais endroit : un critique bruité produirait des cibles bruitées, donc un avantage bruité, c'est-à-dire du bruit dans le signal d'apprentissage lui-même, mais ce n'est pas ce que votre tirage par pas a cassé. La réponse (c) invente une décroissance que la méthode n'a pas : l'amplitude du bruit est un paramètre appris par poids, pas un calendrier qui se referme. Et gardez la mise en garde de la section 11.3 : dirigée veut ici dire cohérente sur la durée, et rien de plus. Un réseau bruité ne décide pas où il a besoin d'explorer, il n'a ni compteur ni notion de nouveauté ; ce sont les deux familles de prime qui ciblent réellement le neuf.",
+ q7: "Le réseau de référence figé n'est pas une précaution de style, c'est la condition de fonctionnement de la méthode, et ce piège est le quatrième de la liste du laboratoire parce qu'il coûte une soirée. La prime ne mesure rien d'autre qu'un écart : une fonction arbitraire mais fixe et déterministe d'un côté, ce qu'un prédicteur en a appris de l'autre, et il ne l'a appris que là où on lui a montré des exemples, c'est-à-dire là où l'agent est déjà passé. Laissez la référence recevoir un gradient et les deux réseaux convergent l'un vers l'autre, la référence apprenant à être prévisible : la prime tombe à zéro partout, y compris dans les états jamais visités, et vos courbes redeviennent celles du volet A. La réponse (b) retourne la distinction qui compte, et c'est la plus utile à avoir faite une fois : cette prime mesure la surprise, pas la rareté. Un état rare dont la sortie se devine par interpolation ne surprend pas le prédicteur et ne paie presque rien, là où un comptage de visites l'aurait payé plein tarif, et c'est pour cette raison que la section 11.3 refuse de ranger les deux familles ensemble. La même idée explique le déséquilibre volontaire des deux réseaux, trois couches contre une : un prédicteur trop puissant apprend la fonction aléatoire partout, y compris par interpolation dans des régions jamais visitées, et la prime cesse de distinguer le connu de l'inconnu. La capacité du prédicteur est un bouton d'exploration déguisé. La réponse (c) nomme deux choses vraies, la décroissance de la prime et les deux écritures de l'écart, l'erreur quadratique que ce cours emploie et la différence absolue de la mise en oeuvre dont la section 11.6 rapporte les mesures, mais ni l'une ni l'autre n'est l'effet d'une référence qui apprend. La réponse (a) invente une prime négative, alors que l'écart est une norme au carré, positif par construction.",
+ q8: "C'est la seule section de la semaine dont l'affirmation centrale est signée par le cours, et elle tient en une phrase à retenir : une récompense que l'agent fabrique est quand même une récompense. Un processus de décision markovien est défini par ses états, ses actions, sa dynamique et sa fonction de récompense ; modifier la récompense définit donc un autre processus, et nos méthodes cherchent consciencieusement la politique optimale de celui-là. Rien en aval de l'enveloppe ne peut distinguer les deux termes de la somme, ni le tampon, ni le calcul de l'avantage, ni le critique, ni la perte : la transition stockée porte un nombre, et ce nombre est le total. La réponse (c) prend la conséquence mesurable pour l'affirmation elle-même : les deux courbes qui ne se comparent pas sont un symptôme, l'énoncé porte sur l'optimum. La réponse (d) nomme correctement les deux têtes de valeur, dont l'existence sert précisément à garder le flux intrinsèque hors de l'estimation de la valeur extrinsèque, puis se trompe deux fois : s'en passer est un choix, pas un défaut d'implémentation, et la raison qu'on en donne d'ordinaire, moins de modifications dans le code, est vraie sans être le prix complet ; quant à un seuil sur c, aucun ne garantit que l'optimum ne bouge pas. La réponse (b) soulève un point réel, puisqu'une prime de comptage dépend bien de l'historique des visites, mais elle en tire une tolérabilité fantaisiste : un hachage grossier ne répare pas cela, il décide seulement quels états sont confondus. Les deux conditions à retenir sont donc celles-ci, et elles sont accidentelles : la prime décroît, en 1 sur la racine du compteur, de sorte que le problème modifié se rapproche du problème d'origine à mesure que l'espace est couvert ; et la sélection finale se fait sur la récompense de la tâche. Si l'une des deux manque, vous optimisez autre chose que ce que vous croyez.",
+ q9: "Voici la règle de lecture de la semaine, et elle décide ce que vous avez le droit de comparer à quoi : seule la courbe d'évaluation, mesurée sur un environnement sans enveloppe, est à l'échelle du problème d'origine. Une courbe d'entraînement sous prime ne se compare ni à une courbe de test, ni à une courbe dont le c diffère, ni à une courbe sans prime du tout ; dans vos rapports, à partir de cette semaine, elle doit être étiquetée comme mesurée sous enveloppe. La réponse (a) donne le diagnostic faux le plus tentant : ce n'est ni du surapprentissage ni un bogue, les deux courbes mesurent deux grandeurs différentes, et réduire la taille de vos réseaux ne changerait rien à cet écart. La réponse (d) traite la méthode de référence comme la même mesure avec un c nul, ce qui serait défendable si la prime était une constante additive : elle dépend de l'état visité, de sorte que l'écart entre les deux courbes mélange l'effet de la prime sur le comportement et la prime elle-même dans le nombre affiché. La réponse (c) invoque un principe de prudence réel, la comparaison entre familles, et il ne sauve pas la comparaison proposée : la section 11.6 compare très bien une méthode de valeur et une méthode de politique, à la condition de le faire sur l'évaluation. C'est le prolongement direct de la règle de la semaine 10 sur les chiffres de banc d'essai : un nombre dont on ne sait pas sur quelle récompense il a été mesuré n'est pas une mesure. Et le piège symétrique vous attend au laboratoire : si vous évaluez vous aussi sous enveloppe, vos deux courbes monteront ensemble, tout aura l'air de fonctionner, et vous ne mesurerez plus la tâche.",
+ q10: "Cette compatibilité n'est écrite nulle part dans les semaines précédentes et elle décide d'un choix d'architecture. Une méthode de valeur a appris des valeurs numériques : changez la récompense et il faut les réapprendre, ce qui coûte du temps et de la stabilité. Une méthode sur politique ne garde aucune valeur de référence pour les anciennes transitions, de sorte qu'une récompense plus élevée met simplement plus de poids sur l'échantillon correspondant dans le gradient de politique, ce qui est le comportement souhaité. Dès que votre dispositif modifie la récompense pendant l'entraînement, la famille sur politique est donc structurellement plus à l'aise, et ce n'est pas un argument de performance. La réponse (c) arrive à la bonne famille par un mécanisme faux : ce qui sauve la méthode sur politique n'est pas de recalculer des avantages, c'est de n'avoir rien mémorisé à corriger ; et vider périodiquement un tampon de rejeu jetterait précisément les rares transitions intéressantes que la section 11.6 passe son temps à chercher. La réponse (b) écrase la distinction des trois raisons : la dilution d'un échantillon rare dans un tampon est bien la première d'entre elles, mais elle porte sur la fréquence des bons échantillons et non sur le changement de la récompense, et les deux raisons sont indépendantes. La réponse (d) invoque une invariance qui n'existe pas : multiplier la récompense par une constante multiplie les avantages, donc la taille effective des pas, et le coefficient c se règle dans les deux familles. Notez enfin que ce reproche est distinct de celui de la section 11.4, et que les deux sont réels : l'un dit que la cible bouge, l'autre dit que la cible n'est pas la bonne.",
+ q11: "Le Tableau 11-1 est utile pour une raison et une seule : il sépare deux questions que l'on confond d'ordinaire, quand le but a été trouvé et si la tâche a été résolue. Les deux colonnes sont indépendantes, et quatre lignes sur sept découvrent le but sans jamais résoudre la tâche. La réponse (b) encode l'erreur de comptage la plus facile à commettre : la ligne du comptage d'états sur la méthode de valeur passe très près du seuil et ne le franchit pas, donc elle est un échec au sens du critère déclaré, un retour de test moyen supérieur à moins 130. Deux exécutions sur sept ont résolu la tâche, et toutes les deux appartiennent à la famille des méthodes de politique. La réponse (a) reprend l'affirmation que ce tableau contredit ligne par ligne, celle selon laquelle les deux familles résolvent la tâche dès qu'on leur ajoute une extension d'exploration : aucune configuration de la méthode de valeur n'a franchi le seuil. La réponse (c) inverse la seconde observation : la découverte la plus rapide de toutes, dix minutes, appartient à une exécution qui n'a jamais résolu la tâche, et les deux réussites ont mis trente-six minutes à trouver le but, soit presque quatre fois plus longtemps que la meilleure exploratrice. Explorer et apprendre sont deux problèmes, et ils ont deux classements. Trois mises en garde pour finir, parce qu'elles valent pour tous les tableaux que vous lirez. L'unité change d'une ligne à l'autre : la ligne des réseaux bruités est en pas d'entraînement, 7 000, et 7 000 épisodes de cette tâche représenteraient plus d'un million de pas d'environnement, soit cent fois l'expérience réellement consommée. La provenance change aussi : les deux nombres de découverte de la dernière ligne ne sont pas recoupés, et la case le dit plutôt qu'une note de bas de page. Et chacune des quatorze cases est une exécution unique, sans graine multiple et sans intervalle, sur une tâche où un seuil a été franchi d'un millième de point, moins 129,999 contre moins 130. Ce tableau montre des ordres de grandeur et sépare deux questions ; il ne classe pas sept configurations.",
+ q12: "La semaine se termine ainsi et elle ne l'adoucit pas : la méthode qui arrive dernière et de très loin sur la voiture arrive première sur le jeu de sous-marin, et c'est la seule dont quelques épisodes découvrent la remontée à la surface. Les deux mesures sont bonnes toutes les deux, et c'est la chose la plus utile que cette semaine a à transmettre : un classement de méthodes d'exploration ne se transfère pas d'un environnement à un autre, et la conclusion honnête d'une comparaison est parfois que la comparaison était locale. La réponse (b) fait du classement de la section 11.6 une propriété des méthodes, qui est exactement ce que le renversement interdit. La réponse (a) choisit la configuration qui obtient ici 6 après six heures, et elle y ajoute une interdiction inventée : la différence de nature des observations fait peut-être partie de l'explication, elle n'interdit pas de comparer deux tâches, sans quoi aucun banc d'essai n'aurait de sens. La réponse (d) a raison sur un point qu'il faut garder et tort sur la lecture : les trois variantes de la méthode de politique stagnent bien à 4, et l'hypothèse d'un défaut subtil du code ou de l'environnement n'a pas été vérifiée, donc elle se rapporte comme une hypothèse et non comme un diagnostic ; mais la première ligne, elle, progresse, et un résultat qui contredit l'attente n'est pas un résultat nul. Lisez enfin ces chiffres pour ce qu'ils sont : une exécution par méthode, au moins une demi-journée d'entraînement chacune, aucun réglage fin, donc des mesures d'un dispositif et non des propriétés des méthodes. Ce que la semaine sait : les deux tâches n'ont pas la même structure d'exploration, puisque l'une exige une longue séquence coordonnée alors que l'autre offre beaucoup de récompense en chemin autour d'une seule compétence rare. Ce qu'elle conjecture, et elle le signale comme tel : c'est probablement cette abondance qui fait la différence. D'où la règle pratique : avant de choisir une méthode d'exploration sophistiquée, mesurez une seule chose, votre agent rencontre-t-il jamais la récompense qui compte."
+};
+
+function submitQuiz() {
+ const questions = document.querySelectorAll('.question');
+ let score = 0;
+ let answered = 0;
+
+ questions.forEach((q, i) => {
+ const name = `q${i + 1}`;
+ const correct = q.dataset.correct;
+ const selected = q.querySelector(`input[name="${name}"]:checked`);
+ const feedback = q.querySelector('.feedback');
+
+ if (selected) {
+ answered++;
+ feedback.style.display = 'block';
+ if (selected.value === correct) {
+ score++;
+ feedback.className = 'feedback correct';
+ feedback.textContent = ' Correct ! ' + explanations[name];
+ } else {
+ feedback.className = 'feedback incorrect';
+ feedback.textContent = ` Incorrect. La bonne réponse est (${correct.toUpperCase()}). ` + explanations[name];
+ }
+ }
+ });
+
+ if (answered < questions.length) {
+ alert('Veuillez répondre à toutes les questions avant de valider.');
+ return;
+ }
+
+ const scoreBox = document.getElementById('score-box');
+ scoreBox.style.display = 'block';
+ document.getElementById('score-text').textContent = `${score} / ${questions.length}`;
+ const pct = Math.round((score / questions.length) * 100);
+ let msg = '';
+ if (pct >= 90) msg = ' Excellent ! Vous maîtrisez les fondements du cours.';
+ else if (pct >= 70) msg = ' Très bien ! Quelques révisions sur les points incorrects et vous serez prêt·e.';
+ else if (pct >= 50) msg = ' Pas mal ! Relisez les sections correspondantes avant de continuer.';
+ else msg = ' Prenez le temps de revoir le cours, puis réessayez.';
+ document.getElementById('score-msg').textContent = msg;
+ scoreBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+ document.getElementById('quiz-form').reset();
+ document.querySelectorAll('.feedback').forEach(f => { f.style.display = 'none'; f.textContent = ''; });
+ document.getElementById('score-box').style.display = 'none';
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
