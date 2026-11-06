@@ -1,0 +1,1 @@
+Figure 6-4. Le même corps de réseau, puis deux sorties possibles : une tête unique qui apprend une valeur par action, ou deux têtes, la valeur de l'état d'un côté et les avantages de l'autre, recombinées après soustraction de leur moyenne.

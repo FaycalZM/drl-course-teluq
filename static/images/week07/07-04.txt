@@ -1,0 +1,1 @@
+Figure 7-4. Une barre de prix et ses quatre nombres : le prix au début de l'intervalle, le maximum et le minimum atteints pendant l'intervalle, et le dernier prix. L'intervalle vaut une minute dans les données de la semaine.

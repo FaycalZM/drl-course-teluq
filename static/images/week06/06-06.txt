@@ -1,0 +1,1 @@
+Figure 6-6. Le rapport signal sur bruit des deux couches bruitées pendant un entraînement complet : la seconde devient de plus en plus déterministe, puis son bruit remonte dans le dernier tiers. Aucun calendrier écrit à la main ne fait cela.

@@ -7,15 +7,16 @@ weight: 11
 
 **Remise : fin de la semaine 10.**
 
-## Livrables attendus
+Une méthode de politique qui apprend, une analyse de la variance de son gradient, et une comparaison honnête avec le réseau Q profond du jalon 2, sur l'efficacité d'échantillon, la stabilité et le temps d'horloge. L'exigence du jalon 2 est reprise sans modification : plusieurs graines aléatoires et un intervalle autour de chaque moyenne.
 
-A2C/PPO (ou SAC) + analyse de variance des gradients + comparaison avec le jalon 2
+L'énoncé complet est sur la page du jalon, dans la semaine 10 : ce qui est évalué, les deux routes entre lesquelles vous choisissez, le budget de calcul, les cinq étapes du livrable et le barème sur 25 points.
+
+[Ouvrir l'énoncé du jalon 3 →]({{< relref "/docs/ch3-methodes-politique/week10/jalon-3" >}})
 
 {{% comment %}}
-SQUELETTE Phase 1 : page de jalon à rédiger en Phase 4 : accroche, livrables détaillés,
-critères, barème. Miroir de evaluation-N/_index.md du cours LLM (reference-site/).
-Exigence du projet : à partir du jalon 2, toute comparaison repose sur plusieurs graines
-aléatoires avec intervalles de confiance (rliable).
+Cette page est un pointeur, pas une seconde copie. L'énoncé vit dans
+content/docs/ch3-methodes-politique/week10/jalon-3.md, issu du bloc « Jalon 3 » de
+source-assets/raw-content/week-10.md, de sorte qu'il n'existe qu'un seul texte à
+corriger. Même forme que ch1-fondations-outillage/jalon-1 (vers week03/jalon-1.md) et
+ch2-methodes-valeur/jalon-2 (vers week07/jalon-2.md). Le jalon 4 (semaine 14) suivra.
 {{% /comment %}}
-
-*Critères et barème en préparation.*

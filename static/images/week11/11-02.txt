@@ -1,0 +1,1 @@
+Figure 11-2. Les trois familles d'exploration dirigée, placées là où chacune intervient. La première met du bruit dans les poids du réseau et change donc qui agit. Les deux autres ajoutent une récompense interne au même endroit de la boucle, et c'est pourquoi on les confond : l'une paie un état parce qu'il est rare, l'autre parce qu'il est surprenant.

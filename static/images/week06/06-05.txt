@@ -1,0 +1,1 @@
+Figure 6-5. Sur un ensemble d'états fixé, l'avantage moyen reste collé à zéro à quelques centièmes près pendant que la valeur de l'état, elle, croît franchement : la contrainte de moyenne nulle rendue visible.

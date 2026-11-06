@@ -1,0 +1,1 @@
+Figure 11-3. Le temps mis par chaque exécution pour atteindre le but une première fois, sur la tâche de la voiture. La méthode de référence ne l'atteint jamais ; la découverte la plus rapide, dix minutes, appartient à une exécution qui n'a pas résolu la tâche ; et les deux exécutions qui l'ont résolue ont mis trente-six minutes à trouver le but.

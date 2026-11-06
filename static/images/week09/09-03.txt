@@ -1,0 +1,1 @@
+Figure 9-3. Les deux réseaux de la méthode déterministe. L'acteur, à gauche, est une pile droite qui transforme l'observation en action. Le critique, à droite, est un Y : l'observation traverse une première couche, l'action le rejoint par la droite, et la sortie est un seul nombre. C'est tout ce que veut dire « le critique note l'action de l'acteur ».

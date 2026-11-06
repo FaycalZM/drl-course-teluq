@@ -1,0 +1,1 @@
+Figure 7-3. Les six configurations de la semaine placées selon leur débit (abscisse) et leur temps de résolution (ordonnée). Si les deux indicateurs mesuraient la même chose, les points s'aligneraient ; la configuration la plus rapide en trames par seconde est presque la plus lente à résoudre le jeu.

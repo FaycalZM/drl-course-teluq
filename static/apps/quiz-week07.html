@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Quiz Semaine 7 : Accélérer l'apprentissage et étude de cas : le trading</title>
+ <style>
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body {
+ font-family: 'Segoe UI', system-ui, sans-serif;
+ background: #f8fafc;
+ color: #1e293b;
+ padding: 1.5rem;
+ line-height: 1.6;
+ }
+ h1 {
+ font-size: 1.4rem;
+ font-weight: 700;
+ color: #0f172a;
+ margin-bottom: 0.5rem;
+ }
+ .subtitle {
+ color: #64748b;
+ font-size: 0.9rem;
+ margin-bottom: 1.5rem;
+ }
+ .question {
+ background: #fff;
+ border: 1px solid #e2e8f0;
+ border-radius: 10px;
+ padding: 1.25rem 1.5rem;
+ margin-bottom: 1.25rem;
+ transition: box-shadow 0.2s;
+ }
+ .question:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+ .question-text {
+ font-weight: 600;
+ margin-bottom: 0.85rem;
+ font-size: 0.98rem;
+ }
+ .option {
+ display: flex;
+ align-items: flex-start;
+ gap: 0.6rem;
+ padding: 0.5rem 0.75rem;
+ border-radius: 6px;
+ margin-bottom: 0.35rem;
+ cursor: pointer;
+ transition: background 0.15s;
+ font-size: 0.93rem;
+ }
+ .option-text { flex: 1; min-width: 0; }
+ .option:hover { background: #f1f5f9; }
+ .option input[type="radio"] { margin-top: 0.2rem; accent-color: #6366f1; flex-shrink: 0; }
+ .feedback {
+ margin-top: 0.85rem;
+ padding: 0.6rem 1rem;
+ border-radius: 6px;
+ font-size: 0.9rem;
+ display: none;
+ }
+ .feedback.correct { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+ .feedback.incorrect { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+ .btn-check {
+ margin-top: 1rem;
+ padding: 0.5rem 1.2rem;
+ background: #6366f1;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ font-size: 0.9rem;
+ font-weight: 600;
+ cursor: pointer;
+ transition: background 0.2s;
+ }
+ .btn-check:hover { background: #4f46e5; }
+ .score-box {
+ background: #ede9fe;
+ border: 1px solid #c4b5fd;
+ border-radius: 10px;
+ padding: 1.5rem;
+ text-align: center;
+ display: none;
+ margin-top: 1rem;
+ }
+ .score-box h2 { font-size: 1.6rem; color: #4c1d95; margin-bottom: 0.25rem; }
+ .score-box p { color: #6d28d9; font-size: 0.95rem; }
+ .btn-reset {
+ margin-top: 1rem;
+ padding: 0.5rem 1.4rem;
+ background: #7c3aed;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ cursor: pointer;
+ font-weight: 600;
+ transition: background 0.2s;
+ }
+ .btn-reset:hover { background: #6d28d9; }
+ #submit-all {
+ display: block;
+ width: 100%;
+ padding: 0.75rem;
+ background: #0f172a;
+ color: #fff;
+ border: none;
+ border-radius: 8px;
+ font-size: 1rem;
+ font-weight: 700;
+ cursor: pointer;
+ margin-top: 1.5rem;
+ transition: background 0.2s;
+ }
+ #submit-all:hover { background: #1e3a5f; }
+ </style>
+</head>
+<body>
+
+<h1>Quiz : Semaine 7</h1>
+<p class="subtitle">Accélérer l'apprentissage et étude de cas : le trading · 12 questions</p>
+
+<form id="quiz-form">
+
+ <div class="question" data-correct="c">
+ <div class="question-text">1. Votre agent de la semaine 6 converge mal, et il vous reste une semaine. Vous décidez de commencer par le profiler pour gagner un facteur 2 sur son débit. Qu'est-ce qui ne va pas dans ce plan, et que vaut réellement une accélération ?</div>
+ <label class="option"><input type="radio" name="q1" value="a" /><span class="option-text">a) Rien ne va mal : un facteur 2 sur le débit donne mécaniquement un facteur 2 sur le temps de résolution, donc vous atteindrez le seuil deux fois plus vite et la convergence finira par s'arranger d'elle-même</span></label>
+ <label class="option"><input type="radio" name="q1" value="b" /><span class="option-text">b) Le plan est bon, mais l'ambition est trop modeste : seuls les très grands facteurs changent quelque chose à un projet, et il vaut donc mieux attendre une carte plus puissante que de retoucher son propre code</span></label>
+ <label class="option"><input type="radio" name="q1" value="c" /><span class="option-text">c) L'ordre est inversé. Une optimisation n'a de sens que si la méthode fonctionne déjà, parce qu'un programme lent et juste vous rend une réponse tardive tandis qu'un programme rapide et faux vous rend une réponse fausse, et vous la croyez : on fait marcher, puis on mesure, puis on accélère, puis on remesure. Et ce qu'une accélération achète n'est pas la durée d'une exécution, c'est le <em>nombre</em> d'exécutions que vous pouvez vous permettre, donc le nombre d'essais disponibles pour trouver les hyperparamètres et corriger les bogues</span></label>
+ <label class="option"><input type="radio" name="q1" value="d" /><span class="option-text">d) Le plan est bon, à condition de dépenser le gain en taille de problème plutôt qu'en attente évitée : plus de données et moins de simplifications, ce qui corrigera la convergence</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">2. Vous vous apprêtez à mesurer une accélération sur votre propre socle de code. Qu'écrivez-vous dans votre carnet <em>avant</em> de lancer la première exécution, et que vous autorise à conclure une exécution unique par variante ?</div>
+ <label class="option"><input type="radio" name="q2" value="a" /><span class="option-text">a) Les hyperparamètres réglés pour chaque variante, afin que chacune soit mesurée dans sa configuration la plus favorable ; et une exécution par variante suffit dès lors que les graines de PyTorch, de l'environnement et de NumPy sont fixées, puisque le programme devient alors déterministe</span></label>
+ <label class="option"><input type="radio" name="q2" value="b" /><span class="option-text">b) Le critère d'arrêt, les deux indicateurs relevés et la liste des graines, dans cet ordre et avant toute exécution. Les deux indicateurs sont le débit en trames par seconde et le temps d'horloge jusqu'à un seuil fixé d'avance : le premier mesure votre programme, le second mesure votre agent, et c'est le second qui est l'objectif. Et une exécution unique n'autorise aucune décision : il faut répéter sur plusieurs graines, le même jeu de graines pour toutes les variantes, rapporter une moyenne avec un intervalle, et compter à part les exécutions qui n'ont pas convergé</span></label>
+ <label class="option"><input type="radio" name="q2" value="c" /><span class="option-text">c) Rien de particulier avant l'exécution : le seuil d'arrêt se choisit après avoir vu les courbes, puisque c'est seulement à ce moment qu'on sait quel niveau est atteignable ; et une exécution par variante suffit si l'on conserve la trace complète des journaux</span></label>
+ <label class="option"><input type="radio" name="q2" value="d" /><span class="option-text">d) Le débit seul, qui est le seul indicateur comparable d'une machine à l'autre ; et une exécution unique suffit dès que l'écart mesuré dépasse 1 %, puisque c'est l'ordre de grandeur de la dispersion d'une version de référence</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">3. Dans une itération de réseau Q profond, le réseau est appelé trois fois : les valeurs d'action de l'état courant pour la perte, le réseau cible sur l'état suivant, et l'agent qui choisit l'action à jouer. Vous échangez les deux outils : vous mettez <code>torch.no_grad()</code> là où il y avait un détachement du graphe sur la cible, et un <code>detach()</code> là où il n'y avait que du calcul sans gradient. Qu'est-ce qui casse ?</div>
+ <label class="option"><input type="radio" name="q3" value="a" /><span class="option-text">a) Aucun des deux échanges n'est grave, parce que le réseau cible est une copie figée : ses poids ne sont pas dans l'optimiseur, donc aucun gradient ne peut partir de la cible, et le détachement n'était qu'une précaution d'écriture</span></label>
+ <label class="option"><input type="radio" name="q3" value="b" /><span class="option-text">b) Rien ne casse et rien ne change : les deux outils interrompent le graphe, ce sont donc deux écritures du même geste, et les séparer est une subtilité de vocabulaire</span></label>
+ <label class="option"><input type="radio" name="q3" value="c" /><span class="option-text">c) Le premier échange casse l'entraînement de façon spectaculaire : le gradient remonte par la cible dès la première itération, la perte diverge, et vous le verrez immédiatement sur la courbe</span></label>
+ <label class="option"><input type="radio" name="q3" value="d" /><span class="option-text">d) Rien ne se voit, et c'est la pire des situations. Le premier échange donne le bon effet par accident, puisque <code>no_grad()</code> interrompt aussi le graphe, mais vous avez perdu la raison de l'écrire ; le second laisse le programme juste et vous fait construire un graphe entier pour le jeter aussitôt. La séparation à tenir : <code>detach()</code> protège un <em>résultat</em>, c'est une question de correction, et son absence peut empêcher le réseau de converger ; <code>no_grad()</code> supprime un <em>travail</em>, c'est une question de vitesse</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">4. Vous venez de l'apprentissage supervisé, donc vous augmentez la taille du lot jusqu'à remplir la mémoire du processeur graphique : le débit monte, la convergence se dégrade. Vous passez alors à <em>N</em> copies de l'environnement et vous balayez <em>N</em> de 2 à 6 : au-delà de trois copies, le débit continue de monter et le temps de résolution remonte. Quel <em>N</em> retenez-vous, et pourquoi le réflexe du gros lot ne se transporte-t-il pas ?</div>
+ <label class="option"><input type="radio" name="q4" value="a" /><span class="option-text">a) <em>N</em> = 3, parce que le temps de résolution est l'indicateur de résultat et qu'il se dégrade au-delà. Le réflexe ne se transporte pas parce que les données d'entraînement sont produites par la chose même qu'on entraîne : grossir le lot sans grossir la diversité de ce qu'il contient optimise plus fort sur la même information, et la convergence repose sur un équilibre fragile entre entraînement et exploration. Les <em>N</em> copies corrigent cela en multipliant les sources, et elles donnent en prime les <em>N</em> actions en un seul passage avant. Mais <em>N</em> est un hyperparamètre de plus</span></label>
+ <label class="option"><input type="radio" name="q4" value="b" /><span class="option-text">b) <em>N</em> = 6, parce que le débit est la seule grandeur qui se transporte d'une machine à l'autre ; la remontée du temps de résolution est un artefact du seuil d'arrêt et disparaît si on l'abaisse</span></label>
+ <label class="option"><input type="radio" name="q4" value="c" /><span class="option-text">c) <em>N</em> = 1 avec un lot très grand : le réflexe supervisé est correct en apprentissage par renforcement aussi, il suffit de recalibrer le calendrier de <em>ε</em>, et tout le gain de la vectorisation vient en réalité de l'inférence par lot</span></label>
+ <label class="option"><input type="radio" name="q4" value="d" /><span class="option-text">d) <em>N</em> = 6, en divisant la taille du lot par <em>N</em> pour compenser : le réseau voit alors autant d'échantillons par itération qu'avant, et la dégradation de convergence disparaît</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">5. Vous séparez la collecte et l'entraînement en deux processus. Où exactement la boucle se coupe-t-elle, et quelle taille donnez-vous à la file d'attente qui joint les deux moitiés ?</div>
+ <label class="option"><input type="radio" name="q5" value="a" /><span class="option-text">a) Entre le choix de l'action et son exécution dans l'environnement, qui sont les deux seules étapes réellement indépendantes ; et la file doit être aussi grande que la mémoire le permet, pour que le collecteur ne bloque jamais</span></label>
+ <label class="option"><input type="radio" name="q5" value="b" /><span class="option-text">b) N'importe où, puisque les quatre étapes d'une itération sont indépendantes les unes des autres ; et la taille de la file est une simple question de mémoire disponible</span></label>
+ <label class="option"><input type="radio" name="q5" value="c" /><span class="option-text">c) Entre les deux étapes qui remplissent le tampon et les deux qui entraînent, parce que c'est précisément là que les deux moitiés ne communiquent déjà que par deux canaux : le tampon de rejeu et le réseau. Et la file est délibérément minuscule, de taille 2 : une grande file laisserait le collecteur courir loin devant l'entraîneur, et le tampon se remplirait de transitions produites par une politique périmée. Sa petitesse est un mécanisme de régulation, pas une économie de mémoire</span></label>
+ <label class="option"><input type="radio" name="q5" value="d" /><span class="option-text">d) Entre l'échantillonnage du lot et l'apprentissage sur ce lot, de sorte que le processeur graphique ne soit jamais en attente ; et la file doit contenir au moins un lot complet, pour la même raison</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">6. Deux lignes du tableau récapitulatif de la semaine vous intéressent. La première affiche 448 trames par seconde, presque le double de la version de référence, et un gain de temps de 9,2 %. La seconde affiche 325 trames par seconde et un gain de temps de 42,5 %. Laquelle livrez-vous, et que démontre la paire ?</div>
+ <label class="option"><input type="radio" name="q6" value="a" /><span class="option-text">a) Celle à 448 : c'est la configuration la plus rapide, et son faible gain de temps vient du seuil d'arrêt, qui pénalise les variantes explorant davantage. Relevez le seuil et les deux classements coïncideront</span></label>
+ <label class="option"><input type="radio" name="q6" value="b" /><span class="option-text">b) Celle à 448 si l'objectif est la vitesse, celle à 325 si l'objectif est la qualité de la politique finale : le débit achète du temps, le temps achète de la performance, et les deux lignes répondent à deux objectifs différents</span></label>
+ <label class="option"><input type="radio" name="q6" value="c" /><span class="option-text">c) Les deux sont équivalentes : 95,6 % de débit en plus contre 42,5 % de temps en moins, ce sont deux façons d'exprimer le même gain, et l'écart entre les deux chiffres vient de la manière de calculer un pourcentage</span></label>
+ <label class="option"><input type="radio" name="q6" value="d" /><span class="option-text">d) Celle à 325. Le débit et la convergence sont deux biens différents, et la paire en est la démonstration : la ligne la plus spectaculaire en trames par seconde est presque la plus faible en gain de temps. Le débit est un indicateur de <em>diagnostic</em>, utile pour savoir où part le temps ; le temps jusqu'à un seuil fixé d'avance est l'indicateur de <em>résultat</em>, parce que l'objectif n'est pas un processeur graphique occupé, c'est un environnement résolu</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">7. Une ligne de ce même tableau annonce, pour une modification qui ne change aucun calcul effectué, 4,3 % de débit en moins et 2,3 % de temps en moins. Par ailleurs, la version de référence a été mesurée à 227, à 228 et à 229 trames par seconde selon l'endroit où on l'a relevée. Que concluez-vous de cette ligne ?</div>
+ <label class="option"><input type="radio" name="q7" value="a" /><span class="option-text">a) Que la modification coûte 4,3 % de débit et rapporte 2,3 % de temps, et qu'il faut donc la retirer dès lors que le temps de résolution compte plus que le débit</span></label>
+ <label class="option"><input type="radio" name="q7" value="b" /><span class="option-text">b) Rien. Les deux indicateurs pointent en sens opposé, les deux écarts sont du même ordre que la dispersion de la version de référence elle-même, et la seule conclusion honnête est qu'il n'y a pas de différence mesurable sur ce réseau. C'est aussi tout ce qu'une exécution unique autorise, et c'est la règle d'interprétation du jalon 2 : un écart dont les intervalles se recouvrent n'est pas un résultat</span></label>
+ <label class="option"><input type="radio" name="q7" value="c" /><span class="option-text">c) Que la mesure est fausse et qu'il faut la refaire : une modification qui ne change aucun calcul ne peut pas déplacer les deux indicateurs, et une mesure qui contredit le raisonnement est une mesure à jeter</span></label>
+ <label class="option"><input type="radio" name="q7" value="d" /><span class="option-text">d) Que l'écart est réel mais négligeable : 2 % de temps gagné reste un gain, simplement trop petit pour justifier un changement de code</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">8. Vous écrivez l'observation de l'agent de négociation. Chaque barre devient trois nombres, le haut, le bas et la clôture exprimés en proportion de l'ouverture, et vous hésitez à conserver les deux dernières composantes : le drapeau de position et le profit relatif. Que décidez-vous, et quel est le coût de la forme relative ?</div>
+ <label class="option"><input type="radio" name="q8" value="a" /><span class="option-text">a) On peut retirer les deux dernières composantes : la position est une information interne de l'environnement et non du marché, et un réseau assez profond la déduira de l'historique des prix. La forme relative, elle, ne coûte rien, puisqu'elle est inversible dès qu'on connaît l'ouverture</span></label>
+ <label class="option"><input type="radio" name="q8" value="b" /><span class="option-text">b) On conserve les deux dernières composantes pour pouvoir journaliser le comportement de l'agent, ce qui est commode mais facultatif ; et la forme relative est une nécessité, parce qu'un réseau de neurones ne sait pas apprendre à retrancher un niveau de prix</span></label>
+ <label class="option"><input type="radio" name="q8" value="c" /><span class="option-text">c) On retire le profit relatif, redondant avec le drapeau et le prix d'entrée, et on garde le drapeau seul ; la forme relative détruit l'échelle absolue des prix, ce qui est précisément le but recherché et n'a donc aucun coût</span></label>
+ <label class="option"><input type="radio" name="q8" value="d" /><span class="option-text">d) On garde les deux. Sans elles, deux instants dont les dix dernières barres sont numériquement identiques donneraient la même observation alors que l'agent détient une action dans l'un et rien dans l'autre, donc exigeraient deux décisions différentes : la propriété de Markov serait violée, et c'est la position dans l'état qui fait de ce problème un processus de décision markovien. La forme relative, elle, a un coût réel : elle détruit les niveaux de prix remarquables, les nombres ronds et les points de retournement passés, et cette information est perdue, pas masquée</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">9. Deux schémas de récompense pour la même opération. Le schéma A ne verse rien pendant la détention et verse tout à la clôture, soit 100 (<em>c<sub>T</sub></em> / <em>c</em><sub>ouv</sub> − 1) points. Le schéma B verse à chaque barre le mouvement de cette barre, 100 (<em>c</em><sub><em>t</em>+1</sub> / <em>c<sub>t</sub></em> − 1). Les deux couvrent le même intervalle de prix et prélèvent les deux mêmes commissions. Définissent-ils le même problème ?</div>
+ <label class="option"><input type="radio" name="q9" value="a" /><span class="option-text">a) Oui : ils couvrent le même intervalle de prix et prélèvent les mêmes commissions, donc le total est identique. Seule la vitesse de convergence change, parce que l'un donne un signal dense et l'autre un signal parcimonieux</span></label>
+ <label class="option"><input type="radio" name="q9" value="b" /><span class="option-text">b) Non, mais pour une seule raison, l'arithmétique : une somme de rendements simples n'est pas le rendement composé. Corrigez cet écart et les deux schémas redeviennent le même objectif</span></label>
+ <label class="option"><input type="radio" name="q9" value="c" /><span class="option-text">c) Non, et pour trois raisons distinctes. L'arithmétique : les produits se télescopent, les sommes non, et deux barres à +10 % donnent 20 points sous B contre 21 sous A. L'actualisation : avec <em>γ</em> inférieur à 1, une somme unique versée au pas <em>T</em> est multipliée par <em>γ</em><sup><em>T</em></sup> tandis que le même mouvement étalé est actualisé terme par terme, donc les retours diffèrent même là où les totaux non actualisés coïncideraient, et le schéma A incite à clôturer tôt. L'attribution du mérite : dense contre parcimonieux, donc des variances et des vitesses d'apprentissage différentes. Un agent optimal pour l'un ne l'est pas pour l'autre</span></label>
+ <label class="option"><input type="radio" name="q9" value="d" /><span class="option-text">d) Non : le schéma A est le seul correct, parce qu'une récompense ne doit être versée qu'au moment où le gain est réalisé. Le schéma B récompense un profit qui n'existe pas encore, ce qui est une erreur de conception et non un autre objectif</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">10. Vous disposez de deux années de cotations, 2015 et 2016, et d'un script qui prend un fichier d'ajustement et un fichier de validation. Comment partagez-vous, et pourquoi ?</div>
+ <label class="option"><input type="radio" name="q10" value="a" /><span class="option-text">a) On ajuste sur 2015 et on valide sur 2016, c'est-à-dire dans l'ordre chronologique. La seule question utile est de savoir si un modèle ajusté sur ce qui était connu alors survit à ce qui est arrivé ensuite. Inverser l'ordre pose une question que personne ne pourra jamais poser en production, fait fuir de l'information par chacune de vos décisions prises en regardant la période la plus récente, et reste indétectable dans les métriques, puisque les courbes sont parfaitement ordinaires. Et la règle n'est pas financière : on ne mélange jamais une série temporelle et on ne la partage jamais au hasard</span></label>
+ <label class="option"><input type="radio" name="q10" value="b" /><span class="option-text">b) On réunit les deux années, on mélange les barres, puis on en tire 80 % pour l'ajustement et 20 % pour la validation : c'est le partage le plus robuste, parce qu'il garantit que les deux ensembles couvrent les mêmes régimes de marché et évite qu'une année atypique fausse la comparaison</span></label>
+ <label class="option"><input type="radio" name="q10" value="c" /><span class="option-text">c) On ajuste sur 2016 et on valide sur 2015 : l'année la plus récente est la plus représentative du régime actuel, donc la plus instructive pour l'ajustement, et l'année ancienne fournit un contrôle indépendant</span></label>
+ <label class="option"><input type="radio" name="q10" value="d" /><span class="option-text">d) L'ordre importe peu, pourvu que l'évaluation finale se fasse sur les données d'entraînement avec l'exploration désactivée : une politique gloutonne jouée depuis un offset de départ tiré au hasard dans la série produit des épisodes jamais vus, ce qui constitue déjà une validation hors échantillon</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">11. Mêmes poids, même année tenue à l'écart, une seule chose change : la commission de courtage de 0,1 % par opération est activée, puis mise à zéro. Avec les frais, le profit cumulé termine autour de −60 %. Sans les frais, autour de +48 %. Que pouvez-vous conclure de cette paire ?</div>
+ <label class="option"><input type="radio" name="q11" value="a" /><span class="option-text">a) Que la stratégie est bonne et que seule la commission est en cause : sans frais l'agent est rentable, donc le résultat à commission nulle est le résultat propre, celui qu'il faut rapporter, les frais relevant du courtier et non de la politique</span></label>
+ <label class="option"><input type="radio" name="q11" value="b" /><span class="option-text">b) Que la commission a été mal calibrée : 0,1 % par opération est anormalement élevé, et avec un coût réaliste le résultat se situerait entre les deux, probablement un peu positif</span></label>
+ <label class="option"><input type="radio" name="q11" value="c" /><span class="option-text">c) Que l'agent a surappris, et rien de plus : l'écart entre les deux courbes mesure l'écart entre les données d'entraînement et les données de validation, ce qui est la définition même du surapprentissage</span></label>
+ <label class="option"><input type="radio" name="q11" value="d" /><span class="option-text">d) Qu'un terme de coût peut inverser le <em>signe</em> d'un résultat sans changer la politique d'un iota. L'agent négocie souvent, chaque aller-retour coûte 0,2 point de pourcentage, et l'écart entre les deux courbes est le coût cumulé de sa propre fréquence de négociation : la stratégie n'échoue pas parce qu'elle prédit mal, elle échoue parce qu'elle n'est pas assez rentable <em>par opération</em> pour payer ses opérations. Par conséquent, toute comparaison qui omet un coût réel mesure un autre problème que le vôtre</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">12. On vous présente une simulation historique annonçant 150 % de profit sur un an. En examinant le montage, vous trouvez : un seul instrument, une seule année, des barres d'une minute, une action détenue à la fois, aucune vente à découvert, l'ordre exécuté instantanément au prix de clôture de la barre, et le chiffre mesuré sur les données d'entraînement. Que manque-t-il, et que vaut le chiffre ?</div>
+ <label class="option"><input type="radio" name="q12" value="a" /><span class="option-text">a) Il manque surtout de la durée : avec dix ans de données et le même montage, le chiffre deviendrait interprétable, puisque c'est la quantité de données qui décide de la validité d'une simulation historique</span></label>
+ <label class="option"><input type="radio" name="q12" value="b" /><span class="option-text">b) Il manque trois coûts que la simulation ne modélise pas du tout, l'écart achat-vente, le dérapage des prix et l'impact de marché ; et il manque la comparaison qu'un lecteur attend, l'achat-conservation sur la même période. Quant au chiffre, il est dans l'échantillon, donc il ne mesure aucune capacité de prévision. Le bon verdict n'est pas que le résultat est faux : il est <em>non interprétable</em>, ce qui est une situation différente et beaucoup plus fréquente</span></label>
+ <label class="option"><input type="radio" name="q12" value="c" /><span class="option-text">c) Il manque l'architecture et les hyperparamètres : sans eux le résultat n'est pas reproductible, et c'est la seule lacune qui empêche de l'interpréter. Les coûts d'exécution, eux, sont du second ordre devant une commission de 0,1 %</span></label>
+ <label class="option"><input type="radio" name="q12" value="d" /><span class="option-text">d) Il ne manque rien d'essentiel : le montage est explicite, les approximations sont nommées, et un résultat obtenu sur les données d'entraînement reste un résultat pourvu qu'on l'annonce comme tel. La seule réserve est qu'il faudrait vérifier sa stabilité sur plusieurs graines</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <button type="button" id="submit-all" onclick="submitQuiz()">Valider mes réponses</button>
+</form>
+
+<div class="score-box" id="score-box">
+ <h2 id="score-text"></h2>
+ <p id="score-msg"></p>
+ <button class="btn-reset" onclick="resetQuiz()"> Recommencer</button>
+</div>
+
+<script>
+const explanations = {
+ q1: "Commencez par l'ordre, parce qu'il gouverne les sept jours : on fait marcher, puis on mesure, puis on accélère, puis on remesure. Toute optimisation n'a de sens que si la méthode fonctionne déjà, et la raison est très concrète : un programme lent et juste vous rend une réponse tardive, un programme rapide et faux vous rend une réponse fausse, et vous la croyez. Or votre agent converge mal : c'est un problème de méthode, et aucun facteur 2 ne le réparera. Vient ensuite la question de ce qu'une accélération achète, et ce n'est pas la durée d'une exécution, c'est le nombre d'exécutions. Même un problème simple est presque impossible à implémenter correctement du premier coup : il faut de nombreux essais avant de trouver des hyperparamètres convenables et avant d'avoir corrigé tous les bogues. Voilà pourquoi la vitesse est une variable de recherche et non un confort. Un calcul d'un mois devient six jours à cinq fois plus vite, huit heures à cent fois, deux à trois minutes à vingt mille fois, et à la dernière étape il change de nature : on le relance au lieu d'y réfléchir. La réponse (a) est la confusion centrale de la semaine, et la section 7.6 la démolit avec un tableau : le débit et le temps de résolution ne sont pas la même grandeur. La réponse (b) attend le matériel, alors que les méthodes de ce domaine sont très peu efficaces en échantillons, qu'un jeu Atari demande des millions d'interactions, et qu'attendre ne corrige aucun bogue. La réponse (d) n'est pas absurde, et c'est pour cela qu'elle est là : dépenser un gain en taille de problème plutôt qu'en attente évitée est un usage parfaitement légitime, mais c'est une décision de projet, et elle ne répare pas une convergence.",
+ q2: "Trois choses s'écrivent avant la première exécution, et l'ordre n'est pas décoratif : un critère d'arrêt choisi après avoir vu les courbes n'est plus un critère, c'est une justification. Ces trois choses sont le seuil, les deux indicateurs et la liste des graines. Le premier indicateur, le débit, est immédiat et se convertit en durée : à 200 trames par seconde, un budget de 50 millions de trames représente environ 2,89 jours pour une seule exécution. Méfiez-vous au passage d'un piège d'unité qui vaut un facteur 4 : les travaux publiés comptent des trames brutes d'environnement, alors qu'un compteur instrumenté dans la boucle compte les communications entre l'agent et l'environnement, et un saut de trames de 4 sépare les deux. Le second indicateur est le temps d'horloge jusqu'à un seuil fixé d'avance, par exemple une récompense lissée sur les 100 derniers épisodes atteignant 18 sur Pong, au lieu du maximum de 21 : au-delà, on ne paierait que du polissage. Retenez que deux durées mesurées jusqu'à deux seuils différents ne sont pas comparables. Pourquoi deux indicateurs ? Parce qu'en manipulant le code on obtient un débit très élevé et une convergence dégradée : le débit mesure votre programme, le temps mesure votre agent. Reste la moitié que la réponse (a) rate : fixer les graines de PyTorch, de l'environnement et de NumPy est nécessaire et ne suffit pas, puisque toute parallélisation réinjecte un hasard pratiquement impossible à éliminer. D'où la règle sans appel : le résultat d'une exécution unique ne permet de décider de rien. Chaque mesure de cette semaine est une moyenne de cinq exécutions, les courbes se tracent en moyenne avec une plage ombrée, on utilise le même jeu de graines pour toutes les variantes, et l'on rapporte à part le nombre d'exécutions qui n'ont pas convergé, qu'aucune moyenne ne révèle. La réponse (d) a raison sur un point et se trompe sur la conclusion : 1 % est bien l'ordre de la dispersion observée, et c'est précisément pourquoi un écart de cet ordre ne conclut rien. Dernier rappel : les nombres absolus viennent d'une machine précise, seuls les rapports se transportent, et c'est pour cela que le jalon 2 demande d'indiquer votre matériel.",
+ q3: "Comptez d'abord les usages du réseau dans une itération : les valeurs d'action de l'état courant, qui entrent dans la perte ; le réseau cible sur l'état suivant, qui construit l'approximation de Bellman ; l'agent qui choisit une action à jouer. Un seul des trois a besoin de gradients, le premier. Les deux outils qui servent à traiter les deux autres se ressemblent et répondent à deux questions différentes. Le détachement du graphe sur la sortie de la cible est une question de correction : sans lui, le gradient remonte dans le modèle par une direction inattendue, à travers une cible censée être constante, et le réseau peut tout simplement ne pas converger. Le gestionnaire de contexte sans gradient est une question de vitesse : le graphe est construit même si vous n'appelez jamais la rétropropagation, PyTorch enregistre les opérations au cas où, et cet enregistrement coûte du temps et de la mémoire pour rien. Voilà pourquoi l'échange ne casse rien de visible et pourquoi c'est grave : dans un sens vous obtenez le bon effet par accident, puisque le bloc sans gradient interrompt aussi le graphe, et vous prenez l'habitude de ne pas comprendre pourquoi votre cible est constante ; dans l'autre, votre programme reste juste et vous payez un graphe que vous jetez aussitôt. La réponse (b) est exactement la confusion à lever, et la formule à garder est celle-ci : detach protège un résultat, no_grad supprime un travail. La réponse (a) se rassure à bon compte, alors que le troisième usage, le choix de l'action, était déjà sorti du graphe par un autre moyen, la conversion en tableau NumPy. La réponse (c) attend un désastre immédiat, et il n'y en a pas : c'est la pire sorte de casse, celle qui ne lève aucune exception. Deux détails d'usage, enfin. Le bloc sans gradient s'écrit aussi bien en décorateur qu'en gestionnaire de contexte, et son effet est borné à la région qu'il couvre : multipliez son résultat, en dehors, par un tenseur qui demande des gradients, et un graphe repart de là. Quant au gain, il est d'environ 10 trames par seconde sur un réseau de convolution modeste et a été observé à 50 % sur des réseaux récurrents : la taille de ce gain est une propriété du modèle, pas une constante, et la section 7.6 va même vous montrer une ligne de tableau qui ne la mesure pas du tout.",
+ q4: "Le réflexe supervisé est excellent dans son domaine d'origine et ne se transporte pas, pour une raison structurelle : pendant un entraînement par renforcement, deux choses se produisent en même temps, le réseau s'améliore sur les données disponibles et l'agent explore, donc fabrique de nouvelles données. Les données d'entraînement sont produites par la chose même qu'on entraîne. L'image qui rend cela palpable est celle d'un agent dont le tampon ne contient que des morts rapides : un apprentissage parfaitement correct sur ces données conclut que mourir tôt minimise la souffrance, et l'agent peut ne jamais découvrir qu'il possède une arme. L'entraînement a réussi, l'exploration a échoué. Grossir le lot sans grossir la diversité de son contenu ne fait donc qu'optimiser plus fort sur la même information ; la bonne idée est d'augmenter le nombre de sources. D'où les N copies du même environnement, un pas joué dans chacune, les N transitions versées dans le tampon, puis un lot proportionnellement plus gros, et le gain secondaire des N actions décidées en un seul passage avant, qui est le régime où un processeur graphique est efficace. Les mesures tranchent : deux environnements font passer le débit de 227 à 335 trames par seconde, soit 47 % de plus, pour un temps de résolution qui ne baisse que d'environ 10 %, de 52 à 48 minutes ; trois environnements donnent 398 trames par seconde et 36 minutes ; au-delà, le débit monte encore et la convergence se dégrade. Un ingénieur qui n'aurait regardé que le débit aurait choisi six copies et rendu son agent plus lent à apprendre, ce qui est l'erreur des réponses (b) et (d). La réponse (d) commet en outre une faute de proportion : le lot doit grossir avec N, sinon chaque copie dilue l'apprentissage. La réponse (c) attribue tout le gain à l'inférence par lot, en oubliant la diversité, qui est l'argument principal. Deux détails qui faussent une comparaison si on les néglige : le calendrier de epsilon se compte en pas de l'agent et non en itérations, et la fenêtre du compteur de débit voit maintenant N pas par itération. Retenez enfin le principe général : une accélération qui introduit un réglage n'est pas gratuite, elle déplace une partie du coût du temps de calcul vers le temps humain.",
+ q5: "Décomposez une itération en quatre étapes : demander les actions au réseau et les exécuter dans les environnements, verser les observations dans le tampon, échantillonner un lot, s'entraîner sur ce lot. Les deux premières remplissent, les deux dernières entraînent, et l'observation qui porte toute la section est celle-ci : les deux moitiés ne communiquent que par deux canaux, le tampon de rejeu et le réseau. Pas de variable partagée, pas de dépendance cachée. Ce qui ne communique que par deux canaux explicites peut être séparé en deux processus, et c'est pour cela que la coupure se fait là et nulle part ailleurs, ce qui écarte les réponses (a), (b) et (d). La file minuscule est le détail le plus contre-intuitif de la semaine. L'intuition dit grande file, pour ne jamais bloquer le collecteur ; c'est exactement l'inverse qu'il faut faire. Une grande file laisse le collecteur courir loin devant l'entraîneur, et le tampon se remplit de transitions produites par une politique périmée, puisque les poids ont changé depuis. Une file de taille 2 étrangle volontairement le collecteur et le force à rester au pas de l'entraîneur. Trois autres points à garder. Le module de multitraitement de PyTorch remplace le module standard sans changer d'interface, et sa vraie raison d'être est le partage de tenseurs entre processus sans copie, ce qui supprime le goulot principal de la communication au sein d'une même machine. La file transporte deux sortes de messages, les transitions et une statistique de fin d'épisode, parce que le processus d'entraînement ne voit plus les épisodes et ne pourrait plus calculer son critère d'arrêt. Et le bénéfice mesuré est de 290 trames par seconde contre 228, avec un temps de résolution en baisse de 41 % : moins de débit que la version à trois environnements, qui approchait 400, et une meilleure convergence, ce qui est le deuxième désaccord de la semaine entre les deux indicateurs. Reste le bon critère de décision, et il tient en une mesure faite avant d'écrire la moindre ligne de code parallèle : chronométrez séparément la collecte et l'entraînement, car le gain maximal d'une optimisation est borné par la part du temps qu'elle touche. Sur Pong, la séparation ne paie pas beaucoup ; sur un simulateur lourd dont chaque pas dure des secondes, c'est la plus grosse optimisation disponible.",
+ q6: "C'est la lecture la plus importante de la première moitié de la semaine, et elle se fait en deux colonnes. La ligne à 448 trames par seconde est la plus spectaculaire du tableau, presque le double de la version de référence, et c'est aussi celle qui apporte le plus faible gain de temps réel, 9,2 %. Le meilleur temps, 30 minutes et 42,5 % de gain, est obtenu par une ligne à 325 trames par seconde, soit un quart de débit en moins que la championne. Si les deux indicateurs mesuraient la même chose, les six variantes s'aligneraient sur une droite décroissante dans le plan débit-temps. Elles ne s'alignent pas. Le débit et la convergence sont deux biens différents, et le tableau en est la démonstration. La réponse (b) est la plus instructive à écarter, parce qu'elle paraît sage : les deux lignes ne poursuivent pas deux objectifs différents, puisque les deux s'arrêtent au même seuil, donc produisent un agent de même niveau ; l'une y met simplement plus de temps. La réponse (a) invoque le seuil, mais le seuil est fixé d'avance et identique pour toutes les lignes, c'est précisément sa fonction. La réponse (c) confond une variation de débit avec une variation de temps : notez d'ailleurs la convention de signe, qui est la seule cohérente et qui se lit dans deux sens opposés, un delta de débit positif est un gain puisque le débit augmente, un delta de temps négatif est un gain puisque le temps diminue. La règle à emporter : ne rapportez jamais un débit seul. Le débit est un indicateur de diagnostic, utile pour savoir où part le temps ; le temps jusqu'à un seuil est l'indicateur de résultat. Les confondre conduit à optimiser consciencieusement dans la mauvaise direction, et c'est l'erreur la plus commune du profilage dans ce domaine. Le jalon 2 vous demande pour cette raison de commenter au moins un cas où les deux classements se contredisent, ou de dire explicitement qu'il n'y en a pas eu : la semaine vous en fournit trois, les six copies de l'environnement, la version à deux processus comparée aux trois environnements, et cette ligne-ci.",
+ q7: "Cette ligne est le meilleur exercice d'humilité du cours, et je l'ai gardée pour le jalon. Observez les trois faits. Premièrement, la modification en cause ne change aucune valeur calculée : elle ne peut pas, par construction, rendre l'agent meilleur ou pire. Deuxièmement, les deux indicateurs pointent en sens opposé, moins de débit et moins de temps. Troisièmement, la version de référence elle-même a été relevée à 227, à 228 et à 229 trames par seconde, trois mesures du même programme sur la même machine, soit environ 1 % de dispersion, c'est-à-dire le même ordre de grandeur que les écarts annoncés. La seule conclusion honnête est donc qu'il n'y a pas de différence mesurable, et il faut savoir l'écrire ainsi, sans excuse : c'est la phrase la plus difficile à produire dans ce domaine et c'est celle que je cherche. La réponse (a) est la conclusion que l'on aurait tirée d'une exécution unique, et elle est absurde physiquement. La réponse (d) accepte l'écart comme réel et le juge petit, alors que la question n'est pas sa taille mais le fait qu'il ne se distingue pas du bruit. La réponse (c) jette la mesure, ce qui est l'erreur inverse et tout aussi coûteuse : la mesure est bonne, c'est l'interprétation qui doit être prudente, et la façon de le savoir était de répéter. D'où la règle d'interprétation du jalon 2 : un écart dont les intervalles se recouvrent n'est pas un résultat. Vous disposez pour cela de l'intervalle de Student sur n graines, ou d'un intervalle par rééchantillonnage avec remise, plus prudent ici parce que les résultats d'apprentissage par renforcement sont souvent bimodaux, ça converge ou ça ne converge pas. Et puisque nous y sommes, retenez le second exemple travaillé de la semaine, qui porte sur ce que les moyennes cachent : avec une seule trame empilée, Pong est encore résolu, mais trois exécutions sur huit n'ont pas convergé du tout. Une moyenne sur huit exécutions, présentée seule, dissimule entièrement ce taux d'échec de 37 %. Le nombre d'exécutions qui n'ont pas convergé est une information irremplaçable, et il n'apparaît dans aucune moyenne.",
+ q8: "Le raisonnement à produire est celui des deux instants. Prenez deux moments où les dix dernières barres sont numériquement identiques. Au premier, l'agent ne détient rien et la bonne décision est d'attendre une occasion d'acheter. Au second, il détient une action achetée 5 % plus bas et la bonne décision est de choisir s'il encaisse. Même observation, décisions différentes : la propriété de Markov est violée et plus aucune méthode du cours n'est justifiée. C'est la position dans l'état, et rien d'autre, qui fait de ce problème un processus de décision markovien, et c'est pour cela que les deux dernières composantes ne sont pas des commodités. Elle est tenue par deux informations, un drapeau de détention et le prix d'entrée, dont le profit relatif est tiré, et ce profit vaut exactement zéro en l'absence de position. Avec les réglages par défaut, dix barres et pas de volumes, l'observation compte trois nombres par barre plus deux, soit 32 nombres. La réponse (a) contient le piège que je veux désamorcer, parce que son argument d'inversibilité est à moitié vrai : oui, la transformation s'inverse dès qu'on connaît l'ouverture, et l'environnement s'en sert pour reconstruire un prix absolu, mais l'ouverture ne figure pas dans l'observation, donc l'agent ne la connaît pas. Le niveau de prix est réellement perdu pour lui, pas masqué : il ne peut pas savoir qu'il se trouve juste sous un nombre rond, alors que les marchés réagissent au voisinage de ces niveaux et des points de retournement passés. Un échange assumé est une décision d'ingénierie ; un échange inaperçu est un bogue qui ne se manifestera que sur les données de validation. La réponse (b) fait de la normalisation une nécessité, alors que c'est un a priori : le réseau pourrait l'apprendre seul, il lui suffirait de retrancher un prix moyen, ce qu'une couche linéaire fait sans difficulté. En la lui fournissant toute faite, on ne lui donne aucune capacité nouvelle, on lui simplifie la tâche. La réponse (c) juge le profit relatif redondant, alors que le prix d'entrée n'est pas dans l'observation et que l'agent ne peut donc pas le recalculer. Notez pour finir que la même information admet deux dispositions, un vecteur plat ou une matrice à une ligne par composante de prix, et que c'est la disposition qui décide quelle architecture est possible, alors que tout ce qui est algorithmique, ici, se réduit à une configuration héritée de la semaine 6.",
+ q9: "Commençons par écarter la fausse piste, parce qu'elle est tentante : les deux schémas couvrent bien le même intervalle de prix, et les commissions sont identiques de part et d'autre, deux prélèvements de kappa, un à l'achat et un à la clôture. La réponse (a) part donc d'un fait exact et en tire une conclusion fausse, ce qui en fait la plus instructive des erreurs. La différence est ailleurs, et elle est triple. Un, l'arithmétique : une somme de rendements simples n'est pas le rendement composé, parce que les produits se télescopent et les sommes non. Deux barres consécutives à 10 % donnent 10 plus 10, soit 20 points par barre, contre 100 fois 1,1 fois 1,1 moins 1, soit 21 points à la clôture, et l'écart croît avec la durée de détention et avec l'amplitude des mouvements. Deux, l'actualisation, et c'est la raison propre à l'apprentissage par renforcement, celle qu'on oublie toujours : le retour vu par l'agent est une somme actualisée, donc une somme unique versée au pas T est multipliée par gamma puissance T, tandis que le même mouvement étalé est actualisé terme par terme avec son propre exposant. Les deux retours diffèrent même dans le cas où les totaux non actualisés coïncideraient, et l'effet n'est pas symétrique : plus la détention est longue, plus le versement unique est pénalisé, donc plus l'agent entraîné sous ce schéma est incité à clôturer tôt. Le choix du schéma modifie le comportement souhaité, pas seulement la vitesse d'apprentissage, et c'est pourquoi la réponse (b), qui ne retient que l'arithmétique, s'arrête au tiers du chemin. Trois, l'attribution du mérite et la variance : un schéma dense donne un signal à chaque pas, un schéma parcimonieux un seul signal au bout d'une détention qui peut durer des centaines de barres, et vous connaissez cette opposition depuis la résistance de FrozenLake à la méthode d'entropie croisée en semaine 3. La réponse (d) décrète qu'un seul schéma est légitime, alors qu'aucun des deux n'est une erreur : ce sont deux objectifs, et un agent optimal pour l'un ne l'est pas pour l'autre. La leçon ne concerne pas la finance. Avant de choisir une récompense, posez-vous les trois questions de cette section : mon agrégation est-elle la bonne opération arithmétique, l'actualisation traite-t-elle mes deux variantes de la même façon, et mon signal est-il dense ou parcimonieux ?",
+ q10: "C'est l'enseignement le plus transférable de la semaine, et il tient en une règle : une série temporelle se partage dans l'ordre chronologique, on ajuste sur la période la plus ancienne et on valide sur la plus récente. Rien d'autre. Trois conséquences d'un partage pris à l'envers, et chacune est un piège distinct. D'abord, on répond à la mauvaise question : ce qu'un praticien a besoin de savoir, c'est si un modèle ajusté sur ce qui était connu à une date donnée survit à ce qui est arrivé ensuite, alors que l'ordre inversé demande si un modèle ayant déjà vu le futur parvient à expliquer le passé, question que personne ne pourra jamais poser en production. Ensuite, la fuite d'information passe par le régime, et elle passe par vous : l'instant d'arrêt, le nombre de barres d'observation, la taille du réseau, toute décision prise en regardant la période récente transporte de l'information depuis une période censée ne pas avoir été vue, et cette fuite n'est pas dans les tenseurs, elle est dans l'expérimentateur, donc aucune relecture de code ne la détectera. Enfin, c'est indétectable dans les métriques : un partage inversé produit des courbes parfaitement ordinaires, et seul le protocole vous dit que le résultat est nul et non avenu, ce qui est précisément pourquoi le protocole doit être écrit avant l'exécution. La réponse (b) est la faute la mieux habillée, et elle est pire que l'ordre inversé : un partage aléatoire place des barres de la même heure des deux côtés de la frontière, le modèle n'a plus à prévoir, il lui suffit d'interpoler entre deux points qu'il connaît déjà, et il y réussira brillamment pour une raison qui n'a rien à voir avec sa capacité de prévision. La réponse (d) est l'erreur que je vois à chaque session : évaluer sur les données d'entraînement avec epsilon nul est une évaluation de la politique gloutonne sur la distribution d'entraînement, ce qui est utile et tout à fait autre chose, et l'offset de départ tiré au hasard renforce l'illusion puisque les barres restent celles de la même année. Hors échantillon signifie une période que l'entraînement n'a jamais vue, point final. Deux raffinements pour finir. Trois blocs chronologiques plutôt que deux, le plus récent n'étant touché qu'une seule fois pour rapporter un chiffre, parce que sélectionner un modèle d'après ses résultats de validation ruine l'idée même de validation. Et la validation glissante, qui fait glisser le couple ajustement-validation le long de la série et rapporte une distribution de résultats : c'est le même raisonnement que plusieurs graines et un intervalle, appliqué à l'endroit où vous avez coupé. Notez enfin que ce protocole ne coûte aucune ligne de code, seulement de passer les deux fichiers dans le bon ordre.",
+ q11: "Mesurez d'abord ce que vous venez de lire : mêmes poids, même année, même politique, aucune ligne d'apprentissage modifiée, et le signe du résultat a changé. Comment un terme de coût peut-il faire cela ? Par simple accumulation. L'unité de la récompense est le point de pourcentage, un aller-retour coûte deux fois la commission, soit 0,2 point, et c'est le coût du voyage, le seuil que toute stratégie doit franchir avant de produire le moindre gain. Un agent qui fait cent allers-retours sur l'année paie vingt points de frais, mille allers-retours en paient deux cents. L'écart entre les deux courbes n'est donc pas une erreur de prédiction, c'est le coût cumulé de sa propre fréquence de négociation : la stratégie n'échoue pas parce qu'elle prédit mal, elle échoue parce qu'elle n'est pas assez rentable par opération pour payer ses opérations. La généralisation sort entièrement de la finance : toute comparaison qui omet un coût réel mesure un autre problème que le vôtre, et vous rencontrerez la même structure avec un agent de recommandation qui ignore le coût d'une sollicitation, un agent de contrôle qui ignore l'usure de l'actionneur, ou un agent de dialogue qui ignore le coût d'un appel. La réponse (a) est la conclusion facile, et il faut tenir l'autre moitié de la lecture : le résultat sans frais n'est pas un résultat propre, c'est un résultat auquel il manque simplement un coût de moins, puisque la simulation ignore encore l'écart achat-vente, le dérapage des prix et l'impact de marché. La réponse (b) cherche une erreur de calibrage là où il n'y en a pas : 0,1 % par opération est un ordre de grandeur ordinaire, et c'est la fréquence de négociation, non le niveau du coût, qui fait l'essentiel de l'écart. La réponse (c) confond deux paires de courbes : celle-ci porte deux fois sur la même année tenue à l'écart et ne mesure donc aucun écart entre entraînement et validation ; le surapprentissage, lui, se lit sur une autre comparaison, l'année d'entraînement contre l'année tenue à l'écart, et il est daté, à partir d'environ un million d'itérations. Un dernier mot sur un repère qui ne vaut presque rien : pendant les premières heures, la récompense de validation reste au-dessus de moins 0,2 %, ce qui signifie seulement que l'agent ne détruit pas de valeur plus vite que ses propres frais de transaction. Ce n'est pas un seuil de rentabilité, c'est un seuil de non-absurdité, et la comparaison qu'un lecteur attend reste l'achat-conservation sur la même période.",
+ q12: "Un résultat de ce genre se lit par ses conditions, pas par son chiffre, et la compétence professionnelle consiste à nommer ce qui manque. Trois coûts ne sont pas modélisés du tout, et il faut savoir les définir. L'écart achat-vente : à tout instant, sur un marché réel, il y a deux prix et non un, celui auquel on peut vendre immédiatement et celui, plus élevé, auquel on peut acheter, et l'écart est payé à chaque passage, en plus de la commission ; une simulation qui utilise un seul prix de clôture pour l'achat et pour la vente l'ignore entièrement. Le dérapage des prix : entre la décision et l'exécution, le prix a bougé, et il a statistiquement tendance à bouger contre vous, puisque vous achetez quand les autres achètent. L'impact de marché : vos propres ordres déplacent le prix, l'effet est négligeable pour une action et croît avec la taille de la position, de sorte qu'une stratégie rentable à petite échelle peut cesser de l'être précisément parce qu'elle a réussi. Les trois ont le même signe, ils coûtent, et la section 7.12 vous a déjà montré ce qu'un seul coût de 0,1 % par opération fait à un résultat. Manque aussi la comparaison passive, l'achat-conservation sur la même période, dix lignes de code qui ne demandent ni apprentissage ni heure de processeur graphique : sur une année où le titre monte de 30 %, un agent qui finit à 10 % a détruit de la valeur par rapport à ne rien faire. Et le chiffre lui-même est dans l'échantillon, donc il ne mesure aucune capacité de prévision. La réponse (a) ne retient qu'une des cinq questions utiles, et c'est vrai qu'une année d'un seul titre ne décrit qu'un régime de marché, ce qui explique entièrement le surapprentissage observé, mais dix ans ne répareraient ni les coûts absents ni la mesure dans l'échantillon. La réponse (c) range les coûts d'exécution dans le second ordre, alors que la paire de courbes de la section 7.12 a montré un coût unique inversant le signe du résultat. La réponse (d) accepte un chiffre dans l'échantillon comme résultat, à l'annonce près, ce qui est exactement l'erreur que la semaine entière cherche à prévenir. Posez donc les cinq questions, à vos résultats comme à ceux des autres : combien d'instruments, combien de périodes, quels coûts modélisés, quelle sélection de modèle, et par rapport à quelle stratégie passive ? Si une seule réponse manque, le résultat n'est pas faux, il est non interprétable, ce qui est une situation différente et plus fréquente."
+};
+
+function submitQuiz() {
+ const questions = document.querySelectorAll('.question');
+ let score = 0;
+ let answered = 0;
+
+ questions.forEach((q, i) => {
+ const name = `q${i + 1}`;
+ const correct = q.dataset.correct;
+ const selected = q.querySelector(`input[name="${name}"]:checked`);
+ const feedback = q.querySelector('.feedback');
+
+ if (selected) {
+ answered++;
+ feedback.style.display = 'block';
+ if (selected.value === correct) {
+ score++;
+ feedback.className = 'feedback correct';
+ feedback.textContent = ' Correct ! ' + explanations[name];
+ } else {
+ feedback.className = 'feedback incorrect';
+ feedback.textContent = ` Incorrect. La bonne réponse est (${correct.toUpperCase()}). ` + explanations[name];
+ }
+ }
+ });
+
+ if (answered < questions.length) {
+ alert('Veuillez répondre à toutes les questions avant de valider.');
+ return;
+ }
+
+ const scoreBox = document.getElementById('score-box');
+ scoreBox.style.display = 'block';
+ document.getElementById('score-text').textContent = `${score} / ${questions.length}`;
+ const pct = Math.round((score / questions.length) * 100);
+ let msg = '';
+ if (pct >= 90) msg = ' Excellent ! Vous maîtrisez les fondements du cours.';
+ else if (pct >= 70) msg = ' Très bien ! Quelques révisions sur les points incorrects et vous serez prêt·e.';
+ else if (pct >= 50) msg = ' Pas mal ! Relisez les sections correspondantes avant de continuer.';
+ else msg = ' Prenez le temps de revoir le cours, puis réessayez.';
+ document.getElementById('score-msg').textContent = msg;
+ scoreBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+ document.getElementById('quiz-form').reset();
+ document.querySelectorAll('.feedback').forEach(f => { f.style.display = 'none'; f.textContent = ''; });
+ document.getElementById('score-box').style.display = 'none';
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
