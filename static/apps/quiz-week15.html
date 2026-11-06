@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Quiz Semaine 15 : Applications industrielles, synthèse et soutenance</title>
+ <style>
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body {
+ font-family: 'Segoe UI', system-ui, sans-serif;
+ background: #f8fafc;
+ color: #1e293b;
+ padding: 1.5rem;
+ line-height: 1.6;
+ }
+ h1 {
+ font-size: 1.4rem;
+ font-weight: 700;
+ color: #0f172a;
+ margin-bottom: 0.5rem;
+ }
+ .subtitle {
+ color: #64748b;
+ font-size: 0.9rem;
+ margin-bottom: 1.5rem;
+ }
+ .question {
+ background: #fff;
+ border: 1px solid #e2e8f0;
+ border-radius: 10px;
+ padding: 1.25rem 1.5rem;
+ margin-bottom: 1.25rem;
+ transition: box-shadow 0.2s;
+ }
+ .question:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+ .question-text {
+ font-weight: 600;
+ margin-bottom: 0.85rem;
+ font-size: 0.98rem;
+ }
+ .option {
+ display: flex;
+ align-items: flex-start;
+ gap: 0.6rem;
+ padding: 0.5rem 0.75rem;
+ border-radius: 6px;
+ margin-bottom: 0.35rem;
+ cursor: pointer;
+ transition: background 0.15s;
+ font-size: 0.93rem;
+ }
+ .option-text { flex: 1; min-width: 0; }
+ .option:hover { background: #f1f5f9; }
+ .option input[type="radio"] { margin-top: 0.2rem; accent-color: #6366f1; flex-shrink: 0; }
+ .feedback {
+ margin-top: 0.85rem;
+ padding: 0.6rem 1rem;
+ border-radius: 6px;
+ font-size: 0.9rem;
+ display: none;
+ }
+ .feedback.correct { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+ .feedback.incorrect { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+ .btn-check {
+ margin-top: 1rem;
+ padding: 0.5rem 1.2rem;
+ background: #6366f1;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ font-size: 0.9rem;
+ font-weight: 600;
+ cursor: pointer;
+ transition: background 0.2s;
+ }
+ .btn-check:hover { background: #4f46e5; }
+ .score-box {
+ background: #ede9fe;
+ border: 1px solid #c4b5fd;
+ border-radius: 10px;
+ padding: 1.5rem;
+ text-align: center;
+ display: none;
+ margin-top: 1rem;
+ }
+ .score-box h2 { font-size: 1.6rem; color: #4c1d95; margin-bottom: 0.25rem; }
+ .score-box p { color: #6d28d9; font-size: 0.95rem; }
+ .btn-reset {
+ margin-top: 1rem;
+ padding: 0.5rem 1.4rem;
+ background: #7c3aed;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ cursor: pointer;
+ font-weight: 600;
+ transition: background 0.2s;
+ }
+ .btn-reset:hover { background: #6d28d9; }
+ #submit-all {
+ display: block;
+ width: 100%;
+ padding: 0.75rem;
+ background: #0f172a;
+ color: #fff;
+ border: none;
+ border-radius: 8px;
+ font-size: 1rem;
+ font-weight: 700;
+ cursor: pointer;
+ margin-top: 1.5rem;
+ transition: background 0.2s;
+ }
+ #submit-all:hover { background: #1e3a5f; }
+ </style>
+</head>
+<body>
+
+<h1>Quiz : Semaine 15</h1>
+<p class="subtitle">Applications industrielles, synthèse et soutenance · 12 questions</p>
+
+<form id="quiz-form">
+
+ <div class="question" data-correct="a">
+ <div class="question-text">1. On vous décrit un problème en une phrase : <strong>régler en continu l'ouverture d'une vanne sur une ligne de production, avec un simulateur fidèle fourni et une mesure de qualité relevée à chaque seconde</strong>. Par quelles semaines commencez-vous, et pourquoi les autres candidates sont-elles écartées ?</div>
+ <label class="option"><input type="radio" name="q1" value="a" /><span class="option-text">a) Par la <strong>semaine 9</strong>, puis la <strong>semaine 10</strong> : l'action est continue, ce qui désigne d'emblée les politiques gaussiennes et DDPG, et la semaine 10 fournit ensuite PPO ou SAC pour stabiliser. Les trois caractéristiques énoncées écartent les autres candidates une par une. L'action continue exclut la semaine 5, dont la tête produit une valeur par action <em>discrète</em>. La mesure relevée à chaque seconde rend la récompense <strong>dense</strong>, donc la prime de nouveauté de la semaine 11 répond à un problème que celui-ci n'a pas. Et le simulateur fourni rend l'interaction bon marché, donc le RL hors ligne de la semaine 13 répond lui aussi à un problème absent</span></label>
+ <label class="option"><input type="radio" name="q1" value="b" /><span class="option-text">b) Par la <strong>semaine 5</strong>, après discrétisation de l'ouverture en une vingtaine de positions : aucune méthode du cours ne prend une action continue en entrée, la discrétisation est donc le passage obligé, et les extensions de la semaine 6 suffisent ensuite à rattraper la perte de précision</span></label>
+ <label class="option"><input type="radio" name="q1" value="c" /><span class="option-text">c) Par la <strong>semaine 13</strong> : un simulateur fidèle est exactement le modèle du monde dont les méthodes de cette semaine ont besoin, et apprendre la politique à l'intérieur du modèle évite d'interagir avec la ligne de production. La semaine 9 ne viendrait qu'ensuite, pour convertir la politique latente en commandes continues</span></label>
+ <label class="option"><input type="radio" name="q1" value="d" /><span class="option-text">d) Par la <strong>semaine 11</strong> : une mesure de qualité relevée à chaque seconde reste une <em>récompense parcimonieuse</em> à l'échelle d'une journée de production, il faut donc commencer par une exploration dirigée, puis passer à la semaine 10 pour exploiter le signal ainsi densifié</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">2. Sur un jeu de référence de <em>navigation web</em>, la récompense de l'environnement est la récompense brute multipliée par une décroissance en <strong>temps d'horloge</strong>. Le même clic, correct dans les deux cas et de récompense brute 1, rapporte <strong>0,7936 en 2,07 s</strong> avec le navigateur affiché et <strong>0,9918 en 0,09 s</strong> sans interface. Qu'est-ce que cela casse exactement ?</div>
+ <label class="option"><input type="radio" name="q2" value="a" /><span class="option-text">a) L'<em>apprentissage</em> : la récompense dépend d'une grandeur absente de l'observation, la vitesse de la machine à cet instant, donc la propriété de Markov est rompue et la cible de valeur n'est plus stationnaire. L'agent apprend plus mal, et c'est pour cette raison qu'on recommande d'entraîner sans interface</span></label>
+ <label class="option"><input type="radio" name="q2" value="b" /><span class="option-text">b) La <em>densité</em> du signal : multiplier par une décroissance rapproche la récompense de zéro à mesure que l'épisode s'allonge, donc le signal finit par disparaître sur les tâches longues et il faut lui adjoindre une <strong>récompense intermédiaire</strong>, comme en fiction interactive</span></label>
+ <label class="option"><input type="radio" name="q2" value="c" /><span class="option-text">c) Rien d'important : la décroissance est un façonnage de la récompense qui pousse l'agent à agir vite, ce qui est précisément ce qu'on attend d'un agent de navigation web. Il suffit de le mentionner une fois dans le rapport</span></label>
+ <label class="option"><input type="radio" name="q2" value="d" /><span class="option-text">d) La <strong>comparabilité</strong>. Le nombre publié mesure l'agent et la machine en même temps : deux équipes dont les agents se conduisent de façon identique rapportent 0,7936 et 0,9918 selon qu'elles affichent le navigateur ou non, et la même expérience rapportera encore autre chose sur un processeur plus rapide. Un score de ce jeu de référence n'est donc interprétable qu'accompagné du <strong>mode de rendu</strong> et du <strong>matériel</strong>, ou recalculé depuis la récompense brute. L'agent, lui, apprend très bien : c'est la <strong>mesure</strong> qui ne se transfère pas, pas l'apprentissage</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">3. En <em>fiction interactive</em>, l'action est une phrase d'au plus 8 jetons sur un vocabulaire de 1 250, et l'environnement peut fournir à chaque pas la liste des <strong>commandes admissibles</strong>, une douzaine environ. Pourquoi cette liste change-t-elle la <em>classe</em> du problème et pas seulement sa taille ?</div>
+ <label class="option"><input type="radio" name="q3" value="a" /><span class="option-text">a) Parce qu'elle fait passer l'espace d'action de 1250<sup>40</sup> à une douzaine, soit un facteur de l'ordre de 10<sup>123</sup> : c'est bien une question de taille, mais d'une taille telle qu'elle change tout, et c'est le seul argument dont on ait besoin</span></label>
+ <label class="option"><input type="radio" name="q3" value="b" /><span class="option-text">b) Parce qu'une méthode fondée sur la valeur doit <strong>comparer toutes les actions</strong> pour en prendre la meilleure, donc disposer d'un espace d'actions <strong>énumérable à chaque pas</strong>. Sans la liste, l'espace <em>par pas</em> vaut 1250<sup>8</sup>, environ 6·10<sup>24</sup> : il n'est ni énumérable ni parcourable, et un DQN de la semaine 5 n'est pas applicable du tout. Avec la liste, une douzaine de candidats se notent un par un, et le DQN redevient applicable. Second effet, de même nature : la liste change d'un état à l'autre, donc la tête à une sortie par action de la semaine 5 ne tient plus, et le réseau prend un <strong>couple</strong> observation-commande pour rendre <strong>une seule</strong> valeur</span></label>
+ <label class="option"><input type="radio" name="q3" value="c" /><span class="option-text">c) Parce qu'elle rend l'environnement <em>markovien</em> : l'inventaire n'apparaît pas dans le texte, donc l'état est partiellement observé, et la liste des commandes admissibles révèle indirectement ce que l'agent porte, ce qui referme le POMDP de la semaine 5</span></label>
+ <label class="option"><input type="radio" name="q3" value="d" /><span class="option-text">d) Parce qu'elle <em>densifie</em> le signal : énumérer les commandes admissibles donne à chaque pas une mesure du progrès vers la quête, ce qui remplace la récompense parcimonieuse de fin de quête. C'est d'ailleurs pourquoi la récompense intermédiaire devient inutile dès qu'on dispose de la liste</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">4. Le cube ne rapporte +1 que sur l'état résolu et -1 partout ailleurs : un bit, à la toute fin. Pourtant l'entraînement par <strong>itération autodidacte</strong> ne souffre pas de récompense parcimonieuse. Pourquoi ?</div>
+ <label class="option"><input type="radio" name="q4" value="a" /><span class="option-text">a) Parce que -1 à chaque pas est déjà un signal <em>dense</em> : l'agent reçoit une récompense à chaque transition, la parcimonie n'existe donc pas dans cet environnement, et c'est pour cela qu'aucune prime d'exploration n'est nécessaire</span></label>
+ <label class="option"><input type="radio" name="q4" value="b" /><span class="option-text">b) Parce que la <em>recherche arborescente de Monte-Carlo</em> fournit le signal manquant : l'arbre atteint l'état résolu, la remontée de la valeur ramène le +1 jusqu'à la racine, et c'est cette remontée qui entraîne le réseau là où la récompense ne dit rien</span></label>
+ <label class="option"><input type="radio" name="q4" value="c" /><span class="option-text">c) Parce que les données d'entraînement sont <strong>engendrées à l'envers</strong>, depuis l'état résolu : on part du cube résolu, on applique N transformations aléatoires, et on s'entraîne sur les états ainsi produits. Chaque état d'entraînement a donc une <strong>distance connue au but</strong>, et le problème du « pas de récompense avant la fin » ne se pose jamais pendant l'entraînement. La parcimonie est réelle au moment de <em>résoudre</em>, et absente au moment d'<em>apprendre</em>. Le procédé se généralise à tout problème dont l'état but est connu et dont la dynamique est inversible</span></label>
+ <label class="option"><input type="radio" name="q4" value="d" /><span class="option-text">d) Parce que le <em>codage un parmi n</em> de 20×24 rend l'espace assez régulier pour que le réseau interpole entre les états vus : avec 4,33·10<sup>19</sup> états et 0,0000005 % d'entre eux visités après un mois d'entraînement, c'est la généralisation du réseau, et non la forme de la récompense, qui fait tout le travail</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">5. On vous remet un agent de navigation web présenté comme de l'<strong>A3C</strong>. Le code définit <strong>une</strong> classe de réseau, un tronc convolutif partagé, une tête de politique et une tête de valeur, et lance <code>AsyncVectorEnv</code> avec 8 environnements. Que parallélise ce dispositif, et quelle méthode du cours avez-vous sous les yeux ?</div>
+ <label class="option"><input type="radio" name="q5" value="a" /><span class="option-text">a) De l'A3C : huit processus tournent en parallèle, ce qui est la définition même de la méthode. Le mot « async » dans le nom de la classe confirme la lecture, et les huit navigateurs jouent le rôle des huit travailleurs</span></label>
+ <label class="option"><input type="radio" name="q5" value="b" /><span class="option-text">b) <code>AsyncVectorEnv</code> est le vectoriseur d'<strong>environnements</strong> de Gymnasium : il exécute les huit navigateurs dans des sous-processus pour collecter huit transitions par passe. Il parallélise le <strong>pas d'environnement</strong>, pas le gradient. Un seul réseau, un seul optimiseur, une seule mise à jour <strong>synchrone</strong> sur le lot issu des huit environnements : c'est un <strong>A2C à environnements vectorisés</strong>, la méthode de la semaine 8, quel que soit le nom que porte le fichier. Ce qui définit l'A3C est l'inverse : plusieurs travailleurs détenant chacun sa copie du réseau et poussant des gradients de façon <em>asynchrone</em> dans un jeu de paramètres partagé</span></label>
+ <label class="option"><input type="radio" name="q5" value="c" /><span class="option-text">c) Une parallélisation du <em>gradient</em> : les huit sous-processus calculent chacun un gradient sur leur propre trajectoire et le processus principal les moyenne avant de mettre à jour les poids. C'est du parallélisme de données synchrone, donc bien de l'A2C, mais ce qui est réparti est le calcul du gradient et non le pas d'environnement</span></label>
+ <label class="option"><input type="radio" name="q5" value="d" /><span class="option-text">d) La distinction est purement terminologique : chaque travailleur d'un A3C exécute exactement la mise à jour d'un A2C, donc les deux noms désignent le même calcul et il n'y a rien à corriger avant de reproduire ce code</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">6. Une implémentation du cube définit <strong>12 actions</strong>, six faces par deux directions, et traite un demi-tour comme <strong>deux</strong> transformations consécutives. Elle prédit ensuite que son solveur devrait <strong>saturer à la profondeur de brouillage 20</strong>, puisque le <em>nombre de Dieu</em> vaut 20. Où est l'erreur ?</div>
+ <label class="option"><input type="radio" name="q6" value="a" /><span class="option-text">a) Dans l'<em>implémentation</em> : avec 12 actions seulement, les demi-tours manquent à l'espace d'action, donc le solveur ne peut pas atteindre en 20 coups ce que le résultat de 2010 garantit. Il faut les ajouter comme transformations distinctes, ce qui porte l'espace d'action à 18</span></label>
+ <label class="option"><input type="radio" name="q6" value="b" /><span class="option-text">b) Dans le changement d'unité : un demi-tour valant deux quarts de tour, 20 demi-tours font 40 quarts de tour, et c'est donc à la profondeur <strong>40</strong> que la saturation devrait être attendue</span></label>
+ <label class="option"><input type="radio" name="q6" value="c" /><span class="option-text">c) Dans la <strong>comparaison</strong>, pas dans l'implémentation. La borne de 20 est énoncée dans la <strong>métrique des demi-tours</strong>, où un demi-tour compte pour un coup. L'implémentation compte en <strong>quarts de tour</strong>, et dans cette métrique la borne vaut <strong>26</strong>. Les 12 actions sont un choix parfaitement cohérent ; ce qui ne l'est pas, c'est de confronter une mesure exprimée en quarts de tour à une borne exprimée en demi-tours. Dans son propre modèle, la saturation attendue est 26</span></label>
+ <label class="option"><input type="radio" name="q6" value="d" /><span class="option-text">d) Dans la borne citée : 20 est le nombre de coups dans la métrique des quarts de tour et 26 celui de la métrique des demi-tours, donc la prédiction est trop optimiste d'un facteur qui dépend de la proportion de demi-tours dans la solution</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">7. Une tentative de reproduction d'un résultat publié sur le cube aboutit à ceci : aucun hyperparamètre n'était publié, l'objectif de valeur d'origine fait <strong>diverger</strong> l'entraînement, un correctif d'une ligne fait passer le cube 2×2 de <strong>55 % à 100 %</strong> de cubes résolus, et le meilleur modèle obtenu sur le 3×3 résout jusqu'à la profondeur de brouillage <strong>13</strong>, là où le banc d'essai publié brouillait sur <strong>1 000 coups</strong>. Que cet <em>échec de reproduction</em> vous autorise-t-il à conclure ?</div>
+ <label class="option"><input type="radio" name="q7" value="a" /><span class="option-text">a) Exactement ceci, et rien de plus : <strong>dans cette configuration et sous ce budget de calcul</strong>, la méthode telle qu'elle est publiée diverge, le correctif de l'objectif de valeur la rend utilisable sur le 2×2, et la portée atteinte sur le 3×3 est la profondeur 13. Ce n'est <strong>pas</strong> une réfutation du résultat publié : les hyperparamètres manquants n'ont pas été retrouvés, répéter l'entraînement d'origine demanderait près de <strong>six jours</strong> sur un seul GPU, et surtout une portée de 13 et un banc d'essai brouillé sur 1 000 coups ne sont pas la même mesure. Rapporté avec sa configuration, son diagnostic et sa durée, un résultat négatif est un résultat utilisable</span></label>
+ <label class="option"><input type="radio" name="q7" value="b" /><span class="option-text">b) Que le résultat publié est <em>réfuté</em> : un résultat qu'on ne reproduit pas n'est pas établi, et la divergence de l'entraînement d'origine en donne la cause mécanique. C'est la définition même de la <strong>non-transférabilité des résultats</strong> vue en semaine 11</span></label>
+ <label class="option"><input type="radio" name="q7" value="c" /><span class="option-text">c) Que rien ne peut être conclu et qu'un échec de reproduction n'a pas sa place dans un rapport : sans les hyperparamètres d'origine, on ne compare pas deux méthodes mais deux réglages, et publier l'échec reviendrait à publier une erreur de réglage</span></label>
+ <label class="option"><input type="radio" name="q7" value="d" /><span class="option-text">d) Que le défaut tient entièrement à l'objectif de valeur : le correctif d'une ligne fait passer le 2×2 de 55 % à 100 %, donc la méthode publiée est fautive sur ce point précis et le correctif rétablit le résultat annoncé. Il ne reste qu'un écart de calcul, que davantage de cœurs et une recherche arborescente parallèle combleraient</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">8. La même famille de quêtes de fiction interactive est confiée à un <strong>grand modèle de langue</strong> sans aucun entraînement : 5 pas sur la première graine, <strong>9 quêtes résolues sur 20</strong>, 450 K jetons, 0,20 $. L'agent entraîné, lui, résolvait une quête en 3 minutes mais validait à <strong>2 sur 6</strong>, en 50 pas. Que montre, et que ne montre pas, le 9 sur 20 ?</div>
+ <label class="option"><input type="radio" name="q8" value="a" /><span class="option-text">a) Il montre qu'un grand modèle de langue raisonne mieux sans entraînement qu'un agent entraîné, donc que l'apprentissage par renforcement est dépassé sur cette famille de problèmes et qu'il faut commencer par appeler un modèle de langue</span></label>
+ <label class="option"><input type="radio" name="q8" value="b" /><span class="option-text">b) Il ne montre rien, parce que la comparaison n'est pas à coûts comparables : 0,20 $ d'appels à une interface de programmation et des heures de GPU ne se mettent pas sur la même ligne, et tant qu'on ne sait pas convertir l'un en l'autre il n'y a pas de résultat</span></label>
+ <label class="option"><input type="radio" name="q8" value="c" /><span class="option-text">c) Il montre surtout que la comparaison est faussée en faveur du modèle de langue, qui recevait la liste des <em>commandes admissibles</em> alors que l'agent entraîné devait composer ses phrases jeton par jeton. À budget d'information égal, l'écart disparaîtrait</span></label>
+ <label class="option"><input type="radio" name="q8" value="d" /><span class="option-text">d) Il ne montre <strong>pas</strong> un raisonnement sans entraînement qui battrait l'apprentissage : 9 sur 20 sur une quête de cinq coups vaut à peu près un tirage à pile ou face, et le modèle n'a certes pas été entraîné sur cette tâche mais l'a été sur un corpus immense qui contient très certainement de la fiction interactive. Ce qu'il montre suffit pourtant : sur un problème dont l'observation <strong>est</strong> du langage et dont l'action <strong>est</strong> une phrase, quatorze semaines de méthodes ont été battues sur la métrique finale par un système qui ne fait aucun apprentissage par renforcement. La question « est-ce un problème de langage ? » passe donc <strong>avant</strong> le choix de la méthode. Et la tâche du modèle était la plus <strong>difficile</strong> des deux, puisqu'il <em>engendre</em> les commandes au lieu de les choisir dans une liste</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">9. Un rapport donne <strong>deux résultats incompatibles</strong> pour une même expérience de clic. D'un côté « aucun progrès après une journée d'entraînement » sans démonstrations, et « problème résolu en 15 minutes » après une vingtaine d'exemples de clics corrects. De l'autre « -0,4 après 12 heures et 4 millions d'images » sans démonstrations, et « récompense moyenne de 0,5 après 30 000 images, soit 8 minutes » avec 25 épisodes de démonstration. Que fait un lecteur attentif ?</div>
+ <label class="option"><input type="radio" name="q9" value="a" /><span class="option-text">a) Il retient le plus <em>précis</em> des deux : -0,4 après 12 heures et 4 millions d'images est une mesure, « aucun progrès après une journée » est une impression. La version chiffrée fait donc foi, et c'est elle qu'il cite</span></label>
+ <label class="option"><input type="radio" name="q9" value="b" /><span class="option-text">b) Il retient le plus <em>tardif</em> : un second passage d'écriture sur la même expérience corrige le premier, et c'est pour cette raison qu'on cite toujours la dernière version publiée d'un résultat</span></label>
+ <label class="option"><input type="radio" name="q9" value="c" /><span class="option-text">c) Il laisse tomber les chiffres et garde la conclusion qualitative, qui n'est pas en cause : les <strong>démonstrations humaines</strong> transforment une tâche inapprenable en une tâche réglée en quelques minutes. C'est cette phrase, et non un nombre, qui est réutilisable dans un rapport</span></label>
+ <label class="option"><input type="radio" name="q9" value="d" /><span class="option-text">d) Il ne cite <strong>ni l'un ni l'autre</strong> comme <em>le</em> chiffre et il écrit que le résultat <strong>n'est pas établi</strong>, en nommant les désaccords : une journée contre douze heures, « aucun progrès » contre -0,4 annoncé, quinze minutes contre huit, et « résolu » contre une récompense moyenne de 0,5 sur une tâche dont les récompenses montent à 1. Un cinquième désaccord, plus discret, achève l'affaire : une vingtaine de <strong>clics</strong> n'est pas 25 <strong>épisodes</strong>, et comme un épisode de cet agent court sur sept à neuf pas, les deux comptes diffèrent d'un ordre de grandeur</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">10. Appliquez les trois objets de la semaine, <strong>observation</strong>, <strong>action</strong> et <strong>récompense</strong>, au problème du <em>marché</em> tel que le cours l'a construit en semaine 7. Quelle description est exacte ?</div>
+ <label class="option"><input type="radio" name="q10" value="a" /><span class="option-text">a) <strong>Observation</strong> : les N dernières barres, 10 par défaut, dont les cours haut, bas et de clôture sont réécrits en <strong>pourcentages du cours d'ouverture</strong>, plus un drapeau de détention et le profit relatif courant. <strong>Action</strong> : 3, passer son tour, acheter, clôturer, sans position vendeuse et sans positions multiples. <strong>Récompense</strong> : deux schémas au choix, le mouvement de chaque barre pendant la détention ou le mouvement entier au moment de la clôture, en points de pourcentage, avec une commission de 0,1 % à l'aller comme au retour, soit <strong>0,2 % pour un aller-retour</strong></span></label>
+ <label class="option"><input type="radio" name="q10" value="b" /><span class="option-text">b) Observation : les N dernières barres en <em>valeurs absolues</em> de cours, afin que le réseau connaisse le niveau du prix. Action : 4, passer son tour, acheter, vendre à découvert, clôturer. Récompense : le mouvement entier au moment de la clôture, commission comprise</span></label>
+ <label class="option"><input type="radio" name="q10" value="c" /><span class="option-text">c) Observation : les N dernières barres en pourcentages du cours d'ouverture, <em>sans</em> drapeau de détention ni profit relatif, ce qui fait du marché un POMDP au sens de la semaine 5. Action : 3. Récompense : le mouvement de chaque barre pendant la détention, schéma unique puisqu'une récompense doit arriver à chaque pas</span></label>
+ <label class="option"><input type="radio" name="q10" value="d" /><span class="option-text">d) Observation : les N dernières barres en pourcentages du cours d'ouverture, plus le drapeau de détention. Action : 3. Récompense : <em>parcimonieuse</em>, puisqu'elle n'arrive qu'à la clôture de la position, ce qui range ce problème dans la même case que le cube et justifie une prime d'exploration</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">11. Vous rapportez un nombre dans votre livrable final. Qu'est-ce qui le rend <strong>reproductible par quelqu'un d'autre</strong> ?</div>
+ <label class="option"><input type="radio" name="q11" value="a" /><span class="option-text">a) La <em>graine</em> : une exécution unique suffit dès lors que la graine est donnée, puisqu'elle rend l'exécution déterministe et que n'importe qui peut la rejouer à l'identique</span></label>
+ <label class="option"><input type="radio" name="q11" value="b" /><span class="option-text">b) La <em>meilleure</em> des exécutions, accompagnée de la graine qui l'a produite : c'est la performance que la méthode est capable d'atteindre, c'est donc elle qui doit figurer dans le rapport, les autres exécutions relevant du réglage</span></label>
+ <label class="option"><input type="radio" name="q11" value="c" /><span class="option-text">c) <strong>Plusieurs graines</strong>, un <strong>intervalle de confiance</strong>, et le nombre qui vit dans le <strong>journal d'exécution</strong> plutôt que dans la prose, accompagné de ses hyperparamètres, de son matériel, de sa durée et d'un critère d'arrêt fixé d'avance. Une exécution est un tirage dans une distribution : sans plusieurs tirages et sans mesure de la dispersion, le lecteur ne sait pas s'il regarde une méthode ou une chance ; et sans le journal, il n'a aucun moyen de savoir d'où sort le nombre imprimé dans le texte</span></label>
+ <label class="option"><input type="radio" name="q11" value="d" /><span class="option-text">d) Une <em>courbe</em> et le <em>code</em> : la courbe montre la dynamique complète de l'entraînement, ce qui est plus informatif qu'un nombre, et le code permet de tout refaire. Les nombres cités dans le texte ne sont qu'un résumé de la courbe et n'ont pas à être tracés séparément</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">12. Le livrable final est un rapport de 8 à 10 pages, une présentation de 10 minutes et un dépôt complet, évalués sur l'ensemble du parcours. Quel <strong>standard</strong> cette semaine retient-elle, et qu'implique-t-il ?</div>
+ <label class="option"><input type="radio" name="q12" value="a" /><span class="option-text">a) La <em>performance finale</em> : le travail est jugé sur le meilleur résultat obtenu, parce que c'est la seule grandeur réellement comparable d'un projet à l'autre et la seule qui ne dépende pas du style du rédacteur</span></label>
+ <label class="option"><input type="radio" name="q12" value="b" /><span class="option-text">b) <strong>Quelqu'un d'autre peut l'exécuter.</strong> Le dépôt contient de quoi refaire la mesure : versions épinglées, commande exacte, données ou procédure pour les obtenir, graines, et journaux d'où sortent les nombres du rapport. C'est le standard que les preuves de la semaine imposent d'elles-mêmes : un hyperparamètre non publié a suffi à rendre un résultat irreproductible, un nombre vivant dans la prose a suffi à en rendre un autre indéterminé, et un score dépendant du mode de rendu a suffi à en rendre un troisième incomparable. Un résultat modeste qu'un tiers rejoue vaut mieux qu'un résultat impressionnant dont personne ne sait d'où il vient</span></label>
+ <label class="option"><input type="radio" name="q12" value="c" /><span class="option-text">c) L'<em>originalité</em> : le projet doit mettre en œuvre une méthode que le cours n'a pas enseignée, puisque reprendre une méthode vue en cours ne démontre aucune maîtrise et ne distingue pas un travail d'un autre</span></label>
+ <label class="option"><input type="radio" name="q12" value="d" /><span class="option-text">d) La <em>couverture</em> : le rapport doit rendre compte des quatorze semaines, une section par semaine, afin de montrer que l'ensemble du parcours a été assimilé avant la soutenance</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <button type="button" id="submit-all" onclick="submitQuiz()">Valider mes réponses</button>
+</form>
+
+<div class="score-box" id="score-box">
+ <h2 id="score-text"></h2>
+ <p id="score-msg"></p>
+ <button class="btn-reset" onclick="resetQuiz()"> Recommencer</button>
+</div>
+
+<script>
+const explanations = {
+ q1: "C'est la compétence que la semaine entière prépare, et elle se conduit sur trois questions, pas quatorze : l'action est-elle discrète ou continue, la récompense dense ou parcimonieuse, l'interaction bon marché ou chère. Ici l'ouverture d'une vanne est une grandeur continue, donc la famille qui s'applique est celle des politiques gaussiennes et de DDPG, vues en semaine 9, que la semaine 10 stabilise ensuite avec PPO ou SAC. Remarquez comment chaque caractéristique de l'énoncé en élimine une autre. Une tête de DQN produit une valeur par action discrète : discrétiser l'ouverture reste possible, mais ce n'est pas un passage obligé, et prétendre qu'aucune méthode du cours ne prend une action continue oublie les semaines 9 et 10 tout entières. Une mesure relevée chaque seconde est une récompense dense, donc une prime de nouveauté arriverait avec le coût d'un second réseau et d'un hyperparamètre de plus pour résoudre un problème que personne n'a. Et un simulateur fidèle déjà fourni est le cas où il est le plus inutile d'en apprendre un : le RL hors ligne et les modèles du monde existent parce que l'interaction est chère ou interdite, et ici elle est gratuite. Retenez la forme du raisonnement plus que la réponse : on ne choisit pas une méthode parce qu'elle est récente ou élégante, on écarte les semaines dont le problème n'a pas la caractéristique, et il en reste deux ou trois. Un bon rapport final montre cette élimination, pas seulement son résultat.",
+ q2: "Le piège de la semaine, et il ne porte pas sur l'agent. Refaites le calcul : la récompense brute vaut 1 dans les deux cas, le clic est le bon dans les deux cas, et l'environnement rend 0,7936 ou 0,9918 selon que le navigateur est affiché ou non, parce qu'il multiplie la récompense brute par une décroissance en temps d'horloge. Autrement dit le nombre mesure deux choses à la fois, la qualité de l'action et la vitesse de la machine, et rien dans le nombre ne permet de les séparer. Deux équipes dont les agents se conduisent exactement de la même façon publieront donc des scores différents, et un score publié ne dit rien à qui ne connaît ni le mode de rendu ni le matériel. Le remède est simple quand on connaît le défaut : rapporter le mode de rendu et le matériel, ou recalculer la mesure depuis la récompense brute, qui est disponible dans les informations auxiliaires à côté du temps écoulé. Il faut être juste avec l'idée que la décroissance encourage la vitesse : elle l'encourage, c'est probablement ce que les concepteurs avaient en tête, et le défaut n'est pas là. Le défaut est qu'elle a rendu la grandeur publiée dépendante de la machine, ce que personne n'a voulu. L'apprentissage, lui, se porte bien : sur une tâche de clic simple, l'agent atteint une récompense moyenne de 0,9 en huit minutes environ. Il n'y a pas non plus de problème de densité : la récompense arrive quand elle est prévue, la décroissance la rétrécit, elle ne la fait pas disparaître. C'est un danger de mesure niché dans un jeu de référence, c'est-à-dire dans l'objet auquel on fait le plus confiance.",
+ q3: "Lisez d'abord les deux nombres, car les confondre est l'erreur la plus courante sur ce passage. Une quête tient en cinq commandes de huit jetons, soit quarante jetons, et 1250^40, environ 10^123, est la taille de l'espace des solutions complètes : c'est le dénominateur de la probabilité qu'une exploration purement aléatoire tombe sur la bonne suite. L'espace d'action par pas est autre chose : une commande de huit jetons sur un vocabulaire de 1 250, soit 1250^8, environ 6·10^24. Et c'est ce second nombre qui décide de la classe du problème. Une méthode fondée sur la valeur choisit son action en comparant toutes les actions disponibles ; elle a donc besoin de pouvoir les énumérer. Avec environ 6·10^24 candidats par pas, l'énumération est impossible et un DQN n'est pas lent, il est inapplicable. Avec une douzaine de commandes admissibles, l'énumération est triviale et la méthode de la semaine 5 redevient disponible. Un changement de classe, donc, et non un simple facteur d'échelle. Second effet, et il a une conséquence d'architecture : la liste change d'un état à l'autre, donc la tête à une sortie par action de la semaine 5 ne tient plus, et le réseau prend un couple observation-commande pour rendre une seule valeur, chaque commande étant notée séparément. Attention à ne pas attribuer à cette liste ce que fait l'autre béquille : la récompense intermédiaire, qui donne un point à chaque pas dans la bonne direction, est une intervention distincte sur l'environnement, et sans les deux, rien n'apprend. La liste ne referme pas davantage l'observation partielle : l'inventaire reste absent du texte, donc l'état après avoir pris une pomme reste indiscernable de l'état d'avant, et le problème demeure un POMDP.",
+ q4: "C'est l'idée la plus réutilisable de la semaine, et ce n'est pas une méthode d'exploration. L'itération autodidacte ne part pas d'un cube brouillé pour chercher la solution : elle part du cube résolu, applique N transformations aléatoires, et s'entraîne sur les états ainsi produits. Chaque exemple arrive donc avec une distance connue au but, et la cible de valeur se construit en regardant les douze enfants d'un état et en retenant le meilleur de leurs valeurs prédites augmentée de l'indicateur de but de l'enfant. Un état situé à un quart de tour du cube résolu reçoit ainsi une cible ancrée sur un vrai +1, et cet ancrage se propage vers l'extérieur à mesure que la profondeur de brouillage augmente. Le « pas de récompense avant la fin » ne se pose jamais à l'entraînement ; il se pose à la résolution, où le cube présenté n'a plus de distance connue. Le procédé se généralise : tout problème dont l'état but est connu et dont la dynamique est inversible peut voir ses données engendrées à l'envers. Pourquoi -1 partout ailleurs n'est pas un signal dense : un signal constant ne porte aucune direction, il ne distingue pas un état à un coup du but d'un état à vingt coups, et c'est l'ancrage dans les données, non la fréquence de la récompense, qui rend l'apprentissage possible. Pourquoi la recherche arborescente n'est pas la réponse : elle intervient au moment de résoudre, et elle est nécessaire précisément parce que suivre gloutonnement la politique du réseau ne marche pas, le réseau donnant des directions et non des actions optimales après avoir vu environ 0,0000005 % de l'espace. Pour mesurer enfin ce que vaut l'ancrage, regardez ce qui se passe quand il disparaît : une cible de valeur qui ajoute la valeur prédite à la récompense même sur l'état but laisse la fonction de valeur sans point fixe, et la perte de valeur reste à zéro deux heures puis dépasse 400 à la verticale. Forcer la cible à 0 sur l'état but fait tomber la perte finale de 0,032572 à 0,012226 et passer le cube 2×2 de 55 % à 100 % de cubes résolus, avec trois à cinq fois moins de recherches.",
+ q5: "Un nom n'est pas une preuve, et c'est le cadeau que cette semaine fait au rapport final. Prenez le code tel qu'il est. Une seule classe de réseau, un tronc convolutif partagé, une tête de politique, une tête de valeur, un optimiseur. Huit environnements lancés par le vectoriseur d'environnements de Gymnasium, qui démarre huit navigateurs dans autant de sous-processus et rend huit transitions par appel. Ce qui est parallélisé est donc la collecte, le pas d'environnement, et le lot ainsi formé alimente une seule mise à jour synchrone d'un seul jeu de poids. C'est la définition de l'A2C à environnements vectorisés, la méthode de la semaine 8. Ce que l'A3C ajoute est absent : plusieurs travailleurs détenant chacun sa copie du réseau, et des gradients poussés de façon asynchrone dans des paramètres partagés. Le mot asynchrone, dans le nom de la classe, qualifie les environnements ; il ne qualifie pas l'algorithme. Rien n'est non plus distribué du côté du gradient : les sous-processus ne calculent aucune dérivée, ils exécutent des pas d'environnement et renvoient des observations. Et la confusion n'est pas inoffensive, même s'il est vrai que chaque travailleur d'un A3C exécute une mise à jour de type A2C : qui croit lire de l'A3C cherche un serveur de paramètres qui n'existe pas, annonce un besoin en processus que le code n'a pas, et se prépare à reproduire sur un carnet Colab une architecture multi-processus qui y est bridée, alors que la version vectorisée y tourne très bien. Vérifiez donc toujours la méthode dans le code, jamais dans le texte qui l'entoure. Pour mémoire, ce même agent atteint une récompense moyenne de 0,9 sur une tâche de clic simple en huit minutes environ.",
+ q6: "Deux nombres, deux métriques, et une leçon de mesure. La borne de 20 est établie dans la métrique des demi-tours, où tourner une face d'un demi-tour coûte un coup. L'implémentation décrite choisit douze actions, six faces par deux directions, et compte un demi-tour comme deux transformations : elle travaille donc dans la métrique des quarts de tour, où la borne vaut 26. Le choix des douze actions est cohérent et se défend, l'espace d'action est plus petit et la dynamique plus simple ; ce qui ne va pas, c'est de confronter une mesure exprimée en quarts de tour à une borne exprimée en demi-tours. Dans son propre modèle, la saturation attendue est 26. Non, l'erreur n'est pas de multiplier par deux : la solution optimale en quarts de tour n'est pas le double de la solution optimale en demi-tours, puisqu'une solution ne se compose pas uniquement de demi-tours, et le résultat connu pour la métrique des quarts de tour est 26, pas 40. Non, la borne de 20 n'est pas celle des quarts de tour : permuter les deux métriques donne une prédiction trop pessimiste et conserve la faute de raisonnement. Retenez surtout la seconde raison, indépendante, pour laquelle la prédiction ne tient pas, car elle enseigne davantage : la profondeur de brouillage n'est pas la longueur de la solution optimale. Un brouillage de d coups aléatoires peut s'annuler en partie et laisser un état résoluble en moins de d coups. La profondeur à laquelle un solveur sature décrit donc la portée du solveur, et non une borne théorique. Une borne ne contraint une mesure que si les deux sont dans les mêmes unités ; ici elles ne sont ni dans la même métrique ni dans la même quantité. La portée effectivement atteinte était la profondeur 13, contre un banc d'essai publié brouillé sur 1 000 coups : deux grandeurs qui ne se comparent pas davantage.",
+ q7: "Lisez la conclusion correcte et mesurez à quel point elle est étroite : c'est tout le sujet. Ce qui est établi, c'est que dans cette configuration et sous ce budget de calcul, la méthode publiée diverge, qu'un correctif de l'objectif de valeur la rend utilisable sur le cube réduit, et que la portée atteinte sur le cube complet est la profondeur 13. Chaque terme de la phrase compte. Le diagnostic est précis et vaut d'être compris : la cible de valeur ajoutait la valeur prédite par le réseau à la récompense réelle même sur l'état but, de sorte que la fonction de valeur n'avait plus aucun point d'ancrage et pouvait dériver vers n'importe quelle échelle, ce qu'une perte quadratique moyenne supporte très mal ; la perte de valeur reste près de zéro pendant deux heures, puis dépasse 400 à la verticale. Pourquoi ce n'est pas une réfutation : les hyperparamètres d'origine n'étaient pas publiés et n'ont pas été retrouvés, répéter l'entraînement d'origine demanderait près de six jours sur un seul GPU, et une portée de 13 ne se compare pas à un banc d'essai brouillé sur 1 000 coups. Pourquoi l'échec doit malgré tout être publié : parce qu'il est rapporté avec sa configuration, son diagnostic et sa durée, ce qui le rend vérifiable donc utilisable, et parce que la non-transférabilité des résultats est une raison de prudence dans les conclusions, jamais un permis de réfuter. Pourquoi le correctif ne clôt pas l'affaire : il fait beaucoup sur le cube 2×2, de 55 % à 100 % de cubes résolus, et il ne comble pas l'écart sur le 3×3, où la méthode d'origine atteignait la profondeur 9 et la version modifiée 13. Enfin, la franchise sur le matériel fait partie du résultat : environ 50 000 cubes par seconde sur trois cartes contre 15 000 sur une seule, ce qui est comparable par cube et incomparable par jour, et c'est précisément pourquoi un environnement 2×2 a été écrit, pour pouvoir expérimenter du tout. Un résultat négatif rapporté précisément vaut mieux qu'un résultat positif rapporté vaguement, et c'est la règle sur laquelle le livrable final est noté.",
+ q8: "Deux phrases à tenir ensemble, et l'exercice consiste à ne lâcher ni l'une ni l'autre. Ce que le 9 sur 20 ne montre pas : un raisonnement sans entraînement qui battrait l'apprentissage. Neuf succès sur vingt quêtes de cinq coups, avec une limite de vingt pas, c'est à peu près un tirage à pile ou face, et les échecs sont instructifs plutôt qu'anecdotiques : boucles, commandes que l'analyseur de l'environnement refuse, impasses de navigation, et deux parties tuées par la génération d'une commande de sortie qui arrête tout immédiatement. Surtout, le modèle n'a pas été entraîné sur cette tâche mais il l'a été sur un corpus immense qui contient très certainement de la fiction interactive : rien ici ne mesure du raisonnement sans exemple contre de l'apprentissage. Ce que le 9 sur 20 montre, et cela suffit : sur un problème dont l'observation est du langage et dont l'action est une phrase, quatorze semaines de méthodes ont été battues sur la métrique finale par un système qui ne fait aucun apprentissage par renforcement. L'agent entraîné résolvait vite la partie sur laquelle il s'entraînait et ne généralisait pas du tout, récompense de validation nulle sur une partie, 2 sur 6 sur vingt parties, toujours 50 pas, et le meilleur aménagement atteignait le maximum en deux heures et demie avant de se dégrader par surapprentissage. La bonne question n'est donc pas quelle méthode prendre, c'est d'abord si le problème est un problème de langage, ce qui est exactement la question des trois objets. Attention à deux lectures voisines. Le coût n'annule pas le résultat, il le complique dans les deux sens : 0,20 $ et 450 K jetons contre des heures de GPU, mais aussi un appel payant à chaque pas contre un agent qui tournera hors ligne indéfiniment. Et le modèle n'a pas reçu la liste des commandes admissibles : seules la description de la pièce et l'objectif lui étaient fournis, si bien que sa tâche était la plus difficile des deux, puisqu'il engendrait ses commandes au lieu de les choisir dans une liste d'une douzaine.",
+ q9: "Voilà à quoi ressemble un résultat non reproductible vu de l'extérieur, et ce n'est ni une fraude ni même une négligence : ce sont deux passages d'écriture sur une même expérience, sans nombre unique enregistré quelque part. Les désaccords sont au nombre de quatre, et aucun n'est mineur. Une journée contre douze heures. Aucun progrès contre une valeur annoncée de -0,4. Quinze minutes contre huit. Et résolu contre une récompense moyenne de 0,5 sur une tâche dont les récompenses montent à 1. Un cinquième, plus discret, est le plus révélateur : une vingtaine de clics corrects n'est pas 25 épisodes de démonstration, et comme un épisode de cet agent court sur sept à neuf pas, les deux comptes diffèrent d'un ordre de grandeur. Devant cela, le lecteur attentif ne choisit pas, il constate que le résultat n'est pas établi et il nomme les désaccords. Pourquoi ne pas prendre le plus précis : la précision n'est pas la fiabilité. Un chiffre détaillé issu d'un passage d'écriture et une appréciation vague issue d'un autre sont deux récits d'une même expérience, le chiffre n'est corroboré par rien, et les deux récits ne divergent pas seulement en magnitude mais en direction, puisque l'un dit aucun progrès et l'autre donne une valeur mesurée. Pourquoi ne pas prendre le plus tardif : l'ordre des paragraphes n'est pas l'ordre des expériences, et un second passage ne corrige le premier que s'il dit qu'il le corrige. Pourquoi ne pas se replier sur la conclusion qualitative : parce que c'est exactement elle qui est en litige, résolu d'un côté et une moyenne de 0,5 de l'autre étant la différence entre une méthode qui règle la tâche et une méthode qui l'améliore. Le remède est le protocole exigé depuis le jalon 2 : le nombre vit dans le journal d'exécution, pas dans la prose, et la prose le cite.",
+ q10: "Classer plutôt que réciter, c'est l'exercice de la semaine, et les trois colonnes se vérifient une par une. L'observation est faite des N dernières barres, dix par défaut, avec les cours haut, bas et de clôture réécrits en pourcentages du cours d'ouverture, auxquels s'ajoutent un drapeau de détention et le profit relatif courant. Chacun de ces choix a une raison. Les pourcentages du cours d'ouverture rendent l'observation comparable d'un niveau de prix à l'autre, là où des valeurs absolues obligeraient le réseau à réapprendre le même motif à chaque échelle. Le drapeau de détention et le profit relatif ne sont pas des ornements : sans eux, l'agent ne sait pas s'il détient quelque chose et l'action de clôturer perd son sens, et c'est précisément ce couple de champs qui garde le problème suffisamment markovien ; y voir un POMDP est l'erreur de lecture, et le vrai POMDP du cours est la fiction interactive, dont l'inventaire reste caché. L'action compte trois possibilités, passer son tour, acheter, clôturer, sans position vendeuse et sans positions multiples, ce qui est une simplification délibérée et non un oubli. La récompense, enfin, est la colonne conçue plutôt qu'observée, et elle offre deux schémas : le mouvement de chaque barre pendant la détention, qui est dense, ou le mouvement entier au moment de la clôture, qui est différé. Choisir l'un ou l'autre ne règle pas un détail, cela change la classe de problème dans laquelle on se place, et aucun des deux n'est parcimonieux au sens du cube, dont le seul bit arrive à la toute fin. Gardez aussi les deux nombres qui font la difficulté : la commission vaut 0,1 % à l'aller comme au retour, donc un aller-retour coûte 0,2 %, et le signal exploitable est minuscule devant ce seuil, l'agent ne restant au-dessus de -0,2 % que pendant quatre heures. Et la décision qui a coûté le plus cher dans cette application ne portait sur aucune des trois colonnes : valider sur 2015 un modèle entraîné sur 2016.",
+ q11: "Le cours exige ce protocole depuis le jalon 2, et la semaine 15 lui fournit ses meilleures preuves. Trois pièces, et chacune répond à une question différente. Plusieurs graines, parce qu'une exécution est un tirage dans une distribution et qu'un tirage ne distingue pas une méthode d'une chance. Un intervalle de confiance, parce que sans mesure de la dispersion on ne sait pas si deux nombres diffèrent, et c'est le rôle d'un outil comme rliable, qui construit des intervalles sur un petit nombre d'exécutions. Et le nombre qui vit dans le journal d'exécution plutôt que dans la prose, avec ses hyperparamètres, son matériel, sa durée et un critère d'arrêt fixé d'avance, parce que c'est la seule façon de rendre un chiffre vérifiable par quelqu'un qui ne vous croit pas sur parole. Pourquoi la graine ne suffit pas : elle ne rend pas une exécution déterministe d'une machine à l'autre, les versions de bibliothèques et certaines implémentations sur processeur graphique y suffisent, et même si elle y parvenait, une graine reste un seul tirage. Pourquoi rapporter la meilleure exécution est la manière la plus commune de rendre irreproductible une expérience honnête : le lecteur ne peut pas distinguer le meilleur du typique, et la mesure cesse de caractériser la méthode pour caractériser le nombre d'essais. Pourquoi une courbe et le code ne répondent pas à la question : ce sont deux bonnes pratiques, mais le nombre que votre lecteur citera est celui du texte, et s'il ne se rattache à aucune ligne de journal, il ne peut pas être vérifié ; un rapport qui donne deux chiffres incompatibles pour une même expérience en est l'illustration. Cette semaine ajoute enfin deux dangers de mesure à la liste, tous deux invisibles sans protocole : un score de jeu de référence qui dépend du mode de rendu, et une borne théorique comparée dans la mauvaise métrique.",
+ q12: "La semaine se referme sur un standard, et il est délibérément modeste : quelqu'un d'autre peut l'exécuter. Concrètement, le dépôt porte les versions épinglées, la commande exacte, les données ou la procédure pour les obtenir, les graines, et les journaux d'où sortent les nombres du rapport ; la présentation de dix minutes montre une mesure et son protocole plutôt qu'une capture d'écran ; et le rapport de huit à dix pages explique quel problème a été choisi, quelles semaines ont été retenues et surtout lesquelles ont été écartées, avec la caractéristique du problème qui justifie chaque exclusion. Les preuves de la semaine imposent ce standard toutes seules : un hyperparamètre non publié a suffi à rendre un résultat irreproductible, un nombre vivant dans la prose plutôt que dans un journal a suffi à en rendre un autre indéterminé, et une récompense dépendant du mode de rendu a suffi à en rendre un troisième incomparable. Pourquoi la performance finale n'est pas le standard : un nombre que personne ne peut rejouer n'est pas un résultat, et un résultat modeste qu'un tiers rejoue en apprend davantage. Pourquoi l'originalité n'est pas le standard : les quatre applications de la semaine réutilisent toutes, sans les modifier, des méthodes déjà enseignées, un DQN, un A2C et une recherche arborescente guidée par un réseau à deux têtes ; ce qui ne s'est pas transféré, ce sont les adaptateurs d'environnement, la généralisation et les nombres publiés, et c'est là que se trouve le travail. Inventer une quinzième méthode n'est pas demandé ; savoir choisir l'est. Pourquoi la couverture n'est pas le standard : ce n'est pas un récapitulatif, une section par semaine est exactement la mauvaise forme, et la compétence évaluée consiste à regarder un problème inconnu pour dire quelles trois semaines sont pertinentes et pourquoi les onze autres ne le sont pas. Un bon point de départ, puisque le tableau des trois objets a servi de colonne vertébrale à toute la semaine : ajoutez-lui une cinquième colonne, celle de votre propre problème, et remplissez les trois lignes avant d'écrire une ligne de code. Le module 5 se termine ici, et le cours avec lui."
+};
+
+function submitQuiz() {
+ const questions = document.querySelectorAll('.question');
+ let score = 0;
+ let answered = 0;
+
+ questions.forEach((q, i) => {
+ const name = `q${i + 1}`;
+ const correct = q.dataset.correct;
+ const selected = q.querySelector(`input[name="${name}"]:checked`);
+ const feedback = q.querySelector('.feedback');
+
+ if (selected) {
+ answered++;
+ feedback.style.display = 'block';
+ if (selected.value === correct) {
+ score++;
+ feedback.className = 'feedback correct';
+ feedback.textContent = ' Correct ! ' + explanations[name];
+ } else {
+ feedback.className = 'feedback incorrect';
+ feedback.textContent = ` Incorrect. La bonne réponse est (${correct.toUpperCase()}). ` + explanations[name];
+ }
+ }
+ });
+
+ if (answered < questions.length) {
+ alert('Veuillez répondre à toutes les questions avant de valider.');
+ return;
+ }
+
+ const scoreBox = document.getElementById('score-box');
+ scoreBox.style.display = 'block';
+ document.getElementById('score-text').textContent = `${score} / ${questions.length}`;
+ const pct = Math.round((score / questions.length) * 100);
+ let msg = '';
+ if (pct >= 90) msg = ' Excellent ! Vous maîtrisez les fondements du cours.';
+ else if (pct >= 70) msg = ' Très bien ! Quelques révisions sur les points incorrects et vous serez prêt·e.';
+ else if (pct >= 50) msg = ' Pas mal ! Relisez les sections correspondantes avant de continuer.';
+ else msg = ' Prenez le temps de revoir le cours, puis réessayez.';
+ document.getElementById('score-msg').textContent = msg;
+ scoreBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+ document.getElementById('quiz-form').reset();
+ document.querySelectorAll('.feedback').forEach(f => { f.style.display = 'none'; f.textContent = ''; });
+ document.getElementById('score-box').style.display = 'none';
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
