@@ -217,4 +217,4 @@ Le troisième, `detach()`, est introduit en section 2.8 et utilisé dès la sema
 
 {{% comment %}}SOURCE: LAPAN ch.3 p.109{{% /comment %}}
 
-{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-02.ipynb" label="Rejouer la session autograd dans Colab" >}}
+{{< colab url="TODO" label="Rejouer la session autograd dans Colab" >}}

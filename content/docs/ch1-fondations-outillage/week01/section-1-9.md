@@ -71,7 +71,7 @@ print(f"Épisode terminé en {total_steps} pas, récompense totale {total_reward
 
 {{% comment %}}SOURCE: LAPAN ch.2 p.74{{% /comment %}}
 
-{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-01.ipynb" label="Mesurer l'agent aléatoire dans Colab" >}}
+{{< colab url="TODO" label="Mesurer l'agent aléatoire dans Colab" >}}
 
 Ce programme mesure **un** épisode, et c'est déjà instructif. Mais un épisode ne prouve rien. Le laboratoire reprend cette boucle pour en faire une fonction, la lance sur cent épisodes et en tire une moyenne avec son écart-type ; c'est là que le chiffre de référence du cours sera établi.
 
