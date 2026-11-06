@@ -17,6 +17,7 @@ L'énoncé complet est sur la page du jalon, dans la semaine 7 : ce qui est éva
 Cette page est un pointeur, pas une seconde copie. L'énoncé vit dans
 content/docs/ch2-methodes-valeur/week07/jalon-2.md, issu du bloc « Jalon 2 » de
 source-assets/raw-content/week-07.md, de sorte qu'il n'existe qu'un seul texte à
-corriger. La duplication équivalente de la semaine 3 (ch1-fondations-outillage/jalon-1
-contre week03/jalon-1.md) subsiste et reste à traiter.
+corriger. La duplication équivalente de la semaine 3 a été traitée depuis :
+ch1-fondations-outillage/jalon-1 est devenue un pointeur vers week03/jalon-1.md le 06/11,
+sur ce modèle. Les jalons 3 (semaine 10) et 4 (semaine 14) suivront la même forme.
 {{% /comment %}}
