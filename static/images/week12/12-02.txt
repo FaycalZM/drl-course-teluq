@@ -1,0 +1,1 @@
+Figure 12-2. À gauche, ce qu'une recherche exige du monde : un simulateur exact, que l'on peut replacer dans l'état de son choix, et qu'elle interroge à chaque pas. À droite, ce qui le remplace : une représentation, une dynamique, une prédiction, et plus aucune flèche qui sorte de l'arbre.

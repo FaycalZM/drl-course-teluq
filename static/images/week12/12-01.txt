@@ -1,0 +1,1 @@
+Figure 12-1. Les quatre phases d'un passage de recherche. On descend par l'utilité, on étend la feuille atteinte, on l'évalue par un seul passage de réseau, puis on remonte le chemin parcouru : le signe de la valeur s'inverse à chaque niveau, parce que les deux joueurs alternent. Un état terminal, lui, est évalué par le résultat réel de la partie, sans aucun réseau.
