@@ -1,0 +1,1 @@
+Figure 5-3. Les mêmes poids au fil des mises à jour : ils ne s'écartent pas un peu de la solution, ils partent à l'infini, et cela ne dépend pas du pas d'apprentissage.

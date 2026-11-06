@@ -69,9 +69,7 @@ Pour lire les journaux, une commande et une adresse :
 tensorboard --logdir runs
 ```
 
-Puis `http://localhost:6006` dans le navigateur. Sur un serveur distant, ajoutez `--bind_all` pour que le service accepte les connexions extérieures. La **Figure 2-9** montre ce que vous verrez pendant le laboratoire.
-
-{{FIG:02-09 | nouvelle figure : capture de TensorBoard sur l'exécution du laboratoire}}
+Puis `http://localhost:6006` dans le navigateur. Sur un serveur distant, ajoutez `--bind_all` pour que le service accepte les connexions extérieures. L'interface affiche vos courbes au fur et à mesure que le laboratoire tourne.
 
 {{% comment %}}SOURCE: LAPAN ch.3 p.104{{% /comment %}}
 
