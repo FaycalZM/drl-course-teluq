@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Quiz Semaine 12 : Auto-jeu, planification et multi-agent</title>
+ <style>
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body {
+ font-family: 'Segoe UI', system-ui, sans-serif;
+ background: #f8fafc;
+ color: #1e293b;
+ padding: 1.5rem;
+ line-height: 1.6;
+ }
+ h1 {
+ font-size: 1.4rem;
+ font-weight: 700;
+ color: #0f172a;
+ margin-bottom: 0.5rem;
+ }
+ .subtitle {
+ color: #64748b;
+ font-size: 0.9rem;
+ margin-bottom: 1.5rem;
+ }
+ .question {
+ background: #fff;
+ border: 1px solid #e2e8f0;
+ border-radius: 10px;
+ padding: 1.25rem 1.5rem;
+ margin-bottom: 1.25rem;
+ transition: box-shadow 0.2s;
+ }
+ .question:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+ .question-text {
+ font-weight: 600;
+ margin-bottom: 0.85rem;
+ font-size: 0.98rem;
+ }
+ .option {
+ display: flex;
+ align-items: flex-start;
+ gap: 0.6rem;
+ padding: 0.5rem 0.75rem;
+ border-radius: 6px;
+ margin-bottom: 0.35rem;
+ cursor: pointer;
+ transition: background 0.15s;
+ font-size: 0.93rem;
+ }
+ .option-text { flex: 1; min-width: 0; }
+ .option:hover { background: #f1f5f9; }
+ .option input[type="radio"] { margin-top: 0.2rem; accent-color: #6366f1; flex-shrink: 0; }
+ .feedback {
+ margin-top: 0.85rem;
+ padding: 0.6rem 1rem;
+ border-radius: 6px;
+ font-size: 0.9rem;
+ display: none;
+ }
+ .feedback.correct { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+ .feedback.incorrect { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+ .btn-check {
+ margin-top: 1rem;
+ padding: 0.5rem 1.2rem;
+ background: #6366f1;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ font-size: 0.9rem;
+ font-weight: 600;
+ cursor: pointer;
+ transition: background 0.2s;
+ }
+ .btn-check:hover { background: #4f46e5; }
+ .score-box {
+ background: #ede9fe;
+ border: 1px solid #c4b5fd;
+ border-radius: 10px;
+ padding: 1.5rem;
+ text-align: center;
+ display: none;
+ margin-top: 1rem;
+ }
+ .score-box h2 { font-size: 1.6rem; color: #4c1d95; margin-bottom: 0.25rem; }
+ .score-box p { color: #6d28d9; font-size: 0.95rem; }
+ .btn-reset {
+ margin-top: 1rem;
+ padding: 0.5rem 1.4rem;
+ background: #7c3aed;
+ color: #fff;
+ border: none;
+ border-radius: 7px;
+ cursor: pointer;
+ font-weight: 600;
+ transition: background 0.2s;
+ }
+ .btn-reset:hover { background: #6d28d9; }
+ #submit-all {
+ display: block;
+ width: 100%;
+ padding: 0.75rem;
+ background: #0f172a;
+ color: #fff;
+ border: none;
+ border-radius: 8px;
+ font-size: 1rem;
+ font-weight: 700;
+ cursor: pointer;
+ margin-top: 1.5rem;
+ transition: background 0.2s;
+ }
+ #submit-all:hover { background: #1e3a5f; }
+ </style>
+</head>
+<body>
+
+<h1>Quiz : Semaine 12</h1>
+<p class="subtitle">Auto-jeu, planification et multi-agent · 12 questions</p>
+
+<form id="quiz-form">
+
+ <div class="question" data-correct="b">
+ <div class="question-text">1. La section 12.1 donne les raisons de se doter d'un <strong>modèle de l'environnement</strong>, et elle en donne exactement deux. Lesquelles, et qu'est-ce qu'il faut refuser d'ajouter à la liste ?</div>
+ <label class="option"><input type="radio" name="q1" value="a" /><span class="option-text">a) L'<strong>efficacité d'échantillon</strong> et la <strong>suppression du besoin d'explorer</strong>. Un agent qui peut simuler les conséquences de ses actions n'a plus besoin de les essayer pour les connaître : il déduit au lieu de tâtonner, et toute la question de la semaine 11 cesse de se poser. Ce qu'il faut refuser d'ajouter est la transférabilité, qui dépend de la tâche et non du modèle</span></label>
+ <label class="option"><input type="radio" name="q1" value="b" /><span class="option-text">b) L'<strong>efficacité d'échantillon</strong> et la <strong>transférabilité entre objectifs</strong>. La première parce qu'un modèle réduit la dépendance à l'environnement réel sans exiger d'être bon : même imparfait, il absorbe une part du travail d'essai et d'erreur, ce qui compte quand le nombre d'échantillons est borné par l'usure du matériel plutôt que par la patience. La seconde parce qu'un modèle décrit la <em>dynamique</em> du système, que la dynamique ne dépend pas du but poursuivi, et qu'un même modèle sert donc plusieurs objectifs sans réapprentissage. Et ce qu'il faut refuser est tout le registre non mesurable : apprentissage « plus intelligent », « plus proche du raisonnement », « plus interprétable »</span></label>
+ <label class="option"><input type="radio" name="q1" value="c" /><span class="option-text">c) La <strong>transférabilité entre objectifs</strong> et le <strong>caractère déterministe</strong> de la politique obtenue. Une recherche menée dans un modèle rend toujours le même coup dans la même position, ce qui supprime la variance de la politique de collecte et rend l'entraînement reproductible. Ce qu'il faut refuser d'ajouter est l'efficacité d'échantillon, puisqu'un modèle appris coûte lui-même des échantillons pour être entraîné</span></label>
+ <label class="option"><input type="radio" name="q1" value="d" /><span class="option-text">d) L'<strong>efficacité d'échantillon</strong> et l'<strong>interprétabilité</strong>. Un modèle du monde est par construction inspectable, puisqu'il prédit des états : on peut donc regarder ce qu'il a mal compris quand l'agent échoue, au lieu de deviner. C'est la raison principale de l'intérêt pour ces méthodes, et ce qu'il faut refuser d'ajouter est la transférabilité, qui n'a jamais été mesurée</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">2. Un passage de recherche enchaîne quatre phases : <strong>sélection</strong>, <strong>expansion</strong>, <strong>évaluation</strong>, <strong>remontée</strong>. Pendant la sélection, la descente ne lit que les nombres portés par les arêtes. Quels sont ces nombres, et que vaut exactement celui qui porte la valeur ?</div>
+ <label class="option"><input type="radio" name="q2" value="a" /><span class="option-text">a) Une probabilité a priori <em>P(s,a)</em>, un comptage de visites <em>N(s,a)</em>, et la valeur de l'état d'arrivée telle que la tête de valeur la rend. Ce troisième nombre est une sortie de réseau, recalculée à chaque passage sur la position atteinte, et les deux premiers sont donc les seules quantités que la recherche accumule réellement</span></label>
+ <label class="option"><input type="radio" name="q2" value="b" /><span class="option-text">b) Une probabilité a priori <em>P(s,a)</em>, un comptage de visites <em>N(s,a)</em>, et une valeur d'action <em>Q(s,a)</em> qui est l'estimation de la valeur de l'action sous la politique courante, exactement au sens des semaines 4 à 10. Une recherche est en effet une méthode d'estimation de plus, par échantillonnage de trajectoires, et c'est ce qui autorise à lire ce nombre comme la valeur d'action apprise</span></label>
+ <label class="option"><input type="radio" name="q2" value="c" /><span class="option-text">c) Un comptage de visites <em>N(s,a)</em>, une somme de valeurs remontées <em>W(s,a)</em> et sa moyenne <em>Q(s,a)</em>, c'est-à-dire les trois quantités que la remontée met à jour. La probabilité a priori n'est pas une statistique d'arête : elle est redemandée au réseau à chaque descente, puisque les poids du réseau changent pendant l'entraînement</span></label>
+ <label class="option"><input type="radio" name="q2" value="d" /><span class="option-text">d) Une <strong>probabilité a priori</strong> <em>P(s,a)</em> fournie par la tête de politique, un <strong>comptage de visites</strong> <em>N(s,a)</em>, et une valeur <em>Q(s,a)</em> qui est ici une <strong>statistique de recherche</strong> : la moyenne empirique des valeurs remontées à travers cette arête pendant cette recherche-ci, effacée quand la recherche s'achève. Elle n'estime aucune politique fixée, puisque la politique de descente change à chaque visite, et c'est pourquoi il faut la tenir séparée de la valeur d'action des semaines 4 à 10</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">3. Vous implémentez l'utilité de sélection en gardant bien le rapport entre la probabilité a priori et le comptage de l'arête, mais vous omettez la <strong>racine carrée du total des visites du nœud</strong>. Votre recherche ne plante pas, ne prévient pas, et tourne pendant toute la nuit. Que fait-elle ?</div>
+ <label class="option"><input type="radio" name="q3" value="a" /><span class="option-text">a) Elle <strong>cesse de chercher</strong>. Sans ce facteur, la prime d'exploration décroît comme 1 sur le comptage de l'arête et <strong>rien ne la pousse en retour</strong> : au bout de quelques dizaines de visites elle est négligeable devant les écarts de valeur, et la sélection devient un argmax pur sur <em>Q</em>. La recherche approfondit indéfiniment la première branche qui a eu de la chance. Le facteur manquant n'est pas une constante de proportionnalité : c'est un facteur qui <em>croît</em> avec le nombre total de visites du nœud, et c'est toute la raison pour laquelle le terme d'exploration ne s'éteint pas quand la recherche s'approfondit</span></label>
+ <label class="option"><input type="radio" name="q3" value="b" /><span class="option-text">b) Elle <strong>explore trop</strong>. Le facteur retiré est celui qui faisait fondre la prime à mesure que le nœud était travaillé ; sans lui, la prime reste élevée et la descente se disperse sur toutes les arêtes au lieu de creuser. Le symptôme est un arbre large et plat, et la parade est de diminuer la constante d'exploration pour retrouver l'équilibre d'origine</span></label>
+ <label class="option"><input type="radio" name="q3" value="c" /><span class="option-text">c) Elle se comporte comme si la constante d'exploration avait été divisée par la racine du nombre de passages, donc avec un peu moins d'exploration à profondeur égale. L'effet est réel et modéré, et il se compense exactement en multipliant la constante d'exploration par la racine du nombre de recherches effectuées par coup</span></label>
+ <label class="option"><input type="radio" name="q3" value="d" /><span class="option-text">d) Rien de visible, et c'est la raison pour laquelle cette forme abrégée circule. Le facteur retiré est le <em>même pour toutes les arêtes d'un même nœud</em> : il ne change donc pas l'ordre des utilités, l'argmax rend la même arête, et la descente est identique. Le seul effet porte sur la comparaison d'utilités entre nœuds de profondeurs différentes, dont la sélection ne se sert jamais</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">4. Votre remontée incrémente le comptage, ajoute la valeur à la somme et recalcule la moyenne, mais vous avez oublié <strong>l'inversion du signe</strong>. La recherche tourne, l'arbre se construit, les comptages montent. Qu'est-ce que votre agent optimise ?</div>
+ <label class="option"><input type="radio" name="q4" value="a" /><span class="option-text">a) Rien de départageable : les valeurs des deux camps s'additionnent désormais dans les mêmes sommes, leurs contributions ont des espérances opposées, donc chaque moyenne tend vers zéro et les comptages de la racine deviennent presque uniformes. Le symptôme est une politique issue de la recherche indiscernable du hasard dès les premières parties</span></label>
+ <label class="option"><input type="radio" name="q4" value="b" /><span class="option-text">b) La bonne quantité, parce que le réseau est <strong>indépendant du joueur</strong>. L'entrée est faite de deux plans, « mes jetons, ses jetons », de sorte que la tête de valeur rend déjà une valeur du point de vue du joueur courant : l'inversion de la remontée est une seconde application de la même symétrie, donc une redondance que l'on peut supprimer sans conséquence</span></label>
+ <label class="option"><input type="radio" name="q4" value="c" /><span class="option-text">c) <strong>Un jeu où l'adversaire vous aide.</strong> La valeur d'une position est toujours exprimée du point de vue du joueur qui doit y jouer ; sans inversion, une position excellente pour l'adversaire s'inscrit comme excellente dans l'arête que vous avez empruntée pour y arriver. La recherche maximise alors la même quantité à tous les niveaux, c'est-à-dire qu'elle suppose les deux camps alliés, et elle préfère les lignes où l'adversaire se laisse battre. Ce qui a disparu est l'alternance de minimax, que la remontée réécrit en accumulation : au lieu de minimiser une fois sur deux, on maximise toujours une quantité dont on retourne le signe une fois sur deux</span></label>
+ <label class="option"><input type="radio" name="q4" value="d" /><span class="option-text">d) Le bon jeu, avec une seule inscription fausse. L'inversion du signe sert uniquement au départ, parce que la valeur rendue par la feuille appartient au joueur qui doit jouer <em>dans</em> la feuille, donc à l'adversaire de celui qui a joué la dernière arête. Retournez la valeur de la feuille une fois avant la première inscription et tout le reste du chemin se remet en place</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">5. Vous voulez brancher la recherche de la section 12.3 sur un environnement de jeu vidéo du genre de ceux de la semaine 5. Qu'est-ce qui vous arrête, et quelle question faut-il poser <strong>avant</strong> toute considération d'algorithme ?</div>
+ <label class="option"><input type="radio" name="q5" value="a" /><span class="option-text">a) La taille de l'état. Une recherche garde en mémoire tous les nœuds créés, et une image de console ne tient pas en milliers d'exemplaires : la mémoire est la ressource qui limite la qualité du résultat. La question à poser d'abord est donc celle de l'encodage, et la réponse est de comprimer l'état, comme une position complète de Puissance 4 tenant dans un seul mot machine</span></label>
+ <label class="option"><input type="radio" name="q5" value="b" /><span class="option-text">b) Le coût d'un pas. Un coup joué demande des centaines ou des milliers de passages de recherche, donc des centaines ou des milliers d'appels au simulateur, là où la boucle d'apprentissage habituelle n'en fait qu'un. La question à poser d'abord est celle du budget de calcul par coup joué, et la réponse est de descendre le nombre de recherches, par exemple à dix</span></label>
+ <label class="option"><input type="radio" name="q5" value="c" /><span class="option-text">c) L'<strong>interface</strong>. Un passage repart de la racine et rejoue le jeu dans une autre direction depuis la <em>même</em> position, des centaines de fois : la recherche a donc besoin de dire au monde « place-toi dans cette position précise, et dis-moi ce qui arrive si je joue ce coup ». L'interface employée depuis la semaine 1 ne donne qu'une réinitialisation vers un état initial choisi par l'environnement et un pas en avant depuis l'état courant. C'est une interface de <strong>trajectoire</strong>, quand une recherche exige un <strong>accès arbitraire</strong>. La question à poser en premier est donc : puis-je replacer ce monde dans un état de mon choix ? Si la réponse est non, aucune recherche n'est possible, quelle que soit la qualité du réseau</span></label>
+ <label class="option"><input type="radio" name="q5" value="d" /><span class="option-text">d) L'absence de récompense terminale. La remontée de la section 12.3 n'inscrit qu'un résultat de partie et suppose donc un jeu qui ne paie qu'à la fin, alors qu'un jeu vidéo paie à chaque pas et ne finit pas toujours. La question à poser d'abord est celle de la structure de la récompense, et la parade est de tronquer les parties à un horizon fixe</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">6. Votre auto-jeu tourne depuis plusieurs heures. La perte totale n'a <strong>aucune tendance</strong> et le taux de victoire de l'apprenti contre le meilleur réseau oscille autour de <strong>0,5</strong>, avec quelques pointes. Que concluez-vous, et que mesurez-vous ensuite ?</div>
+ <label class="option"><input type="radio" name="q6" value="a" /><span class="option-text">a) Que le dispositif se comporte <strong>exactement comme prévu</strong>, et qu'il faut mesurer autrement. La cible est fabriquée par le meilleur réseau : chaque fois que l'apprenti franchit la porte d'évaluation, cent parties et plus de soixante pour cent de victoires, <strong>le producteur des données change</strong>, donc la distribution des positions, les politiques à imiter et les résultats à prédire changent avec lui. Le taux de victoire, lui, est structurellement ramené autour d'un demi, puisque l'adversaire promu redevient aussi fort que l'apprenti. La mesure qui constate le progrès est un <strong>tournoi entre points de contrôle</strong>, et il montre une qualité de jeu qui monte avec l'indice du point de contrôle</span></label>
+ <label class="option"><input type="radio" name="q6" value="b" /><span class="option-text">b) Que le pas d'apprentissage est trop grand. Une perte sans tendance accompagnée d'un taux de victoire qui ne décolle pas est la signature de poids qui oscillent autour du minimum, et la mesure le confirme : le pas le plus faible donne une progression plus régulière, et neuf des dix meilleurs réseaux d'un tournoi croisé viennent de l'entraînement au pas le plus faible</span></label>
+ <label class="option"><input type="radio" name="q6" value="c" /><span class="option-text">c) Que la porte d'évaluation est trop exigeante. À plus de soixante pour cent sur cent parties, l'apprenti est rarement promu, donc il s'entraîne longuement sur des données produites par un réseau dépassé et la perte stagne faute de cible nouvelle. Abaisser la porte à cinquante et un pour cent rétablit une tendance et accélère le cycle</span></label>
+ <label class="option"><input type="radio" name="q6" value="d" /><span class="option-text">d) Que les données manquent de variété. Sans bruit injecté à la racine, deux parties d'auto-jeu ouvertes dans la même position se ressemblent trop : la perte atteint vite son plancher sur un ensemble de positions trop pauvre, et le taux de victoire reste à un demi parce que les deux réseaux rejouent la même partie. La parade est de remettre du bruit, et à chaque niveau de l'arbre plutôt qu'à la racine seule</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">7. La seconde méthode de la semaine remplace le simulateur exact par <strong>trois réseaux</strong>. Que rend chacun d'eux, et quelle contrainte pèse sur l'<strong>état caché</strong> ?</div>
+ <label class="option"><input type="radio" name="q7" value="a" /><span class="option-text">a) Le réseau de représentation reconstruit une position de jeu depuis l'observation, le réseau de dynamique rend la position suivante, le réseau de prédiction rend une politique et une valeur. L'état caché est donc une position prédite, et c'est précisément ce qui rend le modèle vérifiable : on compare la position prédite à la position réelle, et cet écart est le troisième terme de la perte</span></label>
+ <label class="option"><input type="radio" name="q7" value="b" /><span class="option-text">b) Le réseau de représentation rend un état caché, le réseau de dynamique rend l'état caché suivant, le réseau de prédiction rend une politique et une valeur. L'état caché doit rester <em>proche</em> de l'état réel, sans quoi la recherche dériverait à mesure qu'elle s'enfonce : la contrainte est une perte de reconstruction, pondérée assez bas pour ne pas dominer les deux autres termes</span></label>
+ <label class="option"><input type="radio" name="q7" value="c" /><span class="option-text">c) Les trois réseaux rendent respectivement les <em>coups légaux</em>, l'<em>état suivant</em> et le <em>résultat final</em>, c'est-à-dire exactement les trois services que le modèle de jeu écrit à la main fournissait à la recherche. L'état caché n'est qu'un format d'échange interne entre ces trois réseaux, et la recherche, elle, continue de descendre des positions réelles</span></label>
+ <label class="option"><input type="radio" name="q7" value="d" /><span class="option-text">d) Le <strong>réseau de représentation</strong> prend l'observation réelle et rend un état caché, et il n'est appelé qu'<em>une fois</em> par recherche, à la racine : c'est le seul point de contact avec le monde. Le <strong>réseau de dynamique</strong> prend un état caché et une action et rend une récompense immédiate et l'état caché suivant. Le <strong>réseau de prédiction</strong> prend un état caché et rend une politique et une valeur. Quant à la contrainte sur l'état caché, <strong>il n'y en a aucune</strong> : rien n'oblige ce vecteur de soixante-quatre nombres à ressembler à une position, aucun terme de perte ne le compare au monde, il doit seulement être <em>utile</em> aux prédictions. D'où une conséquence structurelle : deux états cachés obtenus par deux chemins ne sont pas comparables, et l'arbre cesse d'être un dictionnaire indexé par l'état pour devenir un graphe d'objets</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">8. L'entraînement du modèle appris prend un épisode du tampon, tire un <strong>décalage</strong> au hasard et <strong>déroule cinq pas</strong>. Contre quoi le modèle est-il vérifié, et à quoi sert le décalage aléatoire ?</div>
+ <label class="option"><input type="radio" name="q8" value="a" /><span class="option-text">a) Contre l'état réel du jeu, à chaque pas du déroulement : c'est le seul moyen d'empêcher l'état caché de dériver après trois ou quatre applications de la dynamique, et la recherche descend bien plus profond que cela. Le décalage aléatoire sert à ce que cette comparaison porte sur des positions variées plutôt que toujours sur des ouvertures</span></label>
+ <label class="option"><input type="radio" name="q8" value="b" /><span class="option-text">b) Contre ses <strong>seules conséquences</strong>, par trois cibles empilées à chaque pas du déroulement : une entropie croisée entre la politique prédite et les fréquences de visite de la racine, une erreur quadratique entre la valeur prédite et la somme actualisée des récompenses jusqu'à la fin de l'épisode, et une erreur quadratique entre la récompense prédite par la dynamique et la récompense immédiate observée. <strong>Nulle part l'état caché n'est comparé à un état réel.</strong> Le réseau de représentation n'est appliqué qu'une fois, en tête de chaîne, et le décalage aléatoire garantit que le modèle voit des débuts, des milieux et des fins de partie</span></label>
+ <label class="option"><input type="radio" name="q8" value="c" /><span class="option-text">c) Contre les fréquences de visite de la racine, et contre elles seules. La valeur et la récompense sont des sorties auxiliaires que l'on n'entraîne pas, faute de cible fiable dans un jeu qui ne paie qu'à la fin : c'est d'ailleurs pourquoi la récompense prédite par la dynamique ne sert à rien ici. Le décalage aléatoire est un simple mélange des données, équivalent à tirer un lot au hasard dans le tampon</span></label>
+ <label class="option"><input type="radio" name="q8" value="d" /><span class="option-text">d) Contre les trois cibles du <em>premier</em> pas uniquement. Les quatre pas suivants n'ont pas de cible propre : leur rôle est de faire passer le gradient à travers la dynamique, et c'est exactement ce que la pondération à un demi des pas lointains vient doser. Le décalage aléatoire sert à ce que ce premier pas ne tombe pas toujours sur une ouverture de partie</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="a">
+ <div class="question-text">9. Quinze heures d'entraînement, 3 400 épisodes, près de deux cents points de contrôle enregistrés, et le tournoi place aux deux premières places les points de contrôle <strong>numéro 10</strong> et <strong>numéro 15</strong>. Que peut-on conclure, et avec quelle largeur ?</div>
+ <label class="option"><input type="radio" name="q9" value="a" /><span class="option-text">a) Que <strong>cette mise en œuvre ne converge pas</strong>, et rien de plus. Ce qui est mesuré, c'est <em>une</em> mise en œuvre, sur <em>un</em> petit jeu, avec <em>un</em> jeu d'hyperparamètres dont il est dit explicitement qu'ils n'ont presque pas été réglés. La méthode, elle, détient l'état de l'art sur cinquante-sept jeux Atari et a dépassé les records de la première méthode de la semaine sur trois jeux de plateau classiques. Les deux énoncés sont vrais ensemble parce qu'ils ne portent pas sur le même objet : une reproduction qui échoue ne réfute pas une méthode, et une méthode qui fonctionne ailleurs ne garantit rien chez vous</span></label>
+ <label class="option"><input type="radio" name="q9" value="b" /><span class="option-text">b) Que cette méthode est moins bonne que l'auto-jeu sur les petits jeux, ce qui confirme le prix annoncé dès l'ouverture de la semaine : plus de réseaux à entraîner, un entraînement plus long, des résultats possiblement moins bons. La mesure établit donc une propriété de la méthode sur cette classe de problèmes, et elle était prévisible</span></label>
+ <label class="option"><input type="radio" name="q9" value="c" /><span class="option-text">c) Qu'il y a surapprentissage. Les meilleurs modèles étant les premiers, le réseau a ensuite mémorisé ses propres parties au lieu d'en généraliser quoi que ce soit, et les deux parades habituelles s'appliquent telles quelles : réduire la capacité des trois réseaux et arrêter l'entraînement tôt</span></label>
+ <label class="option"><input type="radio" name="q9" value="d" /><span class="option-text">d) Qu'il faut suspendre tout jugement, le résultat étant inutilisable. Sans réglage d'hyperparamètres, sans graines multiples et sans intervalle de confiance, un entraînement unique n'autorise aucune lecture, et la conduite honnête est de ne pas rapporter un tel résultat</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="c">
+ <div class="question-text">10. Vous passez de la grille de jeu à la forêt de quarante tigres et deux cent quatre cerfs. Qu'est-ce qui devient <strong>multi-agent</strong> dans votre code, et qu'est-ce qui ne change pas ?</div>
+ <label class="option"><input type="radio" name="q10" value="a" /><span class="option-text">a) La méthode. Elle reçoit un critique centralisé à l'entraînement et une exécution décentralisée, plus un terme de coordination dans la perte, sans quoi rien n'articule les actions des agents d'un même groupe. L'environnement, lui, ne change que par l'ajout d'un identifiant d'agent dans ce qu'il renvoie</span></label>
+ <label class="option"><input type="radio" name="q10" value="b" /><span class="option-text">b) La politique. Elle devient une politique jointe définie sur le produit des espaces d'actions, puisque c'est bien l'action jointe que l'environnement reçoit à chaque pas. L'observation et la méthode d'apprentissage, elles, restent celles des onze semaines précédentes, et c'est la seule modification nécessaire</span></label>
+ <label class="option"><input type="radio" name="q10" value="c" /><span class="option-text">c) L'<strong>environnement</strong>, et lui seul. La méthode est celle de la semaine 5, avec son tampon de rejeu, son réseau cible et sa politique <em>ε</em>-gloutonne, appliquée séparément à chaque agent avec sa propre observation, sa propre action et sa propre récompense. Ce qui change est la façon de parler au monde (une réinitialisation qui rend un seul dictionnaire, un pas qui rend cinq dictionnaires indexés par un identifiant d'agent), la façon de construire l'observation d'un agent (égocentrée et relative au groupe, l'agent au centre de sa fenêtre), et le fait que le <strong>nombre d'agents vivants porte un indice de temps</strong> : un agent mort disparaît de tous les dictionnaires et l'épisode continue sans lui</span></label>
+ <label class="option"><input type="radio" name="q10" value="d" /><span class="option-text">d) Les deux à la fois, et c'est ce qui rend l'exercice coûteux. Une politique partagée par un groupe est déjà une modification de la méthode, puisqu'un seul jeu de poids reçoit les données de quarante agents au lieu d'un, et l'environnement change de signature par-dessus. Rien de la semaine 5 n'est réutilisable tel quel</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="b">
+ <div class="question-text">11. Dans la configuration où une attaque solitaire n'a <strong>aucun effet</strong>, les tigres finissent par chasser à deux. Qu'est-ce que cela établit, exactement ?</div>
+ <label class="option"><input type="radio" name="q11" value="a" /><span class="option-text">a) Qu'une méthode à un seul agent apprend la collaboration dès que la récompense est partagée à l'intérieur d'un groupe. Ici, ce qu'un tigre reçoit dépend du succès d'un autre tigre, donc la perte contient implicitement un terme de coordination, et c'est ce terme implicite qui produit les couples</span></label>
+ <label class="option"><input type="radio" name="q11" value="b" /><span class="option-text">b) <strong>Deux énoncés de statut très différent, et il faut les tenir séparés.</strong> Le premier est structurel et certain : la règle rendant une attaque isolée sans effet, un tigre seul <em>ne peut physiquement pas</em> se nourrir, donc toute chasse réussie est par définition l'œuvre de deux tigres simultanés, et cette phrase se déduit de la configuration sans rien observer. Le second est comportemental : que la politique apprise ait effectivement trouvé le couple est rapporté d'un <strong>enregistrement d'un épisode</strong>, et non d'un compteur de couples ni d'une statistique sur mille épisodes. La méthode d'apprentissage, elle, est restée celle de la semaine 5, sans communication entre agents ni terme de coordination : la question qui tranche est toujours « un agent seul pouvait-il réussir ? », et si la réponse est non, le comportement est dans la conception du problème</span></label>
+ <label class="option"><input type="radio" name="q11" value="c" /><span class="option-text">c) Que le comportement émergent apparaît dès qu'un environnement est partagé par assez d'agents, comme dans l'expérience de cache-cache où des agents ont construit une barrière avec les objets du décor, puis appris à passer par-dessus avec un trampoline. L'échelle diffère, le mécanisme est le même, et la chasse en couple en est la version miniature</span></label>
+ <label class="option"><input type="radio" name="q11" value="d" /><span class="option-text">d) Que la configuration a changé la méthode. Une seule ligne de configuration suffit, mais elle modifie la fonction de récompense du processus, donc l'objectif optimisé, donc l'algorithme qui l'optimise : c'est la démonstration que l'environnement et l'algorithme ne sont pas séparables, et que parler d'un algorithme « inchangé » n'a pas de sens ici</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <div class="question" data-correct="d">
+ <div class="question-text">12. Vous entraînez les <strong>deux groupes en même temps</strong> : les courbes de récompense de test des tigres et des cerfs montent, descendent, et ne vont nulle part. En quoi ce phénomène diffère-t-il de la cible qui se déplace de la semaine 5 ?</div>
+ <label class="option"><input type="radio" name="q12" value="a" /><span class="option-text">a) Il n'en diffère pas. Dans les deux cas la cible bouge parce que des poids bougent, et la parade est la même : figer la cible pendant quelques milliers de pas. Il suffit donc de figer le réseau du groupe adverse exactement comme le réseau cible de la semaine 5 fige le vôtre, et les deux courbes retrouvent une tendance</span></label>
+ <label class="option"><input type="radio" name="q12" value="b" /><span class="option-text">b) Il n'en diffère que par l'amplitude. La triade fatale de la semaine 5 déplaçait la cible d'une petite quantité à chaque mise à jour, alors que deux groupes qui apprennent la déplacent par grands écarts. Le remède est donc de même nature, simplement plus énergique : espacer davantage les synchronisations et réduire les deux pas d'apprentissage</span></label>
+ <label class="option"><input type="radio" name="q12" value="c" /><span class="option-text">c) Il en diffère par la cause mais non par le remède. Comme en auto-jeu, le producteur des données change par paliers, à chaque fois que l'un des deux groupes prend l'avantage, et il suffit donc de mesurer autrement, par un tournoi entre points de contrôle des deux groupes, pour retrouver la tendance que les courbes de test ne montrent pas</span></label>
+ <label class="option"><input type="radio" name="q12" value="d" /><span class="option-text">d) La cible se déplace parce qu'un <strong>autre agent</strong>, avec ses propres poids et son propre optimiseur, apprend en même temps. La dynamique perçue par un agent dépend de l'action jointe, donc des politiques des autres ; si celles-ci sont mises à jour, le problème résolu au pas suivant n'est plus celui du pas courant, et la stationnarité qu'exige la définition de la semaine 1 est violée. C'est la <strong>non-stationnarité</strong>, et aucun réseau cible ne peut la figer, puisque ce qui bouge n'est pas dans vos poids. La semaine 5 avait une cible d'amorçage calculée avec les poids que l'on met à jour, ce qu'un réseau cible fige localement : même signature sur un graphique, mécanismes incomparables</span></label>
+ <div class="feedback"></div>
+ </div>
+
+ <button type="button" id="submit-all" onclick="submitQuiz()">Valider mes réponses</button>
+</form>
+
+<div class="score-box" id="score-box">
+ <h2 id="score-text"></h2>
+ <p id="score-msg"></p>
+ <button class="btn-reset" onclick="resetQuiz()"> Recommencer</button>
+</div>
+
+<script>
+const explanations = {
+ q1: "Un modèle achète deux choses, et la semaine vous demande de refuser la troisième avant même de l'avoir entendue. La première est l'efficacité d'échantillon : un modèle réduit la dépendance à l'environnement réel, et cette réduction n'exige pas que le modèle soit bon, puisque même un modèle imparfait absorbe une partie du travail d'essai et d'erreur. L'argument historique est celui de la robotique, très concret : un robot coûte cher, il s'use, il casse, et le nombre d'échantillons qu'on peut en tirer est borné par la physique et non par la patience. La seconde est la transférabilité entre objectifs : un modèle décrit la dynamique du système, la dynamique ne dépend pas de ce que vous voulez obtenir, et un même modèle sert donc plusieurs buts, là où une politique entraînée à poser un objet sur une étagère ne sait rien faire d'autre. La réponse (a) encode la confusion la plus naturelle, et elle est fausse : un modèle ne supprime pas le besoin d'explorer, il déplace l'exploration à l'intérieur du modèle. La recherche de la section 12.3 passe l'essentiel de son code à arbitrer entre exploiter la valeur observée et visiter une arête peu vue, et la semaine 11 reste donc entièrement en vigueur. La réponse (c) prête au modèle une propriété de la politique : rien n'empêche une recherche d'être rendue aléatoire, et elle l'est pendant l'auto-jeu, par la température des premiers coups et par le bruit de Dirichlet à la racine. La réponse (d) est la promesse la plus séduisante, et la section 12.6 lui oppose un contre-exemple cinglant : l'état caché du modèle appris est un vecteur de soixante-quatre nombres que personne n'interprète, ni vous ni qui l'a entraîné. Gardez aussi en tête le prix, annoncé avant la facture : plus de réseaux à entraîner, un entraînement plus long, et des résultats possiblement moins bons, ce que la section 12.8 mesure sans rien embellir.",
+ q2: "Trois nombres par arête, et c'est tout ce qu'une recherche mémorise : une probabilité a priori fournie par la tête de politique, un comptage de visites, et une valeur. Les deux premiers se lisent sans piège ; le troisième change de sens par rapport à tout ce que vous avez vu depuis la semaine 4, et c'est la confusion la plus coûteuse de la semaine. Dans un arbre de recherche, cette valeur est une statistique de recherche : une moyenne empirique locale, calculée sur les quelques dizaines de valeurs remontées à travers cette arête pendant cette recherche-ci, et effacée quand la recherche s'achève. Elle n'estime aucune politique fixée, puisque la politique de descente change à chaque visite. La réponse (b) est exactement cette confusion, et il faut l'avoir refusée une fois pour lire la suite sans effort. La réponse (c) est à moitié vraie, et c'est ce qui en fait une bonne erreur : la somme des valeurs remontées existe bien, le code la garde explicitement pour mettre la moyenne à jour sans la recalculer, on accumule la somme, on incrémente le compteur, on divise. Mais la probabilité a priori est bien une statistique d'arête : elle est écrite dans le nœud au moment de sa création, avec le comptage à zéro et la valeur à zéro, et elle n'est plus redemandée ensuite. La réponse (a) confond la phase d'évaluation avec une statistique accumulée : la tête de valeur n'est consultée qu'une fois, au moment où la feuille est étendue, et ce qu'elle rend part immédiatement dans la remontée. Deux détails à ranger avec le reste : les comptages de la racine, et eux seuls, deviennent la distribution sur les actions à la fin de la recherche, pas les valeurs et pas les probabilités a priori ; et les états terminaux ne sont jamais rangés dans les statistiques, de sorte qu'ils restent toujours des feuilles et qu'une partie finie est réévaluée par son résultat réel plutôt que par une moyenne mémorisée.",
+ q3: "Voici le piège de transcription de la semaine, et il est dangereux parce qu'il retire de l'exploration en silence. La prime d'exploration a trois propriétés voulues : proportionnelle à l'avis du réseau, décroissante quand l'arête est visitée, et croissante quand le nœud dans son ensemble est beaucoup visité. Cette troisième propriété est portée par la racine carrée du total des visites du nœud, et son rôle est de dire que plus on a dépensé de visites dans un nœud, plus il serait absurde de n'avoir jamais essayé une de ses branches. Sans elle, la prime décroît en 1 sur le comptage de l'arête et rien ne la pousse en retour : la sélection devient un argmax pur sur la valeur, la recherche creuse la première branche chanceuse, elle continue de tourner et elle ne cherche plus. La réponse (d) est la plus instructive à écarter, parce que sa prémisse est vraie : ce facteur est bien le même pour toutes les arêtes d'un même nœud. Mais l'utilité n'est pas la prime, c'est une somme de deux termes, et mettre à l'échelle un seul des deux change lequel décide. Divisez la prime par dix et c'est la valeur qui tranche ; multipliez-la par dix et c'est la prime. L'argmax n'est invariant que par une transformation croissante appliquée à l'utilité entière, jamais à l'un de ses morceaux. La réponse (b) inverse numérateur et dénominateur : ce qui fait fondre la prime est le comptage de l'arête, au dénominateur, et il est resté en place. La réponse (c) propose une compensation qui n'existe pas : le facteur retiré varie pendant la recherche et varie d'un nœud à l'autre, alors qu'une constante d'exploration est, par définition, constante. Aucune valeur de constante ne restitue un facteur variable. Le réflexe à garder dépasse cette formule : quand vous retirez un terme d'une utilité, demandez-vous s'il était une échelle ou une dépendance, parce qu'une échelle se rattrape et une dépendance ne se rattrape pas.",
+ q4: "Le signe est le détail que l'on rate en écrivant son premier MCTS, et il mérite la précision qu'il demande. La valeur d'une position est toujours exprimée du point de vue du joueur qui doit y jouer : une position excellente pour moi est, pour mon adversaire, le même nombre avec le signe opposé. Comme la remontée change de joueur à chaque niveau, elle doit changer de signe à chaque niveau. C'est minimax, écrit en accumulation plutôt qu'en alternance de minimums et de maximums. Sans l'inversion, les deux camps maximisent la même quantité : l'arbre décrit un monde où l'adversaire coopère, et la recherche recommande avec assurance des coups qui ne survivent pas au premier joueur attentif. La réponse (a) suppose que les erreurs se compensent, et c'est l'erreur de raisonnement à éviter : elles sont systématiques, pas de moyenne nulle. Une arête dont les enfants sont bons pour l'adversaire accumule des valeurs hautes à chaque passage, donc ces arêtes attirent les visites et les comptages de la racine désignent un coup précis, le mauvais. Une recherche cassée de cette façon est bien plus nuisible qu'une recherche aléatoire, parce qu'elle a l'air décidée. La réponse (b) part d'un fait vrai et en tire l'inverse de la bonne conclusion : les deux plans d'entrée, « mes jetons, ses jetons », rendent le réseau indépendant du joueur, ce qui est exactement la raison pour laquelle la valeur rendue est celle du joueur courant, et donc la raison pour laquelle le signe doit s'inverser en remontant. La symétrie de l'entrée n'annule rien, elle institue le point de vue. La réponse (d) attrape la moitié du mécanisme : il y a bien une inversion initiale, puisque la valeur rendue par la feuille appartient au joueur qui doit jouer dans la feuille, c'est-à-dire à l'adversaire de celui qui a joué la dernière arête, et c'est pourquoi le code commence par retourner le signe. Mais cette inversion initiale ne dispense pas de l'inversion par niveau, et un code qui n'a que la première est faux à partir du deuxième niveau.",
+ q5: "C'est la section la plus transposable de la semaine, et son idée unique vous servira chaque fois que vous voudrez planifier dans quoi que ce soit. Une recherche ne parcourt pas une trajectoire, elle rejoue la même position dans des directions différentes : il lui faut donc un accès arbitraire au monde, quand l'interface standard n'offre qu'un accès en avant. Vous ne pouvez pas revenir en arrière, vous ne pouvez pas sauvegarder une position et y revenir, vous ne pouvez pas poser un état arbitraire. D'où la conséquence pratique de la section 12.4 : le modèle du jeu est écrit à la main, comme un module de fonctions pures, sans état interne et sans objet d'environnement. La question à poser avant toute considération d'algorithme est donc : puis-je replacer ce monde dans un état de mon choix ? La réponse (a) nomme une contrainte réelle et la place au mauvais rang. La mémoire est bien la ressource qui limite la qualité du résultat, situation inhabituelle dans ce cours, et c'est pour cela qu'une position complète tient dans un seul mot machine. Mais c'est une conséquence de la décision de chercher, pas l'obstacle qui l'empêche. La réponse (b) décrit un coût, pas une impossibilité : le laboratoire de la semaine descend précisément à dix recherches par coup, en traitant huit feuilles par passage de réseau, et la méthode continue de fonctionner, moins bien. Un budget se négocie ; une interface, non. La réponse (d) nomme une différence vraie et ne la rattache pas au bon moment de la semaine : la première méthode remonte bien un seul résultat de partie, et c'est la seconde moitié de la semaine qui généralise la remontée en accumulant une récompense à chaque niveau. Cela ne débloque toujours pas l'interface. Et c'est exactement ce que la seconde méthode règle autrement : si l'on ne peut pas replacer le monde dans un état choisi, on cesse de le lui demander et l'on fait la recherche dans un modèle appris.",
+ q6: "C'est la chose la plus importante de la section 12.5, et peut-être de la semaine : en auto-jeu, la courbe de perte ne contient aucune information sur le progrès de l'agent, et son absence de tendance est le comportement attendu. Depuis la semaine 2, vous regardez descendre des pertes, et cela a un sens parce que la cible est fixe. Ici la cible est fabriquée par le meilleur réseau, et chaque promotion déplace le producteur des données : la distribution des positions change, les politiques à imiter changent, les résultats à prédire changent. Vous ne descendez pas une fonction, vous poursuivez une cible qui bouge parce que vous progressez. Le taux de victoire a le même défaut : vous mesurez l'apprenti contre une version de lui-même, et l'adversaire est remis à niveau à chaque promotion. Le progrès existe, il est mesurable, et il n'est pas dans ces deux courbes : un tournoi entre points de contrôle le montre, la qualité de jeu monte avec l'indice du point de contrôle. La réponse (b) arrive à un fait vrai par un chemin impossible. Le pas d'apprentissage compte, et c'est bien le plus faible des deux qui donne une progression plus régulière et neuf des dix premiers d'un tournoi croisé. Mais ce constat vient du tournoi, pas de la perte, et c'est tout le propos : une perte plate ne vous autorise aucun diagnostic d'hyperparamètre. La réponse (c) retourne le rôle de la porte. À cinquante et un pour cent sur cent parties, l'écart est dans le bruit et vous promouvriez un réseau équivalent la moitié du temps ; soixante pour cent est un seuil de décision statistique, assez large pour que la promotion signifie quelque chose et assez bas pour que le système avance. Abaisser la porte ne donnerait pas une tendance, seulement des promotions sans contenu. La réponse (d) nomme un mécanisme réel et en déduit le contraire de la bonne conclusion : le bruit de Dirichlet diversifie bien les parties, mais il est injecté à la racine seulement, car un bruit injecté à chaque niveau détruirait la cohérence de la descente au lieu de diversifier les parties. Retenez la généralisation : quand l'adversaire est une copie de vous-même, il n'y a aucun objectif fixe à descendre. C'est la première fois que ce cours vous demande de ne pas diagnostiquer une perte.",
+ q7: "Trois réseaux remplacent le simulateur, et chacun rend précisément ce dont la recherche a besoin : un état caché à la racine, une récompense et un état caché suivant à chaque descente, une politique et une valeur à chaque nœud. La recherche, elle, ne change pas : quatre phases, trois statistiques par arête, une utilité à maximiser, un signe qui s'inverse, à cela près que les nœuds contiennent des états cachés au lieu de positions, et que la méthode d'origine fait huit cents recherches par coup. Le point à retenir est l'absence de contrainte : il n'existe aucun terme de perte qui compare l'état caché à l'état réel du monde, aucune reconstruction, aucune supervision. L'état caché est seulement le vecteur qui permet aux deux autres réseaux de bien prédire. Les réponses (a) et (b) inventent toutes les deux la même chose, une perte de reconstruction, et c'est l'ajout le plus naturel et le plus faux de la section : la méthode est libérée de tout besoin de comprendre le monde, et c'est précisément ce qui la rend applicable là où personne ne peut écrire les règles. La réponse (b) a de plus un argument plausible, la dérive de l'état caché en profondeur, et la vraie réponse à cette inquiétude est ailleurs, dans l'entraînement sur un déroulement de cinq pas. La réponse (c) range au mauvais endroit une liste exacte : les coups légaux, l'état suivant et le résultat final sont bien les trois services que le modèle de jeu écrit à la main fournissait, et c'est la liste de ce qui disparaît, pas celle de ce que les trois réseaux rendent. Deux précisions de vocabulaire pour finir. « État caché » n'est pas « couche cachée » : la couche cachée de la semaine 2 est une couche interne, l'état caché de cette semaine est la sortie complète d'un réseau, traitée comme l'état d'un modèle du monde. Et l'opération de la quatrième phase s'appelle remontée dans ce cours, jamais rétropropagation, qui reste réservée au calcul des gradients de la semaine 2.",
+ q8: "C'est le seul endroit de toute la méthode où le modèle appris est effectivement entraîné, et il n'est jamais confronté à un état réel. Relisez la chaîne : le réseau de représentation est appliqué une fois sur l'observation, puis cinq fois la paire prédiction et dynamique, et chaque pas produit trois cibles. Nulle part on ne compare l'état caché produit par la dynamique à l'état réel du jeu au pas suivant, nulle part on ne demande une reconstruction. Le modèle n'est tenu que par ses conséquences : si les politiques, les valeurs et les récompenses prédites sont justes, l'état caché est bon, quoi qu'il contienne. L'idée est puissante et dangereuse en même temps, et les deux faces vont ensemble : puissante parce qu'elle libère la méthode de tout besoin de comprendre le monde, dangereuse parce que vous n'avez aucun diagnostic disponible, l'état interne ne voulant rien dire. La réponse (a) invente la comparaison à l'état réel, qui est exactement ce que la méthode refuse. La réponse (c) supprime deux des trois cibles et se trompe sur la raison : la cible de valeur est la somme actualisée des récompenses jusqu'à la fin de l'épisode, qui existe parfaitement dans un jeu qui ne paie qu'à la fin, et la tête de récompense est entraînée même quand la récompense immédiate est presque toujours nulle, puisque c'est elle qui rendra la méthode utilisable sur un environnement qui paie à chaque pas. La réponse (d) confond le déroulement avec un simple chemin de gradient : les cinq pas ont chacun leurs trois cibles, et la pondération, poids entier au premier pas et un demi aux suivants, ne les supprime pas, elle les atténue. Deux avertissements à emporter du même endroit. Cette pondération à un demi n'est pas la mise à l'échelle du gradient de la méthode d'origine : une mise à l'échelle placée dans la récurrence se compose à travers les pas, une constante appliquée aux pertes les atténue toutes de la même quantité. Et le lot d'entraînement n'est pas un tenseur mais une liste de tenseurs, un par pas du déroulement, parce qu'au pas considéré les actions et les cibles diffèrent d'un élément du lot à l'autre.",
+ q9: "Voici la largeur exacte de ce que l'on peut conclure, et elle est étroite : une mise en œuvre, un petit jeu, un jeu d'hyperparamètres non réglés, et pas de convergence. Voilà tout. La méthode, elle, détient l'état de l'art sur cinquante-sept jeux Atari. Les deux énoncés ne portent pas sur le même objet, l'un sur une reproduction et l'autre sur une méthode, et c'est l'écart entre les deux qui est la leçon de la section. La réponse (b) est le piège principal, parce qu'elle s'appuie sur une phrase vraie de la section 12.1 : le prix est bien annoncé d'avance, plus de réseaux, entraînement plus long, résultats possiblement moins bons. Mais un prix annoncé n'est pas une propriété démontrée par cette mesure. Ce que la mesure établit est qu'un dispositif à plus de pièces mobiles offre plus d'occasions de mal régler quelque chose : trois réseaux au lieu d'un, une récompense à prédire, un déroulement à construire, une pondération à choisir. La généralité se paie en surface d'erreur, et ce n'est pas la même affirmation que « cette méthode est moins bonne ». La réponse (c) importe un diagnostic d'apprentissage supervisé qui ne colle pas : il n'y a pas d'ensemble de validation ici, les données sont régénérées en permanence par l'agent lui-même, et les courbes de perte n'ont de toute façon aucune tendance, donc rien ne ressemble à l'écart caractéristique entre entraînement et validation. La réponse (d) surcorrige. Un résultat négatif qui donne la taille du problème, le temps de calcul dépensé et ce qui a été fait du réglage des hyperparamètres est utilisable, et c'est exactement pour cela qu'on le rapporte ; c'est un résultat négatif qui cache ces trois informations qui n'est pas un résultat. C'est le second rapport de ce genre en trois semaines, et le réflexe de lecture est le même qu'alors : cherchez ces trois informations avant de vous former une opinion.",
+ q10: "La révélation la plus désarmante de la semaine : il n'y a pas d'algorithme multi-agent ici. La méthode est celle de la semaine 5, appliquée à chaque agent séparément, avec sa propre observation, sa propre action et sa propre récompense, et la même erreur quadratique. Ce qui devient multi-agent est l'environnement, et lui seul : la façon de lui parler, la façon de ranger ce qu'il renvoie, la façon de construire l'observation d'un agent. Tenez les deux faces de cette phrase. La leçon : un problème multi-agent peut souvent être ramené à un problème d'ingénierie d'environnement, ce qui est une très bonne nouvelle quand on veut commencer. Le plafond : rien de ce que vous voyez ici ne fait coopérer des agents par construction. La réponse (a) décrit des méthodes qui existent réellement, critique centralisé, exécution décentralisée, valeurs jointes ou factorisées, et la semaine n'en montre aucune, ce qu'elle dit explicitement dans son inventaire de lacunes. La réponse (b) a une prémisse vraie et une conclusion fausse : c'est bien l'action jointe que l'environnement reçoit, et c'est précisément le point où la définition de la semaine 1 se fissure, puisqu'un processus de décision markovien reçoit une action. Mais rien ici n'apprend une politique sur le produit des espaces d'actions, qui serait d'ailleurs ingérable pour deux cent quarante-quatre agents. La réponse (d) prend une simplification pour une modification de méthode. Une politique partagée se paie en spécialisation, il n'y aura pas un tigre rabatteur et un tigre embusqué puisque les deux sont littéralement le même réseau, et elle rapporte un entraînement au lieu de quarante ; la méthode d'apprentissage, elle, ne change pas d'une ligne. Retenez enfin les trois contraintes qu'impose une population volatile, parce qu'aucune n'a d'analogue dans onze semaines de code : on fige la liste des agents avant le pas, on n'y suppose aucune clé encore présente après le pas, et la boucle d'épisode se termine sur un compte d'agents vivants plutôt que sur un drapeau. C'est là que le nombre d'agents gagne son indice de temps.",
+ q11: "C'est la partie de la semaine où l'on se raconte le plus volontiers des histoires, et deux énoncés doivent y rester séparés. Le premier est structurel et certain : sous cette configuration, une attaque isolée n'a aucun effet, donc un tigre seul ne peut pas se nourrir, donc toute chasse réussie est l'œuvre de deux tigres simultanés. Cette phrase se déduit de la règle, sans observer quoi que ce soit. Le second est comportemental : que la politique apprise ait trouvé le couple est rapporté d'un enregistrement d'un épisode, pas d'un compteur ni d'une statistique, et la distinction mérite d'être tenue à voix haute. Ce qui a produit les couples est la structure de la récompense : un environnement où manger seul est impossible n'a pas d'autre solution que le couple, et n'importe quelle méthode qui apprend à manger apprendra donc à se mettre en couple. La réponse (a) invente une récompense partagée qui n'existe pas : chaque agent reçoit un point par pas de temps vécu, la récompense d'un tigre ne dit rien de la chasse, et ce qui l'oblige à chasser est son métabolisme, un demi-point de santé par pas sur dix de santé initiale. Aucun terme de la perte ne lie deux agents. La réponse (c) emprunte à l'exemple de cache-cache, qui est dans la semaine pour poser le plafond de ce qu'on sait obtenir, et non pour décrire cette expérience : le comportement obtenu ici est peu profond, et l'enregistrement de la dernière expérience montre des cerfs qui se contentent tous de se déplacer vers la gauche. La réponse (d) confond changer le problème et changer la méthode. Le seul objet modifié est la configuration de l'environnement : aucune ligne de la boucle d'entraînement, du réseau ou de la politique ne bouge, et c'est bien ce qui rend l'expérience démonstrative. La question à poser devant toute annonce de collaboration émergente est donc unique et elle suffit : un agent seul pouvait-il réussir ? Si la réponse est non, le comportement est dans la conception du problème, pas dans l'algorithme.",
+ q12: "Voilà l'apport principal de la semaine au vocabulaire du cours, et il nomme un phénomène que l'expérience démontre deux fois. La non-stationnarité est le fait qu'un agent optimise contre un environnement qui change parce qu'un autre agent y apprend. La dynamique perçue par un agent dépend de l'action jointe, donc des politiques des autres ; si celles-ci sont mises à jour, le problème résolu au pas suivant n'est pas celui du pas courant, et il n'y a pas d'optimum fixe vers lequel converger, seulement deux politiques qui se poursuivent. La signature est une courbe sans tendance. La réponse (a) est l'erreur à ne pas commettre, parce qu'elle conclut à un remède : aucun réseau cible ne peut figer cela, puisque ce qui bouge n'est pas dans vos poids mais dans ceux d'un autre optimiseur. Figer le réseau adverse serait possible et changerait le problème, puisque ce serait revenir au cas d'un seul groupe qui apprend, celui où les tigres atteignent soixante-seize pour cent des cerfs. La réponse (b) réduit la différence à une amplitude, alors que les deux mécanismes sont de nature distincte : dans la semaine 5, la cible d'amorçage se déplaçait parce qu'elle était calculée avec les poids que l'on met à jour, et le réseau cible existe précisément pour la figer quelques milliers de pas. Ici, rien de ce que vous contrôlez ne porte la cause. La réponse (c) nomme un troisième mécanisme réel, et c'est la meilleure erreur du lot : en auto-jeu, le producteur des données change effectivement par paliers, à chaque promotion, et entre deux promotions l'adversaire est un réseau figé, donc une partie stationnaire de l'environnement, ce qui en fait un problème à un seul agent. Le tournoi entre points de contrôle répond à ce cas. Il ne répond pas à celui-ci, où les deux groupes bougent en même temps et où il n'existe aucune échelle commune pour les comparer. Terminez par le détail mécanique, qui est le plus instructif de l'expérience : ce sont les cerfs qui gagnent, parce que les deux groupes se déplacent à la même vitesse. Un cerf n'a donc pas besoin d'être malin, il a besoin de ne jamais s'arrêter, et le tigre meurt de faim en le suivant. La même courbe plate peut avoir deux causes, et une seule est de votre ressort."
+};
+
+function submitQuiz() {
+ const questions = document.querySelectorAll('.question');
+ let score = 0;
+ let answered = 0;
+
+ questions.forEach((q, i) => {
+ const name = `q${i + 1}`;
+ const correct = q.dataset.correct;
+ const selected = q.querySelector(`input[name="${name}"]:checked`);
+ const feedback = q.querySelector('.feedback');
+
+ if (selected) {
+ answered++;
+ feedback.style.display = 'block';
+ if (selected.value === correct) {
+ score++;
+ feedback.className = 'feedback correct';
+ feedback.textContent = ' Correct ! ' + explanations[name];
+ } else {
+ feedback.className = 'feedback incorrect';
+ feedback.textContent = ` Incorrect. La bonne réponse est (${correct.toUpperCase()}). ` + explanations[name];
+ }
+ }
+ });
+
+ if (answered < questions.length) {
+ alert('Veuillez répondre à toutes les questions avant de valider.');
+ return;
+ }
+
+ const scoreBox = document.getElementById('score-box');
+ scoreBox.style.display = 'block';
+ document.getElementById('score-text').textContent = `${score} / ${questions.length}`;
+ const pct = Math.round((score / questions.length) * 100);
+ let msg = '';
+ if (pct >= 90) msg = ' Excellent ! Vous maîtrisez les fondements du cours.';
+ else if (pct >= 70) msg = ' Très bien ! Quelques révisions sur les points incorrects et vous serez prêt·e.';
+ else if (pct >= 50) msg = ' Pas mal ! Relisez les sections correspondantes avant de continuer.';
+ else msg = ' Prenez le temps de revoir le cours, puis réessayez.';
+ document.getElementById('score-msg').textContent = msg;
+ scoreBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+ document.getElementById('quiz-form').reset();
+ document.querySelectorAll('.feedback').forEach(f => { f.style.display = 'none'; f.textContent = ''; });
+ document.getElementById('score-box').style.display = 'none';
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
