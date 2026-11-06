@@ -1,0 +1,1 @@
+Figure 7-2. La même boucle, coupée aux deux seuls endroits où elle communiquait : un processus de jeu et un processus d'entraînement, reliés par une file d'attente, et un réseau partagé qui reste à l'extérieur des deux. Même convention de traits que la figure précédente.

@@ -1,0 +1,1 @@
+Figure 7-1. Une itération d'entraînement, en un seul fil : on demande les actions, on les joue, on verse dans le tampon, on échantillonne, on apprend. Les traits pleins sont des flux de données, les traits pointillés des usages du réseau, inférence d'un côté et entraînement de l'autre. Les deux étapes du haut ne touchent celles du bas que par le tampon et par le réseau.
