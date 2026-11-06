@@ -1,0 +1,1 @@
+Figure 5-4. Deux situations de Pong qui appellent des actions opposées, et qu'un agent ne voyant qu'une trame à la fois ne peut pas distinguer : une image fixe dit où est la balle, jamais où elle va.

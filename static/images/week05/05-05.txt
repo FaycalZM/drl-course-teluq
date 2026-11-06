@@ -1,0 +1,1 @@
+Figure 5-5. Les formes des tenseurs qui traversent le calcul de la perte : la sortie du réseau, les actions réellement jouées, les valeurs Q sélectionnées, puis le résultat du prélèvement ligne par ligne.
