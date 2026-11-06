@@ -1,0 +1,1 @@
+Figure 9-2. Le robot quadrupède de cette semaine, dans son simulateur. Vingt-huit nombres en entrée, huit moteurs en sortie, et une récompense qui paie la distance parcourue et facture l'énergie dépensée : rien ici ne s'énumère.
