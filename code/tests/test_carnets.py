@@ -99,19 +99,24 @@ def test_aucun_carnet_n_est_livre_avec_des_sorties(carnets):
 
 
 def test_chaque_trou_annonce_est_un_trou_reel(carnets):
-    """« À COMPLÉTER » doit accompagner un `...`, jamais du code deja ecrit.
+    """Une cellule qui annonce « À COMPLÉTER » doit contenir un `...`.
 
-    Autrement le commentaire ment : l'etudiant croit avoir un exercice et la cellule
-    s'execute sans rien lui demander.
+    Sinon le commentaire ment : la cellule s'execute sans rien demander, et
+    l'etudiant la croit faite. L'invariant est au niveau de la **cellule** et non
+    de la ligne : une consigne peut porter sur plusieurs lignes a ecrire, et le
+    `...` qui fait echouer la cellule vit alors ailleurs dans la meme cellule.
     """
     fautes = []
     for chemin, nb in carnets:
         for i, cellule in enumerate(nb["cells"]):
             if cellule["cell_type"] != "code":
                 continue
-            for ligne in "".join(cellule["source"]).splitlines():
-                if "À COMPLÉTER" in ligne and "..." not in ligne:
-                    fautes.append(f"{chemin.name} cellule {i} : {ligne.strip()[:70]}")
+            texte = "".join(cellule["source"])
+            if "À COMPLÉTER" in texte and "..." not in texte:
+                marqueur = next(
+                    ligne.strip() for ligne in texte.splitlines() if "À COMPLÉTER" in ligne
+                )
+                fautes.append(f"{chemin.name} cellule {i} : {marqueur[:70]}")
     assert not fautes, "\n".join(fautes)
 
 

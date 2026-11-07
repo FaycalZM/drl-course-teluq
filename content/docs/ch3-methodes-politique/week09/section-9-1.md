@@ -127,6 +127,6 @@ Un mot d'outillage, parce qu'il a des conséquences pratiques immédiates pour v
 {{% comment %}}SOURCE: COURSE-PLAN-Lapan.md §9.2{{% /comment %}}
 
 > [!NOTE]
- **Nommer l'environnement exactement, et pas « le pendule ».** Il existe dans l'écosystème au moins deux pendules : `Pendulum-v1`, du contrôle classique, qui demande de redresser puis de maintenir une tige à partir d'une position quelconque, et `InvertedPendulum-v1`, qui est un environnement MuJoCo. Ils n'ont ni la même dynamique, ni la même échelle de récompense, ni la même difficulté. Toutes les mesures de cette semaine se font sur `Pendulum-v1`, et je donnerai en section 9.6 la raison expérimentale, chiffrée, pour laquelle le second serait un très mauvais choix.
+ **Nommer l'environnement exactement, et pas « le pendule ».** Il existe dans l'écosystème au moins deux pendules : `Pendulum-v1`, du contrôle classique, qui demande de redresser puis de maintenir une tige à partir d'une position quelconque, et `InvertedPendulum-v5`, qui est un environnement MuJoCo. Ils n'ont ni la même dynamique, ni la même échelle de récompense, ni la même difficulté. Toutes les mesures de cette semaine se font sur `Pendulum-v1`, et je donnerai en section 9.6 la raison expérimentale, chiffrée, pour laquelle le second serait un très mauvais choix.
 
 ---

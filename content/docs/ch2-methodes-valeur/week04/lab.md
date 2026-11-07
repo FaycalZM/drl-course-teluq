@@ -81,7 +81,7 @@ assert agent.valeur_action(15, 0) == 0.0 or agent.transitions[(15, 0)]
 
 **Objectif.** Rendre **visible** la différence entre sur politique et hors politique, et savoir l'expliquer. FrozenLake ne peut pas le faire : son glissement mélange les deux effets, et sa récompense unique à l'objectif ne laisse rien apparaître. La falaise, elle, le montre en une figure.
 
-**Écrivez l'environnement vous-même.** Il existe sous le nom `CliffWalking-v0` dans la famille des environnements en texte de Gymnasium, mais une grille de 4 × 12 tient en vingt lignes de Python et vous apprendrez davantage à l'écrire qu'à l'importer. Voici le squelette.
+**Écrivez l'environnement vous-même.** Il existe sous le nom `CliffWalking-v1` dans la famille des environnements en texte de Gymnasium, mais une grille de 4 × 12 tient en vingt lignes de Python et vous apprendrez davantage à l'écrire qu'à l'importer. Voici le squelette.
 
 ```python
 class Falaise:
