@@ -69,7 +69,7 @@ Cet agent est obtus : il appelle `env.observe()` puis **jette l'observation**. C
 
 {{% comment %}}SOURCE: LAPAN ch.2 p.61{{% /comment %}}
 
-{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-01.ipynb" label="Exécuter l'agent-jouet dans Colab" >}}
+{{< colab url="TODO" label="Exécuter l'agent-jouet dans Colab" >}}
 
 La morale de la section : remplacez cet environnement par un modèle physique complexe et cet agent par un grand réseau de neurones, **le motif de base ne changera pas**. À chaque pas, l'agent prend des observations, fait ses calculs, choisit une action ; le résultat est une récompense et une nouvelle observation. Tout ce qui suit (DQN, A2C, PPO, SAC) est une façon de plus en plus sophistiquée de remplir la ligne « décider ».
 
