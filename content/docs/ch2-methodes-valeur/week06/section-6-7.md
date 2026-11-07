@@ -59,8 +59,8 @@ L'indice et la valeur ne viennent plus du même bruit. La mise à jour complète
 
 $$
 Q_1(S_t,A_t) \;\leftarrow\; Q_1(S_t,A_t) + \alpha\Big[\,
- R_{t+1} + \gamma\,Q_2\big(S_{t+1},\, \argmax_{a} Q_1(S_{t+1},a)\big)
- - Q_1(S_t,A_t) \,\Big]
+ R_{t+1} + \gamma\,Q_2\big(S_{t+1},\, \argmax_{a} Q_1(S_{t+1},a)\big) -
+ Q_1(S_t,A_t) \,\Big]
 $$
 
 {{% comment %}}SOURCE: SB ch.6 éq. 6.10 p.158{{% /comment %}}

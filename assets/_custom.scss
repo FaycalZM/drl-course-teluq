@@ -1,0 +1,36 @@
+/*
+  SCI1070 — styles owned by this project.
+
+  This file shadows themes/hugo-book/assets/_custom.scss, which book.scss imports
+  after "markdown" and "shortcodes". The theme is never edited (see CLAUDE.md), so
+  every override lands here, and arriving last means these rules win on equal
+  specificity without needing !important.
+*/
+
+/*
+  Centre the Mermaid diagrams.
+
+  The theme renders {{< mermaid >}} as <pre class="mermaid">, so the diagram inherits
+  the code-block rule in _markdown.scss and sits flush left in its box. The six
+  diagrams in this course are figures, not code the reader types, so they belong on
+  the page's centre line like the bookfig images.
+
+  Mermaid is initialised with flowchart.useMaxWidth = true (themes/hugo-book/assets/
+  mermaid.json), which makes it put width="100%" on the <svg> and the diagram's
+  natural width in an inline style="max-width: …px". With display:block that is
+  exactly the shape auto inline margins centre: the used width collapses to
+  max-width whenever the column is wider, and the leftover space is split evenly.
+  A diagram wider than the column still fills it, so the rule costs nothing there.
+
+  text-align handles the other half: the raw graph source is visible in the <pre>
+  for the moment before mermaid.min.js replaces it, and it is also what remains if
+  the script fails to load.
+*/
+.markdown pre.mermaid {
+  text-align: center;
+
+  > svg {
+    display: block;
+    margin-inline: auto;
+  }
+}

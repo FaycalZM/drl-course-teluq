@@ -72,8 +72,8 @@ Ensuite, et je préfère vous le dire franchement : la théorie complète de ce 
 Premier algorithme de contrôle. On applique TD(0) à la table \(Q\) au lieu de la table \(V\), et la règle de mise à jour s'écrit directement.
 
 $$
-Q(S_t,A_t) \leftarrow Q(S_t,A_t)
-  + \alpha\big[\, R_{t+1} + \gamma\, Q(S_{t+1},A_{t+1}) - Q(S_t,A_t) \,\big]
+Q(S_t,A_t) \leftarrow Q(S_t,A_t) +
+  \alpha\big[\, R_{t+1} + \gamma\, Q(S_{t+1},A_{t+1}) - Q(S_t,A_t) \,\big]
 $$
 
 {{% comment %}}SOURCE: SB ch.6 éq. 6.7 p.151{{% /comment %}}
@@ -117,8 +117,8 @@ Pour chaque épisode :
 Second algorithme, et c'est celui qui donne son nom à la moitié du cours.
 
 $$
-Q(S_t,A_t) \leftarrow Q(S_t,A_t)
-  + \alpha\Big[\, R_{t+1} + \gamma \max_a Q(S_{t+1},a) - Q(S_t,A_t) \,\Big]
+Q(S_t,A_t) \leftarrow Q(S_t,A_t) +
+  \alpha\Big[\, R_{t+1} + \gamma \max_a Q(S_{t+1},a) - Q(S_t,A_t) \,\Big]
 $$
 
 {{% comment %}}SOURCE: SB ch.6 éq. 6.8 p.153{{% /comment %}}
