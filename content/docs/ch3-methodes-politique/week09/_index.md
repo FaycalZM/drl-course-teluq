@@ -225,7 +225,7 @@ de la mesure de §4.2. Saturation d'InvertedPendulum à 1000,00 pour six méthod
 
 LABORATOIRE. Ablation à cinq configurations plus trois « moins un », un seul programme et
 trois interrupteurs, protocole de la semaine 7 (§6.1-6.2). Pendulum-v1 nommé avec son
-identifiant exact, un couple dans [-2,2], et NON InvertedPendulum-v1 : correction du dossier
+identifiant exact, un couple dans [-2,2], et NON InvertedPendulum-v5 : correction du dossier
 reportée par la passe de lecture, tenue ici (Table 1 p.7). Volet B = la mesure de surestimation
 de §4.1 ramenée à l'échelle d'un carnet, ce qui est la route honnête retenue pour la lacune 2.
 Solution courte par la bibliothèque haut niveau, qui livre les deux bruits comme deux objets

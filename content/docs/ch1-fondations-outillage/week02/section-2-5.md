@@ -125,4 +125,4 @@ Voilà la table à laquelle revenir chaque fois qu'un symbole du cours vous para
 | \(\lambda\) | la force de la pénalité sur les poids | `weight_decay=` de l'optimiseur |
 | *(aucun)* | effacer les gradients avant le lot suivant | `optimizer.zero_grad()` |
 
-{{< colab url="TODO" label="Faire tourner la boucle en huit lignes dans Colab" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-02.ipynb" label="Faire tourner la boucle en huit lignes dans Colab" >}}

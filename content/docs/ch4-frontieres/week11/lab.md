@@ -26,7 +26,7 @@ Reprenez le fragment de la section 11.2, complétez-le, et reproduisez les trois
 2. Que devient ce comptage si vous portez la longueur d'épisode de 10 à 50 pas, tout le reste étant inchangé ? Dites **pourquoi** avant de lancer l'expérience, puis comparez votre prédiction au résultat.
 3. Que devient-il si vous passez de six états à dix ? C'est l'extrapolation de la section 11.2, et elle coûte un paramètre à changer.
 
-{{< colab url="TODO" label="Échauffement : River Swim, trois comptages et cinq graines" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-11.ipynb" label="Échauffement : River Swim, trois comptages et cinq graines" >}}
 
 ---
 
@@ -42,7 +42,7 @@ Reprenez le fragment de la section 11.2, complétez-le, et reproduisez les trois
 
 **Étape 4.** Rédigez trois phrases dans votre carnet : combien de fois le but a été atteint, ce que la position maximale a fait pendant l'entraînement, et à quel pas d'entraînement votre \(\varepsilon\) a cessé d'explorer. La troisième phrase est celle qui compte : c'est elle qui explique pourquoi l'échec est permanent et non seulement lent.
 
-{{< colab url="TODO" label="Volet A : réseau Q profond ε-glouton sur MountainCar-v0, et ses deux instruments" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-11.ipynb" label="Volet A : réseau Q profond ε-glouton sur MountainCar-v0, et ses deux instruments" >}}
 
 > [!NOTE]
  **Ce volet est le seul de tout le cours dont le résultat attendu est un échec, et je veux que vous le rapportiez comme une mesure.** Pas comme un problème à régler, pas comme un bogue à chercher : comme une mesure. Si après cent mille pas votre compteur d'atteintes du but affiche zéro, votre volet A est **réussi**. Et si par hasard il affiche un nombre non nul, c'est également un résultat intéressant et je veux que vous l'expliquiez : regardez votre graine, votre calendrier de \(\varepsilon\), et si vous n'avez pas par mégarde ajouté une récompense quelque part.
@@ -61,7 +61,7 @@ Reprenez le fragment de la section 11.2, complétez-le, et reproduisez les trois
 
 **Étape 4, et c'est le réglage à explorer.** Faites varier la **fréquence de tirage du bruit** : à chaque itération, puis une fois sur dix, puis une fois sur cent. Vous mesurez ici, directement, l'idée centrale de la section 11.3 : la **cohérence** de la politique de collecte. Prédisez le sens de l'effet avant de lancer, puis commentez l'écart.
 
-{{< colab url="TODO" label="Volet B : réseaux bruités contre calendrier de ε, et la fréquence de tirage du bruit" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-11.ipynb" label="Volet B : réseaux bruités contre calendrier de ε, et la fréquence de tirage du bruit" >}}
 
 ---
 
@@ -79,7 +79,7 @@ Reprenez le fragment de la section 11.2, complétez-le, et reproduisez les trois
 
 **Étape 5.** Et une dernière mesure, qui est le volet C en une image : tracez la **perte du prédicteur** le long de l'entraînement, et marquez sur le même axe le moment de la première atteinte du but. Dites ce que vous voyez. La section 11.6 annonce une croissance de cette perte au moment où le comportement change : vérifiez si cela se produit chez vous, et dites-le franchement si ce n'est pas le cas.
 
-{{< colab url="TODO" label="Volet C : prime de distillation de réseau aléatoire, trois valeurs de c, trois graines" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-11.ipynb" label="Volet C : prime de distillation de réseau aléatoire, trois valeurs de c, trois graines" >}}
 
 > [!WARNING]
  **Quatre pièges de ce laboratoire, et chacun coûte une soirée.** Premier piège, **`termine` contre `tronque`** : sur cette tâche, la distinction est toute l'information, et la confondre invalide chacune de vos mesures. Deuxième piège, **le coefficient \(c\) appliqué deux fois**, une fois dans l'enveloppe et une fois dans la boucle ; votre prime est alors multipliée par \(c\) une fois de trop, elle peut être des dizaines de fois trop grande, et votre agent devient un touriste. Troisième piège, **l'évaluation sous enveloppe** : vos deux courbes montent ensemble, tout a l'air de fonctionner, et vous ne mesurez plus la tâche. Quatrième piège, **le réseau de référence qui apprend** : si vous oubliez `requires_grad_(False)` ou si vous passez ses paramètres à l'optimiseur, les deux réseaux convergent l'un vers l'autre, la prime tombe à zéro partout, et votre méthode redevient exactement celle du volet A, en plus lente.
@@ -106,7 +106,7 @@ dqn = DQN("MlpPolicy", env, verbose=0).learn(total_timesteps=100_000)
 ppo = PPO("MlpPolicy", env, verbose=0).learn(total_timesteps=200_000)
 ```
 
-{{< colab url="TODO" label="Solution courte : deux références en six lignes, à lancer après vos volets" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-11.ipynb" label="Solution courte : deux références en six lignes, à lancer après vos volets" >}}
 
 > [!NOTE]
  **Les deux budgets de pas de ce fragment ne sont pas des cibles, et ils ne prédisent rien.** Je les mets pour que le fragment tourne en quelques minutes, c'est tout. Les chiffres du Tableau 11-1 portent sur un autre code, d'autres hyperparamètres et des dizaines de milliers d'épisodes ; ils vous donnent des ordres de grandeur et ils ne vous donnent pas une attente. Comme en semaine 10, la cible à atteindre est **la vôtre** : faites une exécution pilote, lisez ce qu'elle obtient, annoncez-le dans votre carnet comme votre référence, et comparez toutes vos configurations à cette référence sur les mêmes graines.

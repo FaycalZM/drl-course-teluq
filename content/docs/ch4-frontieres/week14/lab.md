@@ -41,7 +41,7 @@ Pourquoi cinquante et non dix : parce qu'un segment compte \(L = 50\) pas, donc 
 
 **Ce que ce volet établit** : que les deux objectifs ne dépendent pas des mêmes quantités, et exactement en quoi. **Ce qu'il n'établit pas** : que l'un des deux produit un meilleur agent. Pour cela il faudrait entraîner, et nous n'avons pas de machine pour cela cette semaine. Dites-le dans votre conclusion.
 
-{{< colab url="TODO" label="Volet A : les deux formes de la perte de préférence, et quatre mesures sans entraînement" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-14.ipynb" label="Volet A : les deux formes de la perte de préférence, et quatre mesures sans entraînement" >}}
 
 ---
 
@@ -61,7 +61,7 @@ Pourquoi cinquante et non dix : parce qu'un segment compte \(L = 50\) pas, donc 
 
 **Ce que ce volet établit** : que les quatre pièces se branchent, et que votre critère écrit en une phrase produit un comportement identifiable. **Ce qu'il n'établit pas** : quoi que ce soit sur l'efficacité de la rétroaction humaine, puisque votre étiqueteur est déterministe, sans bruit, sans fatigue et sans contradiction, c'est-à-dire exactement ce qu'une personne n'est pas.
 
-{{< colab url="TODO" label="Volet B : la chaîne de préférences complète, avec un étiqueteur scripté et sa variante semi-supervisée" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-14.ipynb" label="Volet B : la chaîne de préférences complète, avec un étiqueteur scripté et sa variante semi-supervisée" >}}
 
 ---
 
@@ -81,7 +81,7 @@ Dites explicitement, en commentaire, lequel des trois types de la section 14.12 
 
 **Ce que ce volet établit** : le protocole, et la forme des courbes si vous la voyez. **Ce qu'il n'établit pas** : un seuil, ni une valeur. Les seuils de la section 14.13 sont des mesures relevées sur des figures et ne sont pas des références.
 
-{{< colab url="TODO" label="Volet C : substitut contre récompense réelle, deux ou trois capacités, et la corrélation aux deux points de contrôle" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-14.ipynb" label="Volet C : substitut contre récompense réelle, deux ou trois capacités, et la corrélation aux deux points de contrôle" >}}
 
 ---
 
@@ -99,7 +99,7 @@ Le plus court des quatre, et le plus directement utile si vous choisissez la cin
 
 **Ce que ce volet établit** : l'ordre de grandeur du régime de données dans lequel un modèle de récompense cesse de surapprendre, **sur votre tâche**. **Ce qu'il n'établit pas** : rien de transférable à une tâche visuelle, où le modèle de la section 14.6 avait plus de cent mille dimensions d'entrée et trois cents exemples.
 
-{{< colab url="TODO" label="Volet D : trois tailles d'étiquetage, arrêt anticipé sur la partition réservée, et un étiqueteur bruité" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-14.ipynb" label="Volet D : trois tailles d'étiquetage, arrêt anticipé sur la partition réservée, et un étiqueteur bruité" >}}
 
 ---
 
@@ -109,6 +109,6 @@ Comme à chaque semaine, une référence pour comparer votre code, et elle vaut 
 
 En revanche, le volet A n'a **aucune** solution courte, et c'est délibéré : aucune bibliothèque ne vous dira de quoi une perte dépend. Il faut l'évaluer soi-même, et cela prend cinq minutes.
 
-{{< colab url="TODO" label="Référence : une méthode de région de confiance de bibliothèque sur l'enveloppe de substitution des volets B et C" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-14.ipynb" label="Référence : une méthode de région de confiance de bibliothèque sur l'enveloppe de substitution des volets B et C" >}}
 
 ---

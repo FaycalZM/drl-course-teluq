@@ -57,7 +57,7 @@ assert agent.valeur_action(15, 0) == 0.0 or agent.transitions[(15, 0)]
 * Affichez la table des valeurs à la fin. Les seize nombres doivent dessiner une pente croissante du départ vers l'objectif, et les trous doivent valoir zéro. Si ce n'est pas le cas, le coupable est presque toujours la gestion de l'état terminal.
 * **Ajoutez une ligne de commentaire sur la ligne où votre code lit la dynamique de l'environnement.** Ce commentaire est le vrai livrable de ce volet.
 
-{{< colab url="TODO" label="Volet A : itération sur la valeur avec trois tables, sur FrozenLake" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-04.ipynb" label="Volet A : itération sur la valeur avec trois tables, sur FrozenLake" >}}
 
 ---
 
@@ -73,7 +73,7 @@ assert agent.valeur_action(15, 0) == 0.0 or agent.transitions[(15, 0)]
 * La comparaison que je vous demande d'écrire n'est **pas** « lequel gagne ». Elle est : **qu'est-ce que chacun des deux a le droit de regarder ?** Trois lignes dans votre carnet, une pour l'agent A, une pour l'agent B, une pour la conséquence.
 * Une mesure utile et gratuite : comptez le nombre de transitions consommées par chacun des deux agents avant d'atteindre 0,80. C'est la bonne unité de comparaison, et pas le nombre de tours ni le temps de calcul.
 
-{{< colab url="TODO" label="Volet B : Q-learning tabulaire sur FrozenLake, sans aucun modèle" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-04.ipynb" label="Volet B : Q-learning tabulaire sur FrozenLake, sans aucun modèle" >}}
 
 ---
 
@@ -81,7 +81,7 @@ assert agent.valeur_action(15, 0) == 0.0 or agent.transitions[(15, 0)]
 
 **Objectif.** Rendre **visible** la différence entre sur politique et hors politique, et savoir l'expliquer. FrozenLake ne peut pas le faire : son glissement mélange les deux effets, et sa récompense unique à l'objectif ne laisse rien apparaître. La falaise, elle, le montre en une figure.
 
-**Écrivez l'environnement vous-même.** Il existe sous le nom `CliffWalking-v0` dans la famille des environnements en texte de Gymnasium, mais une grille de 4 × 12 tient en vingt lignes de Python et vous apprendrez davantage à l'écrire qu'à l'importer. Voici le squelette.
+**Écrivez l'environnement vous-même.** Il existe sous le nom `CliffWalking-v1` dans la famille des environnements en texte de Gymnasium, mais une grille de 4 × 12 tient en vingt lignes de Python et vous apprendrez davantage à l'écrire qu'à l'importer. Voici le squelette.
 
 ```python
 class Falaise:
@@ -123,7 +123,7 @@ class Falaise:
 * **La réponse écrite, une demi-page, et c'est le cœur de l'exercice.** Expliquez, à partir de **vos** courbes et de **vos** deux chemins, pourquoi la méthode qui a appris la meilleure politique obtient le pire score en ligne. Votre raisonnement doit faire apparaître trois choses : la composition de la cible de chaque méthode, la distinction entre politique apprise et politique jouée, et le rôle de \(\varepsilon\).
 * **Une mesure qui tranche, et elle coûte dix lignes.** Rejouez les deux politiques apprises de façon purement **gloutonne**, \(\varepsilon = 0\), sur cent épisodes chacune, et comparez les scores. Puis commentez : laquelle gagne maintenant, et pourquoi le classement s'inverse-t-il ?
 
-{{< colab url="TODO" label="Volet C, évalué : la falaise, Sarsa contre Q-learning" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-04.ipynb" label="Volet C, évalué : la falaise, Sarsa contre Q-learning" >}}
 
 ---
 

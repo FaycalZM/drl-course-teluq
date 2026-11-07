@@ -19,7 +19,7 @@ Entre deux extrêmes, il faut choisir. D'un côté la bibliothèque clé en main
 
 {{% comment %}}SOURCE: LAPAN ch.7 p.204{{% /comment %}}
 
-PTAN, que nous allons lire, est de cette famille intermédiaire. Elle s'installe en une ligne, `pip install ptan==0.8`, et la version est épinglée parce que ses interfaces ont bougé d'une version à l'autre.
+PTAN, que nous allons lire, est de cette famille intermédiaire. Elle s'installe en deux lignes, `pip install stable_baselines3` puis `pip install ptan==0.8 --no-deps`, et la version est épinglée parce que ses interfaces ont bougé d'une version à l'autre. Les deux précautions ne sont pas décoratives. PTAN 0.8 fige `torch==2.3.1`, qui n'a plus de roue pour les versions récentes de Python, de sorte qu'une installation ordinaire s'arrête avant d'avoir rien installé ; et son premier import charge `stable_baselines3`, qu'elle ne déclare pas dans ses dépendances.
 
 {{% comment %}}SOURCE: LAPAN ch.7 p.203{{% /comment %}}
 

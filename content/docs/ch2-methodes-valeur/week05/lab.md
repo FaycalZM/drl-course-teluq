@@ -66,7 +66,7 @@ assert float(valeurs_suivantes[termines_t].abs().sum()) == 0.0
 * Attendez-vous à voir le retour **redescendre** après un premier succès, parfois brutalement. Ce n'est pas un bogue, c'est le régime de la section 5.9, et vous le commenterez en une phrase.
 * **Comptez les trames, pas les épisodes.** Si votre axe horizontal est en épisodes, votre courbe compare des épisodes de 20 pas avec des épisodes de 500 pas.
 
-{{< colab url="TODO" label="Volet A : un DQN complet sur CartPole, des cinq pièces à la convergence" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-05.ipynb" label="Volet A : un DQN complet sur CartPole, des cinq pièces à la convergence" >}}
 
 ---
 
@@ -100,7 +100,7 @@ def dernieres_transitions(memoire, taille_lot):
 * **Et une mise en garde que je vous demande d'écrire vous-même**, en une phrase : pourquoi une seule exécution par configuration ne suffit-elle pas à conclure ? Vous avez la réponse dans la section 5.9, et elle vaut un chiffre.
 * **Facultatif, et instructif** : une quatrième configuration où vous retirez `.detach()` et `torch.no_grad()` de la cible. Prédisez le résultat **avant** de lancer, écrivez votre prédiction, puis comparez. C'est la façon la plus rapide de vérifier que la section 5.4 est comprise.
 
-{{< colab url="TODO" label="Volet B, évalué : trois ablations, trois courbes, une demi-page" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-05.ipynb" label="Volet B, évalué : trois ablations, trois courbes, une demi-page" >}}
 
 ---
 
@@ -137,7 +137,7 @@ print(f"retour moyen sur {N_EPISODES} épisodes : {np.mean(retours):.1f}")
 * **Une vérification qui attrape le bogue classique de ce volet** : si votre agent obtient \(-21\) à tous les épisodes avec des poids réputés bons, le problème est dans la **chaîne d'enveloppes**, pas dans les poids. Vérifiez dans l'ordre : la forme de l'observation, l'ordre des axes, l'appui sur FIRE, puis la position de l'enveloppe d'empilement, qui doit être la dernière.
 * **Facultatif** : enregistrez une vidéo d'un épisode avec l'enveloppe d'enregistrement de Gymnasium et regardez jouer votre agent. Cela prend trois lignes, et c'est le moment le plus satisfaisant de la semaine.
 
-{{< colab url="TODO" label="Volet C : évaluer un agent de Pong à partir de poids fournis" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-05.ipynb" label="Volet C : évaluer un agent de Pong à partir de poids fournis" >}}
 
 ---
 

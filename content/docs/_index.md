@@ -115,13 +115,15 @@ situer votre travail, et elle est à lire **après** avoir écrit le vôtre, jam
 semaines n'en proposent aucune, et la page vous dit alors pourquoi : parce qu'aucune
 bibliothèque ne fait ce que la semaine demande, ce qui est une information en soi.
 
-> [!WARNING]
- **Les carnets Colab ne sont pas encore publiés.** Vous verrez donc, au bas de chaque
- laboratoire, un badge **gris** portant la mention « Carnet à venir » : il n'est pas
- cliquable, et ce n'est pas une panne de votre navigateur. Rien ne vous empêche de
- travailler dès maintenant : l'énoncé, les fragments de code, les trous à combler et les
- points de contrôle sont complets dans la page, et un carnet Colab vierge suffit à les
- recevoir. Les carnets préremplis arriveront, et le badge deviendra alors un lien.
+> [!NOTE]
+ **Un carnet par semaine, et le badge y mène.** Le badge au bas de chaque laboratoire
+ ouvre le carnet de la semaine dans Colab. Plusieurs badges d'une même semaine mènent au
+ **même** carnet, à des endroits différents : l'étiquette du badge vous dit lequel.
+ Le carnet reprend l'énoncé, les fragments de code, les trous à combler et les points de
+ contrôle, et il ne contient **aucune solution** : les écrire est l'exercice, et c'est la
+ règle de ce cours depuis la semaine 1. Ce que le cours fournit vraiment, le protocole de
+ mesure, les jeux de données et les journaux à lire, vit dans un paquet Python que le
+ carnet installe de lui-même, et que vous pouvez aussi cloner pour travailler hors ligne.
 
 ---
 
@@ -152,8 +154,10 @@ Tout ce qui est affirmé ici est vérifiable dans le dépôt :
   facultatifs : titres réels des pages lab.md ;
 - solution courte à partir de la semaine 9, absente en semaines 12 et 15, où la page dit
   pourquoi ;
-- badge Colab gris : layouts/shortcodes/colab.html rend un badge désactivé portant « Carnet
-  à venir » pour url="TODO", ce qui est le cas des 53 appels des laboratoires.
+- badge Colab : layouts/shortcodes/colab.html rend un badge désactivé portant « Carnet à
+  venir » quand l'adresse vaut TODO, et un lien sinon. Les 110 appels des quinze semaines
+  pointent maintenant vers notebooks/semaine-NN.ipynb du dépôt du site, un carnet par
+  semaine, plusieurs badges menant au même carnet sous des étiquettes différentes.
 
 CHARGE DE TRAVAIL : aucune durée hebdomadaire n'est écrite nulle part dans le dépôt, ni dans
 course.yaml ni dans les quinze semaines. Rien n'est donc inventé : la page explique ce que

@@ -71,7 +71,7 @@ print(f"{L.mean():.1f} pas en moyenne, écart-type {L.std(ddof=1):.1f}, max {L.m
 * Sur CartPole, une moyenne à deux chiffres, **un ordre de grandeur sous la frontière de 195** : vous venez de produire vous-même le chiffre de référence du cours. Relevez aussi l'écart-type, qui n'est pas négligeable devant la moyenne : comptez un tiers à une moitié. Nous l'exploitons au niveau suivant.
 * L'enveloppe \(\varepsilon\)-aléatoire ne change **rien** de mesurable à la politique uniforme : remplacer un tirage uniforme par un autre tirage uniforme n'a aucun effet. Sur l'agent obtus, le gain est net. Retenez la dissymétrie : l'exploration profite d'abord aux mauvaises politiques.
 
-{{< colab url="TODO" label="Niveau 1 : environnement-jouet, agent aléatoire, enveloppe" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-01.ipynb" label="Niveau 1 : environnement-jouet, agent aléatoire, enveloppe" >}}
 
 ---
 
@@ -98,7 +98,7 @@ print("épisodes requis pour ±1 pas :", int(np.ceil(s ** 2))) # s/sqrt(n) <= 1
 * À \(n = 5\), vos 20 moyennes s'étalent sur plusieurs pas : même expérience, deux graines, deux conclusions. À \(n = 100\), l'étendue se resserre au pas près. Vous devez retrouver l'ordre de grandeur de \(s/\sqrt{n}\) et constater que la précision ne progresse qu'en \(\sqrt{n}\) : quadrupler le coût pour diviser l'incertitude par deux.
 * À écrire noir sur blanc : les **100 épisodes consécutifs** de la frontière de récompense ne sont pas un chiffre rond arbitraire. Dites, avec *votre* \(s\), quelle précision ils achètent.
 
-{{< colab url="TODO" label="Niveau 2 : balayage d'epsilon et crédibilité d'une moyenne" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-01.ipynb" label="Niveau 2 : balayage d'epsilon et crédibilité d'une moyenne" >}}
 
 ---
 

@@ -57,7 +57,7 @@ assert not isinstance(net.pipe[-1], nn.Softmax), "la dernière couche est linéa
 * « Résolu ! » apparaît entre la trentième et la soixantième itération, donc entre 480 et 960 épisodes joués. Si vous êtes très au-delà, relisez d'abord le point de contrôle 4.
 * La perte ne descend **pas** régulièrement, et c'est normal : le jeu d'entraînement change à chaque itération, et il devient plus difficile à mesure que les élites se ressemblent. Une perte qui remonte alors que le retour monte n'est pas un bogue.
 
-{{< colab url="TODO" label="Niveau 1 : CEM sur CartPole, les quatre points de contrôle" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-03.ipynb" label="Niveau 1 : CEM sur CartPole, les quatre points de contrôle" >}}
 
 ---
 
@@ -79,7 +79,7 @@ assert not isinstance(net.pipe[-1], nn.Softmax), "la dernière couche est linéa
 * Avec huit neurones cachés, l'agent progresse puis plafonne : la capacité du réseau finit par limiter la politique. Avec 512, le temps par itération augmente sans gain notable.
 * Avec `next_obs`, l'entraînement **fonctionne encore**, plus lentement et moins loin. C'est le point important de tout le niveau : un bogue qui empêche tout est facile ; un bogue qui dégrade est ce qui vous coûtera du temps dans la vraie vie.
 
-{{< colab url="TODO" label="Niveau 2 : percentile, taille de lot, capacité, bogue silencieux" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-03.ipynb" label="Niveau 2 : percentile, taille de lot, capacité, bogue silencieux" >}}
 
 ---
 

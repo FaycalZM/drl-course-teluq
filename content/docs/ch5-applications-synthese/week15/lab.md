@@ -38,7 +38,7 @@ C'est le volet principal, c'est le seul qui tourne de bout en bout, et il est co
 
 **Ce que ce volet établit** : que la réduction d'espace d'actions est mesurable, et de combien. **Ce qu'il n'établit pas** : quoi que ce soit sur la performance d'un agent, puisque vous n'en entraînez aucun. Dites-le dans votre conclusion.
 
-{{< colab url="TODO" label="Volet A : engendrer un jeu textuel, écrire l'adaptateur Gymnasium, et mesurer l'effet des commandes admissibles" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-15.ipynb" label="Volet A : engendrer un jeu textuel, écrire l'adaptateur Gymnasium, et mesurer l'effet des commandes admissibles" >}}
 
 ---
 
@@ -56,7 +56,7 @@ Volet de **démonstration**. Vous n'entraînez rien : vous recevez des journaux 
 
 **Ce que ce volet établit** : que vous savez diagnostiquer une fonction de valeur sans ancre et écrire le correctif. **Ce qu'il n'établit pas** : que le correctif résout le problème, puisque la mesure fournie montre justement qu'il ne le résout pas sur le cube complet.
 
-{{< colab url="TODO" label="Volet B : lire une divergence de valeur sur des journaux fournis, et écrire les deux cibles comme fonctions pures" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-15.ipynb" label="Volet B : lire une divergence de valeur sur des journaux fournis, et écrire les deux cibles comme fonctions pures" >}}
 
 ---
 
@@ -72,7 +72,7 @@ Ce volet ne tourne pas dans un carnet, et il n'est pas noté. Je le propose parc
 
 **Étape 3, et c'est la question du volet.** En deux phrases : qu'est-ce qu'un score publié sur ce jeu de référence mesure exactement, et que faudrait-il publier à côté pour qu'il soit comparable ?
 
-{{< colab url="TODO" label="Volet C, facultatif et hors carnet : mesurer la décroissance de la récompense avec le temps d'horloge" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-15.ipynb" label="Volet C, facultatif et hors carnet : mesurer la décroissance de la récompense avec le temps d'horloge" >}}
 
 ---
 

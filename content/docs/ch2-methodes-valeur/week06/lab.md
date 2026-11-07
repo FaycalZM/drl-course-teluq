@@ -25,7 +25,7 @@ Budget de calcul. Tout le laboratoire tourne sur **CartPole**, et c'est une déc
 
 **Objectif.** Vérifier que vous avez compris la transition premier-dernier, sans entraîner quoi que ce soit. Dix minutes, et c'est le meilleur rapport de tout le laboratoire entre ce que l'exercice apprend et ce qu'il coûte.
 
-**Protocole.** On installe la bibliothèque, `pip install ptan==0.8`, et on construit l'environnement jouet de la section 6.3 : une observation qui compte de 0 à 4, une récompense égale à l'action jouée, un épisode de dix pas exactement, et un agent qui joue toujours l'action 1.
+**Protocole.** On installe la bibliothèque en deux lignes, `pip install stable_baselines3` puis `pip install ptan==0.8 --no-deps` (la raison est donnée en section 6.1, et une installation ordinaire échoue), et on construit l'environnement jouet de la section 6.3 : une observation qui compte de 0 à 4, une récompense égale à l'action jouée, un épisode de dix pas exactement, et un agent qui joue toujours l'action 1.
 
 **Ce que je vous demande, et dans cet ordre.** D'abord, **écrivez sur une feuille** les douze premières transitions que la source d'expérience va produire avec `steps_count=2`, avec leurs quatre champs. Ensuite seulement, exécutez. Puis comparez, et expliquez en une phrase chacun des écarts, s'il y en a.
 
@@ -37,7 +37,7 @@ Budget de calcul. Tout le laboratoire tourne sur **CartPole**, et c'est une déc
 
 **Attendu.** Vos prédictions, la sortie réelle, et vos trois réponses. Pas de courbe, pas d'entraînement.
 
-{{< colab url="TODO" label="Volet A : prédire la sortie d'une source d'expérience avant de l'exécuter" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-06.ipynb" label="Volet A : prédire la sortie d'une source d'expérience avant de l'exécuter" >}}
 
 ---
 
@@ -80,7 +80,7 @@ assert 0.8 < n_duel / n_ref < 1.25        # sinon la comparaison est truquée
 * Une courbe de retour par épisode, lissée sur dix épisodes, avec l'axe horizontal en **trames** et non en épisodes.
 * La troisième assertion ci-dessus doit passer. Si elle échoue, réduisez la largeur des couches cachées du réseau duel, comme la section 6.8 l'explique.
 
-{{< colab url="TODO" label="Volet B : un socle commun et la courbe de référence sur CartPole" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-06.ipynb" label="Volet B : un socle commun et la courbe de référence sur CartPole" >}}
 
 ---
 
@@ -105,7 +105,7 @@ assert 0.8 < n_duel / n_ref < 1.25        # sinon la comparaison est truquée
 * **Une phrase que je veux lire textuellement**, et qui est la compétence de la semaine : dites ce qui, dans votre protocole, garantit que vous mesurez la variante et non autre chose.
 * **Un piège à vérifier explicitement**, et il vaut des points : montrez par un test ou par une capture que la configuration (2) utilise bien \(\gamma^3\) dans sa perte et non \(\gamma\). C'est l'erreur qui invalide le plus souvent cette expérience, et elle ne lève aucune exception.
 
-{{< colab url="TODO" label="Volet C, évalué : quatre variantes, trois graines, une page d'analyse" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-06.ipynb" label="Volet C, évalué : quatre variantes, trois graines, une page d'analyse" >}}
 
 ---
 
@@ -133,7 +133,7 @@ def valeur_moyenne_temoins(reseau) -> float:
 * Sur le second : la moyenne des avantages doit rester proche de zéro. Donnez son amplitude. Si elle dérive franchement, votre soustraction est mal branchée, et ce volet vient de vous faire gagner une soirée.
 * **Une remarque sur la méthode, en deux phrases** : pourquoi ces deux mesures sont-elles indispensables, alors que la courbe de retour ne montre ni l'une ni l'autre ?
 
-{{< colab url="TODO" label="Volet D : mille états témoins, et la contrainte de moyenne nulle mesurée" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-06.ipynb" label="Volet D : mille états témoins, et la contrainte de moyenne nulle mesurée" >}}
 
 ---
 
@@ -153,6 +153,6 @@ def valeur_moyenne_temoins(reseau) -> float:
 > [!TIP]
  **Mon message pour ce laboratoire.** La semaine dernière, le volet évalué vous demandait de retirer une pièce pour voir ce qu'elle faisait. Cette semaine, il vous demande d'en ajouter quatre et de dire laquelle sert. C'est le même geste, dans l'autre sens, et c'est le geste central de tout ce domaine. Vous allez trouver, je le crois, que sur CartPole les écarts entre variantes sont du même ordre que l'écart entre deux graines de la même variante. Ce serait un excellent résultat, et il ne faut surtout pas le cacher : il signifie que vous avez mesuré votre dispersion avant de conclure, ce que beaucoup de publications de ce domaine ont longtemps omis de faire. Un résultat nul correctement établi vaut mieux qu'un écart impressionnant obtenu sur une seule exécution.
 
-{{< colab url="TODO" label="Volet E, facultatif : couches bruitées et tampon priorisé" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-06.ipynb" label="Volet E, facultatif : couches bruitées et tampon priorisé" >}}
 
 ---

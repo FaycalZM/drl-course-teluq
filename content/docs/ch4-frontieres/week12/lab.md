@@ -29,7 +29,7 @@ Une heure, et il n'est pas décoratif : tout le reste repose dessus, et la secti
 2. **Le match nul.** Remplissez une grille entièrement sans victoire, et vérifiez que votre détection de fin de partie fonctionne. Rappel de la section 12.4 : la fonction qui joue un coup ne vous signalera **pas** le match nul, c'est à vous de constater qu'il n'y a plus de coups possibles.
 3. **L'horizon de coups, et vous le dérivez.** Ne recopiez aucune expression. Calculez vous-même le nombre **minimal** de coups joués pour qu'une partie puisse être gagnée, à partir du nombre de jetons à aligner, puis le nombre **maximal** de coups d'une partie, à partir de la taille du plateau. Écrivez les deux nombres dans votre carnet avant de choisir votre horizon, et justifiez votre choix en une phrase. La section 12.7 explique ce qui arrive quand on se trompe du mauvais côté.
 
-{{< colab url="TODO" label="Échauffement : le modèle de jeu en cinq fonctions, et trois vérifications" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-12.ipynb" label="Échauffement : le modèle de jeu en cinq fonctions, et trois vérifications" >}}
 
 ---
 
@@ -47,7 +47,7 @@ Une heure, et il n'est pas décoratif : tout le reste repose dessus, et la secti
 
 **Étape 3, et c'est l'expérience la plus instructive du laboratoire.** Implémentez **volontairement** la mauvaise utilité, celle sans racine carrée et sans constante, et comparez-la à la bonne sur une seule mesure : le **nombre de colonnes distinctes** visitées au moins dix fois à la racine, après deux cents recherches. Puis commentez l'écart. C'est l'avertissement de la section 12.3, reproduit dans votre code, et c'est la façon de ne plus jamais l'oublier.
 
-{{< colab url="TODO" label="Volet A : la recherche, trois tests d'isolation, et l'utilité amputée mesurée" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-12.ipynb" label="Volet A : la recherche, trois tests d'isolation, et l'utilité amputée mesurée" >}}
 
 ---
 
@@ -67,7 +67,7 @@ Une heure, et il n'est pas décoratif : tout le reste repose dessus, et la secti
 
 **Étape 6, la récompense.** Jouez contre votre réseau, à la main, dans le terminal. Attendez-vous au niveau annoncé en section 12.5 : en dessous de celui d'un enfant, une stratégie rudimentaire, une erreur grossière un coup sur deux. Notez trois erreurs qu'il commet, et dites pour chacune si vous pensez qu'elle vient du réseau ou du nombre de recherches.
 
-{{< colab url="TODO" label="Volet B : auto-jeu complet, une heure, 2 500 parties, et le tournoi des points de contrôle" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-12.ipynb" label="Volet B : auto-jeu complet, une heure, 2 500 parties, et le tournoi des points de contrôle" >}}
 
 > [!WARNING]
  **Quatre pièges de ce volet, et chacun coûte une soirée.** Premier piège, **le signe du résultat dans les triplets** : si vous ne retournez pas le résultat en remontant l'historique, la moitié de vos cibles de valeur ont le signe inverse, et votre tête de valeur apprend la moyenne des deux, c'est-à-dire zéro partout. Deuxième piège, **le masquage des coups illégaux après l'argmax** au lieu d'avant : vos indices se décalent et votre agent joue un coup pour un autre. Troisième piège, **la promotion sans copie des poids** : si vous promouvez l'apprenti en gardant une référence au même objet, apprenti et meilleur réseau deviennent le même réseau, l'auto-jeu continue de tourner, et la porte s'ouvre désormais au hasard. Quatrième piège, **le match nul non détecté**, déjà signalé à l'échauffement : votre boucle d'auto-jeu tournera indéfiniment sur une grille pleine.
@@ -86,7 +86,7 @@ Une heure, et il n'est pas décoratif : tout le reste repose dessus, et la secti
 
 **Étape 4.** Une phrase de conclusion par constante, dans votre carnet, de la forme « cette constante commande *telle grandeur du problème*, et on la règle en regardant *telle mesure* ». C'est l'objectif réel du volet.
 
-{{< colab url="TODO" label="Volet C : trois constantes, et la mesure qui commande chacune" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-12.ipynb" label="Volet C : trois constantes, et la mesure qui commande chacune" >}}
 
 ---
 
@@ -106,7 +106,7 @@ Une heure, et il n'est pas décoratif : tout le reste repose dessus, et la secti
 
 **Question 6.** Deux courbes sans tendance, l'une venant d'un entraînement par auto-jeu et l'autre d'un entraînement de deux groupes simultanés. Dites en quoi les causes diffèrent, et ce qui, dans chaque cas, serait ou ne serait pas une réponse technique utile.
 
-{{< colab url="TODO" label="Volet D : lecture et analyse multi-agent, six questions, aucun entraînement" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-12.ipynb" label="Volet D : lecture et analyse multi-agent, six questions, aucun entraînement" >}}
 
 ---
 
@@ -132,7 +132,7 @@ Votre mesure de référence sera donc faite par vous, et en voici les deux terme
 #    l'entrainement a ajoute, et non ce que la recherche faisait deja.
 ```
 
-{{< colab url="TODO" label="Références : le joueur aléatoire et la recherche sans entraînement" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-12.ipynb" label="Références : le joueur aléatoire et la recherche sans entraînement" >}}
 
 > [!NOTE]
  **Le second adversaire est le plus intéressant des deux, et c'est une mesure que l'on oublie presque toujours.** Une recherche arborescente, même avec un réseau complètement aléatoire, **joue déjà quelque chose** : elle détecte les victoires immédiates et les défaites immédiates, parce que celles-ci sont des états terminaux, évalués par le résultat réel de la partie et non par le réseau. Une partie de la force de votre système final vient donc de la recherche et non de l'entraînement. Si vous ne mesurez pas cela, vous attribuerez à votre réseau un mérite qui revient à votre arbre.

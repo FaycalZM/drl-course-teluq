@@ -222,7 +222,7 @@ délibérément sur la question que la semaine 5 répond.
   précisément ce qu'il remplace. Aucune bibliothèque d'algorithmes n'est proposée : les cinq
   algorithmes de la semaine tiennent chacun en moins de vingt lignes.
 - L'environnement de la falaise est ÉCRIT par l'étudiant plutôt qu'importé, bien que
-  CliffWalking-v0 existe dans la famille des environnements en texte de Gymnasium. Motif explicite
+  CliffWalking-v1 existe dans la famille des environnements en texte de Gymnasium. Motif explicite
   dans l'énoncé du volet C : une grille 4 × 12 tient en vingt lignes et la règle subtile (la chute
   renvoie au départ SANS terminer l'épisode) ne s'apprend qu'en l'écrivant.
 
