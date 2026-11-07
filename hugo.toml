@@ -15,6 +15,41 @@ theme = 'hugo-book'
   # KaTeX est chargé globalement par layouts/partials/docs/inject/head.html.
   math = true
 
+# --- Les cinq remises du cours ---
+# Lues par layouts/shortcodes/remise.html, appelé depuis la page de module ET depuis
+# l'énoncé dans la semaine. Échéance, poids et lien de dépôt n'existent donc qu'ici :
+# dix pages à corriger si on les écrivait dans le contenu, une ligne ici.
+#
+# `url = "TODO"` rend un bouton visiblement en attente, pas un lien mort. Les formulaires
+# de dépôt seront créés à l'ouverture du cours : il n'y aura alors que ces cinq lignes à
+# remplir, et rien à retoucher dans le contenu.
+[params.remises]
+  [params.remises.jalon-1]
+    titre   = "Jalon 1 : analyse de l'échec"
+    semaine = 3
+    poids   = "25 % de la note finale"
+    url     = "TODO"
+  [params.remises.jalon-2]
+    titre   = "Jalon 2 : accélérer et comparer"
+    semaine = 7
+    poids   = "25 % de la note finale"
+    url     = "TODO"
+  [params.remises.jalon-3]
+    titre   = "Jalon 3 : politique contre valeur"
+    semaine = 10
+    poids   = "25 % de la note finale"
+    url     = "TODO"
+  [params.remises.jalon-4]
+    titre   = "Jalon 4 : une extension avancée"
+    semaine = 14
+    poids   = "25 % de la note finale"
+    url     = "TODO"
+  [params.remises.livrables-finaux]
+    titre   = "Livrables finaux : rapport, présentation, dépôt"
+    semaine = 15
+    poids   = "barème indicatif sur 20 points"
+    url     = "TODO"
+
 [markup]
   [markup.highlight]
     style = 'github'

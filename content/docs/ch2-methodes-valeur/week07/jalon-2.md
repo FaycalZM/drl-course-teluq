@@ -5,7 +5,7 @@ weight: 16
 
 ## Ce qui est évalué, et pourquoi les deux moitiés de la semaine sont dans le même jalon
 
-Le jalon 2 clôt le module 2 et vaut **25 %** de la note du cours. **Remise : fin de la semaine 7.**
+Le jalon 2 clôt le module 2 et vaut **25 %** de la note du cours.
 
 Ce que je vous demande tient en une phrase : **un réseau Q profond, au moins deux extensions, une comparaison qui tient debout, et une accélération mesurée.** La comparaison vient de la semaine 6, l'accélération de la première moitié de celle-ci, et les deux sont dans le même jalon parce qu'elles sont les deux faces d'une seule compétence : savoir produire un chiffre, et savoir dire ce qu'il vaut.
 
@@ -15,6 +15,24 @@ Ce qui est nouveau, et je veux que ce soit parfaitement clair avant que vous com
 
 {{% comment %}}SOURCE: LAPAN ch.9 p.287-288{{% /comment %}}
 {{% comment %}}SOURCE: COURSE-PLAN-Lapan.md §10{{% /comment %}}
+
+---
+
+## Le jalon en un coup d'œil
+
+Une seule contrainte d'ordre structure tout le reste, et le schéma la met au centre : **la référence se mesure et se montre convergente avant que vous n'accélériez quoi que ce soit**. Sans cette mesure préalable, une accélération qui casse l'apprentissage ressemble à une accélération qui marche, et vous n'avez aucun moyen de faire la différence après coup.
+
+{{< mermaid >}}
+graph TD
+  S["Un socle unique, variantes activées par un drapeau"] -->|"d'abord, sans rien accélérer"| R["La référence : elle converge, et c'est montré"]
+  R -->|"3 à 5 graines, les mêmes pour toutes les variantes"| C["Courbes en moyenne, avec intervalle"]
+  R -->|"le même seuil, fixé d'avance"| T["Tableau d'accélération : débit et temps"]
+  C --> A["L'analyse : une mesure, une déduction, une conclusion"]
+  T -->|"les deux indicateurs peuvent pointer en sens opposé"| A
+  A -->|"intervalles qui se recouvrent"| N["Des non-résultats, déclarés comme tels"]
+{{< /mermaid >}}
+
+La branche de droite est la partie qui surprend le plus : deux chiffres mesurés sur la même variante, le débit et le temps jusqu'au seuil, peuvent se contredire, et savoir lequel croire demande d'avoir répété. C'est tout l'objet de l'étape 3.
 
 ---
 
@@ -74,6 +92,7 @@ Je tranche ce point explicitement, parce que l'exigence de plusieurs graines et 
 | **6.** Nombre d'exécutions non convergées, rapporté séparément de la moyenne, pour chaque variante | tableau ou note | 2 |
 | **7.** Analyse critique : une mesure, une déduction, une conclusion ; les écarts dont les intervalles se recouvrent déclarés comme non-résultats | note de 1 à 2 pages | 4 |
 | **8.** Reproductibilité : graines listées, hyperparamètres, seuil d'arrêt fixé d'avance, matériel, durée totale | annexe d'une demi-page | 2 |
+| **Total** | | **25** |
 
 **Ce qui n'est pas demandé**, et que je ne noterai pas : battre un score particulier, obtenir une accélération d'un facteur donné, atteindre une performance d'état de l'art, ou exécuter quoi que ce soit à l'échelle d'Atari. Un **résultat nul correctement établi** vaut mieux qu'un écart impressionnant obtenu sur une seule exécution, et il sera noté comme tel.
 
@@ -83,3 +102,7 @@ Je tranche ce point explicitement, parce que l'exigence de plusieurs graines et 
 {{% comment %}}SOURCE: raw-content/week-03.md §Jalon 1{{% /comment %}}
 
 ---
+
+## Remise
+
+{{< remise cle="jalon-2" >}}
