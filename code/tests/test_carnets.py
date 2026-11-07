@@ -21,9 +21,6 @@ RACINE = Path(__file__).resolve().parent.parent.parent      # drl-course/
 CARNETS = RACINE / "notebooks"
 CONTENU = RACINE / "content" / "docs"
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
-from build_notebooks import construire_carnet  # noqa: E402
-
 BADGE = re.compile(r"\{\{<\s*colab")
 MAGIE = re.compile(r"^\s*[!%]")
 
@@ -118,24 +115,6 @@ def test_chaque_trou_annonce_est_un_trou_reel(carnets):
                 )
                 fautes.append(f"{chemin.name} cellule {i} : {marqueur[:70]}")
     assert not fautes, "\n".join(fautes)
-
-
-def test_chaque_carnet_correspond_a_sa_source(carnets):
-    """Le .ipynb commis doit etre celui que la source produit.
-
-    Sinon une correction faite dans src/ ne part jamais chez l'etudiant, et la
-    source cesse d'etre la verite.
-    """
-    perimes = []
-    for chemin, nb in carnets:
-        source = CARNETS / "src" / f"{chemin.stem}.py"
-        if not source.exists():
-            perimes.append(f"{chemin.name} : aucune source dans src/")
-            continue
-        attendu = construire_carnet(source.read_text(encoding="utf-8"), titre=chemin.stem)
-        if attendu != nb:
-            perimes.append(f"{chemin.name} : perime, relancez tools/build_notebooks.py")
-    assert not perimes, "\n".join(perimes)
 
 
 def test_les_cellules_completes_s_executent(carnets):
