@@ -26,10 +26,10 @@ porteront sur les quatre ensemble.
 
 {{< mermaid >}}
 graph TD
-  J1["Jalon 1 : analyser un échec"] -->|"+ plusieurs graines, + un intervalle"| J2["Jalon 2 : accélérer et comparer"]
-  J2 -->|"+ trois axes qui peuvent se contredire"| J3["Jalon 3 : politique contre valeur"]
-  J3 -->|"+ le choix de la méthode, justifié"| J4["Jalon 4 : une extension avancée"]
-  J4 -->|"+ quelqu'un d'autre peut l'exécuter"| LF["Livrables finaux"]
+  J1["Jalon 1 : analyser un échec"] -->|"ajoute plusieurs graines et un intervalle"| J2["Jalon 2 : accélérer et comparer"]
+  J2 -->|"ajoute trois axes qui peuvent se contredire"| J3["Jalon 3 : politique contre valeur"]
+  J3 -->|"ajoute le choix de la méthode, à justifier"| J4["Jalon 4 : une extension avancée"]
+  J4 -->|"ajoute l'exécution par quelqu'un d'autre"| LF["Livrables finaux"]
 {{< /mermaid >}}
 
 Deux conséquences pratiques, et elles valent de l'argent en temps de calcul.
