@@ -25,6 +25,7 @@ Format accepte :
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import re
@@ -32,6 +33,7 @@ import sys
 from pathlib import Path
 
 MARQUEUR = re.compile(r"^#\s*%%(.*)$")
+MARQUEUR_MAGIE = re.compile(r"^\s*[!%]")
 NBFORMAT_MINOR = 5
 
 
@@ -109,13 +111,7 @@ def construire_carnet(source: str, titre: str = "") -> dict:
 
         metadonnees: dict = {}
         if genre == "smoke":
-            if "..." in texte:
-                raise ValueError(
-                    "cellule « smoke » contenant un trou (`...`) : une cellule "
-                    "declaree executable ne peut pas etre un exercice, sinon le "
-                    "garde d'execution echoue a chaque fois.\n"
-                    f"  {texte.strip()[:70]}"
-                )
+            _verifier_smoke(texte)
             metadonnees = {"sci1070": {"smoke": True}}
         cellules.append(
             {"cell_type": "code", "id": cid, "metadata": metadonnees,
@@ -136,6 +132,36 @@ def construire_carnet(source: str, titre: str = "") -> dict:
         "nbformat": 4,
         "nbformat_minor": NBFORMAT_MINOR,
     }
+
+
+def _verifier_smoke(texte: str) -> None:
+    """Une cellule « smoke » doit etre du Python valide et sans trou.
+
+    Le trou se cherche dans l'arbre syntaxique et non dans le texte : `print("...")`
+    affiche des points de suspension, il ne demande rien a l'etudiant, et un garde
+    qui cherchait la chaine `...` refusait la cellule (vu en semaine 7).
+    """
+    sans_magie = "\n".join(
+        (ligne[: len(ligne) - len(ligne.lstrip())] + "pass") if MARQUEUR_MAGIE.match(ligne)
+        else ligne
+        for ligne in texte.splitlines()
+    )
+    try:
+        arbre = ast.parse(sans_magie)
+    except SyntaxError as exc:
+        raise ValueError(
+            "cellule « smoke » qui n'est pas du Python valide : elle sera executee "
+            f"telle quelle par le garde.\n  {exc}"
+        ) from None
+
+    for noeud in ast.walk(arbre):
+        if isinstance(noeud, ast.Constant) and noeud.value is Ellipsis:
+            ligne = sans_magie.splitlines()[noeud.lineno - 1].strip()
+            raise ValueError(
+                "cellule « smoke » contenant un trou (`...`) : une cellule declaree "
+                "executable ne peut pas etre un exercice, sinon le garde d'execution "
+                f"echoue a chaque fois.\n  ligne {noeud.lineno} : {ligne[:70]}"
+            )
 
 
 def _nettoyer(genre: str, corps: list[str]) -> str:

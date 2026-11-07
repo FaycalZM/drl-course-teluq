@@ -38,7 +38,7 @@ Deux décisions de conception du laboratoire, et je vous dois les deux raisons.
 
 **Attendu.** La courbe d'évaluation sur au moins trois graines avec intervalle, votre amplitude de bruit effective, et votre cible annoncée à partir de l'exécution pilote.
 
-{{< colab url="TODO" label="Volet A : politique déterministe et critique à deux entrées sur Pendulum-v1" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-09.ipynb" label="Volet A : politique déterministe et critique à deux entrées sur Pendulum-v1" >}}
 
 ---
 
@@ -58,7 +58,7 @@ Deux décisions de conception du laboratoire, et je vous dois les deux raisons.
 
 **Attendu.** La figure à deux courbes, dans les deux configurations, sur au moins trois graines, et votre réponse écrite aux trois questions.
 
-{{< colab url="TODO" label="Volet B : mesurer la surestimation du critique, avec et sans double Q écrêté" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-09.ipynb" label="Volet B : mesurer la surestimation du critique, avec et sans double Q écrêté" >}}
 
 ---
 
@@ -107,7 +107,7 @@ for nom, bruit in [("non correle", bruit_simple), ("correle", bruit_correle)]:
 
 **Attendu.** Le tableau de vos cinq configurations avec graines et intervalles, votre lecture des trois correctifs, et le résultat de la comparaison des deux bruits.
 
-{{< colab url="TODO" label="Volet C : ablation des trois correctifs et comparaison des deux bruits d'exploration" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-09.ipynb" label="Volet C : ablation des trois correctifs et comparaison des deux bruits d'exploration" >}}
 
 ---
 
@@ -141,7 +141,7 @@ env.close()        # INDISPENSABLE : c'est close() qui finalise le fichier video
 
 **Attendu.** Une vidéo, et deux phrases. La première décrit ce que votre agent fait de travers, et la seconde dit ce que vous changeriez pour le corriger. Le robot qui tombe vers l'avant au bout de onze secondes, dont la section 9.3 vous a donné la mesure, est un comportement **appris** et non un échec : c'est une démarche, instable, et la décrire est un exercice d'observation que ce cours n'a pas encore demandé.
 
-{{< colab url="TODO" label="Démonstration : un robot simulé, rendu hors écran et exporté en vidéo" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-09.ipynb" label="Démonstration : un robot simulé, rendu hors écran et exporté en vidéo" >}}
 
 > [!TIP]
  **Mon message pour ce laboratoire.** Faites les volets dans l'ordre, même si le volet C est le plus intéressant. La raison est celle de toute la semaine : vous n'avez, dans cette famille de méthodes, **aucune** perte dont la valeur vous dise si les choses se passent bien. La perte du critique peut descendre pendant que l'agent se dégrade, et la perte de l'acteur n'est que l'opposé d'une note qu'il s'attribue à lui-même. Le volet A vous donne des repères, le volet B vous donne le seul diagnostic honnête que cette semaine connaisse, et le volet C ne devient interprétable **qu'après** le volet B : savoir si votre tâche souffre de surestimation est ce qui vous permettra de dire si le premier correctif devait aider. Sans ce préalable, le volet C produit un tableau de nombres et aucune conclusion.

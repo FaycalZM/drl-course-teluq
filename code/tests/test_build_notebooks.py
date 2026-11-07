@@ -93,6 +93,26 @@ class TestMarqueurSmoke:
         with pytest.raises(ValueError, match="smoke"):
             construire_carnet("# %% [smoke]\nx = ...  # À COMPLÉTER\n")
 
+    def test_des_points_de_suspension_dans_une_CHAINE_ne_sont_pas_un_trou(self):
+        # Faux positif rencontre en semaine 7 : print("clotures", x, "...") est du
+        # texte affiche, pas un exercice. Le garde doit lire des jetons, pas du texte.
+        nb = construire_carnet('# %% [smoke]\nprint("clôtures", 1, "...")\n')
+        assert nb["cells"][0]["metadata"]["sci1070"]["smoke"] is True
+
+    def test_des_points_de_suspension_en_commentaire_ne_sont_pas_un_trou(self):
+        nb = construire_carnet("# %% [smoke]\nx = 1  # et ainsi de suite ...\n")
+        assert nb["cells"][0]["metadata"]["sci1070"]["smoke"] is True
+
+    def test_un_trou_cache_dans_un_appel_est_quand_meme_vu(self):
+        with pytest.raises(ValueError, match="smoke"):
+            construire_carnet("# %% [smoke]\nresultat = ma_fonction(..., 2)\n")
+
+    def test_une_cellule_smoke_doit_etre_du_python_valide(self):
+        # Elle sera executee telle quelle par le garde : si elle ne parse pas,
+        # mieux vaut le dire a la construction qu'au moment du test.
+        with pytest.raises(ValueError, match="smoke"):
+            construire_carnet("# %% [smoke]\nx = (1 +\n")
+
 
 class TestFormat:
     def test_produit_un_nbformat_4_valide(self):

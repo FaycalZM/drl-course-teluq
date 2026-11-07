@@ -81,7 +81,7 @@ for epoque in range(30):
 * La perte d'entraînement descend franchement sur les premières époques, puis ralentit. La perte de validation suit la perte d'entraînement, à un léger décalage près : vous venez de voir un écart de généralisation, mesuré et non raconté.
 * Si la perte reste obstinément plate, vérifiez dans cet ordre : l'activation manquante, l'ordre des trois lignes de la boucle, le `zero_grad()`.
 
-{{< colab url="TODO" label="Niveau 1 : le réseau, la boucle, TensorBoard" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-02.ipynb" label="Niveau 1 : le réseau, la boucle, TensorBoard" >}}
 
 ---
 
@@ -103,7 +103,7 @@ for epoque in range(30):
 * Sur ce problème, l'abandon de neurones **dégrade** la perte d'entraînement et n'améliore pas la validation : les données sont propres, abondantes et sans bruit d'étiquetage. C'est le résultat attendu, et c'est le meilleur antidote à l'idée qu'une technique de régularisation serait bonne en soi.
 * Sans `net.eval()`, la courbe de validation devient bruitée et systématiquement pessimiste. Notez l'écart : c'est le coût d'une ligne oubliée.
 
-{{< colab url="TODO" label="Niveau 2 : sigmoïde, symétrie, Xavier, abandon" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-02.ipynb" label="Niveau 2 : sigmoïde, symétrie, Xavier, abandon" >}}
 
 ---
 
@@ -125,4 +125,4 @@ for epoque in range(30):
 > [!TIP]
  **Mon message pour ce laboratoire :** vous n'entraînez pas un agent, et c'est normal. Vous fabriquez l'instrument, vous apprenez à le régler, et vous installez les réflexes qui vous éviteront, les treize semaines suivantes, de confondre un bogue de PyTorch avec un échec d'apprentissage par renforcement. Quand votre agent de la semaine 5 refusera d'apprendre, la première question sera : « est-ce que le réseau, lui, apprend ? » Cette semaine vous donne les moyens d'y répondre en cinq minutes.
 
-{{< colab url="TODO" label="Niveau 3 : corps convolutif, carré blanc, comparaison" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-02.ipynb" label="Niveau 3 : corps convolutif, carré blanc, comparaison" >}}

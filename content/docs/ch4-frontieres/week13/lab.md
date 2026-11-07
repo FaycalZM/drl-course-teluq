@@ -32,7 +32,7 @@ Vous devriez voir \(V_{\mathrm{R}}\) rester **exactement nul** jusqu'à \(H = 30
 
 **Étape 3, et c'est la partie à écrire dans votre carnet.** Dites, en trois phrases, **ce que cette expérience établit et ce qu'elle n'établit pas**. Elle établit que \(V_{\mathrm{R}}\) est aveugle au-delà de l'horizon, et que l'amorçage sur une valeur lève cette cécité. Elle **n'établit pas** que l'agent complet de la section 13.11 apprend mieux : votre critique était parfait, et un critique parfait est précisément ce qu'on n'a pas.
 
-{{< colab url="TODO" label="Volet A : les trois estimateurs de retour, et l'horizon balayé sur une trajectoire synthétique" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-13.ipynb" label="Volet A : les trois estimateurs de retour, et l'horizon balayé sur une trajectoire synthétique" >}}
 
 ---
 
@@ -54,7 +54,7 @@ Vous devriez voir \(V_{\mathrm{R}}\) rester **exactement nul** jusqu'à \(H = 30
 
 **Étape 4, ce que le volet n'établit pas**, et je veux la phrase dans votre carnet : rien de ceci ne dit quoi que ce soit sur la qualité d'un **modèle appris**. Votre dynamique est exacte. Vous avez mesuré le **planificateur**, et uniquement lui.
 
-{{< colab url="TODO" label="Volet B : la méthode d'entropie croisée sur une dynamique analytique, et trois ablations" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-13.ipynb" label="Volet B : la méthode d'entropie croisée sur une dynamique analytique, et trois ablations" >}}
 
 > [!TIP]
  **Savourez ce volet pour ce qu'il est.** Vous allez rouvrir le carnet de la semaine 3, y recopier une boucle de quinze lignes que vous aviez écrite quand ce cours commençait, et constater qu'elle pilote correctement un système dynamique en commande prédictive. La semaine 3 avait quitté cette méthode sur un échec, et c'était un échec réel. Dix semaines plus tard, elle est le planificateur d'une architecture de pointe. Ce n'est pas une anecdote : c'est l'argument le plus fort que je puisse vous donner en faveur du fait d'apprendre les méthodes simples **avant** les compliquées.
@@ -79,7 +79,7 @@ Vous devriez voir \(V_{\mathrm{R}}\) rester **exactement nul** jusqu'à \(H = 30
 
 **Ce que ce volet n'établit pas**, et c'est important : il ne montre **pas** que ce gradient entraîne un bon agent. Un chemin de dérivation peut exister et être totalement inutile, si le modèle qu'il traverse est faux. Ce volet montre que le mécanisme fonctionne mécaniquement ; la section 13.11 vous dit, elle, à quel prix en calcul il fonctionne réellement.
 
-{{< colab url="TODO" label="Volet C : le gradient de l'acteur à travers deux couches de dynamique, et trois comparaisons" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-13.ipynb" label="Volet C : le gradient de l'acteur à travers deux couches de dynamique, et trois comparaisons" >}}
 
 ---
 
@@ -107,7 +107,7 @@ Tracez les trois sur le même axe des abscisses. Et prédisez-les **avant** de l
 
 **Étape 5, la référence qu'il faut absolument tracer.** Mesurez le retour de la **politique de comportement elle-même**, celle que vous avez écrite à l'étape 1. C'est l'étalon de tout ce volet : une méthode hors ligne qui ne la dépasse pas n'a rien produit, et une méthode qui tombe en dessous d'elle a activement nui. Placez cette valeur en ligne horizontale sur vos trois graphiques.
 
-{{< colab url="TODO" label="Volet D : désapprentissage sur un jeu figé, trois tailles de données, et la pénalité conservatrice" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-13.ipynb" label="Volet D : désapprentissage sur un jeu figé, trois tailles de données, et la pénalité conservatrice" >}}
 
 > [!WARNING]
  **Trois pièges de ce volet, et chacun fausse la conclusion.** Premier piège, **appeler l'environnement pendant l'entraînement** : si une seule transition collectée pendant la boucle entre dans votre tampon, vous ne faites plus d'apprentissage hors ligne, et le phénomène disparaîtra en partie. Séparez physiquement les deux phases, et chargez le jeu depuis un fichier. Deuxième piège, **juger sur la perte** : elle descend, elle descendra, et elle ne mesure rien de ce qui vous intéresse. Troisième piège, **une seule graine** : le retournement arrive à des moments différents selon l'initialisation, et une graine unique produira soit une courbe spectaculaire soit une courbe plate, dans les deux cas sans valeur. Trois graines minimum, avec un intervalle, comme le jalon 2 l'exige depuis la semaine 7.
@@ -141,7 +141,7 @@ La référence de cette semaine est donc une méthode, et c'est la bonne : **le 
 # la seule chose que votre travail de la semaine a produite.
 ```
 
-{{< colab url="TODO" label="Référence : clonage de comportement sur le même jeu de données figé" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-13.ipynb" label="Référence : clonage de comportement sur le même jeu de données figé" >}}
 
 > [!NOTE]
  **Et pourquoi cette référence est meilleure qu'une bibliothèque, dans ce cas précis.** Une référence de bibliothèque vous dit si votre code est correct. Celle-ci vous dit quelque chose de plus intéressant : **si votre problème valait la peine d'être posé**. Un jeu de données sur lequel un clonage de comportement égale votre meilleure méthode hors ligne est un jeu de données qui ne contient aucune recomposition exploitable, et aucune sophistication n'y changera rien. C'est un diagnostic sur les **données** et non sur l'algorithme, et c'est exactement le réflexe que le jalon 4 va vous demander.

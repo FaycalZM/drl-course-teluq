@@ -18,7 +18,10 @@ from dataclasses import dataclass
 
 import numpy as np
 
-__all__ = ["Prix", "charger_prix", "series_disponibles", "series_synthetique"]
+from .journaux import Journal, charger_journal, journaux_disponibles
+
+__all__ = ["Prix", "charger_prix", "series_disponibles", "series_synthetique",
+           "Journal", "charger_journal", "journaux_disponibles"]
 
 
 @dataclass(frozen=True)

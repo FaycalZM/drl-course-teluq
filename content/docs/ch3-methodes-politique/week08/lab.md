@@ -35,7 +35,7 @@ Les deux volets suivent la structure de la semaine. Le **volet A** prend REINFOR
 
 **Attendu.** La figure, les deux nombres de pas à la résolution avec leur intervalle sur vos graines, et un paragraphe de lecture.
 
-{{< colab url="TODO" label="Volet A : REINFORCE avec et sans référence, et la variance du gradient mesurée" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-08.ipynb" label="Volet A : REINFORCE avec et sans référence, et la variance du gradient mesurée" >}}
 
 ---
 
@@ -115,7 +115,7 @@ def preparer_lot(lot, reseau, gamma: float, n_pas: int, device):
 
 **Attendu.** La courbe de récompense sur au moins trois graines avec intervalle, les dix quantités journalisées, le tableau de vos trois ablations, et la comparaison avec votre REINFORCE du volet A sur les mêmes graines.
 
-{{< colab url="TODO" label="Volet B : A2C vectorisé sur CartPole, trois termes de perte et dix quantités journalisées" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-08.ipynb" label="Volet B : A2C vectorisé sur CartPole, trois termes de perte et dix quantités journalisées" >}}
 
 **Diagnostic facultatif, et je vous le recommande vivement si vous avez du temps.** Mesurez la **divergence de Kullback-Leibler** \(\KL\) entre la politique avant et après chaque pas d'optimisation. C'est trois lignes : gardez les probabilités avant le pas, recalculez les log-probabilités après, et formez \(\sum_a \pi_{\text{avant}}\,(\log\pi_{\text{avant}} - \log\pi_{\text{après}})\). Une exécution saine reste en dessous de \(10^{-3}\). Des pics élevés sont un mauvais signe : ils veulent dire que le pas a déplacé la politique **trop loin**, et un réseau très non linéaire en grande dimension réagit mal à cela. Retenez cette quantité : elle est le sujet de la semaine 10.
 

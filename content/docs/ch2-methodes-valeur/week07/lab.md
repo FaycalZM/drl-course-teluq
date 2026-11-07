@@ -37,7 +37,7 @@ Les deux volets ne se ressemblent pas, exactement comme les deux moitiés de la 
 
 **Attendu.** Le tableau, les deux courbes en fonction de \(N\), vos intervalles, votre matériel, et un paragraphe de lecture.
 
-{{< colab url="TODO" label="Volet A : profiler et accélérer votre socle, avec graines et intervalles" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-07.ipynb" label="Volet A : profiler et accélérer votre socle, avec graines et intervalles" >}}
 
 ---
 
@@ -62,7 +62,7 @@ L'**affichage**, qui n'est pas implémenté : tracez la série de prix de l'épi
 
 La **stratégie d'achat-conservation**, qui est la comparaison manquante de la section 7.12 : achetez à la première barre, ne faites rien, vendez à la dernière, payez deux commissions, et rapportez le profit. Vous aurez alors le point de comparaison qu'un lecteur attend, et vous pourrez enfin dire si un agent qui finit à \(+10\,\%\) a créé ou détruit de la valeur.
 
-{{< colab url="TODO" label="Volet B : écrire l'environnement de négociation et vérifier sa récompense par des assertions" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-07.ipynb" label="Volet B : écrire l'environnement de négociation et vérifier sa récompense par des assertions" >}}
 
 > [!TIP]
  **Mon message pour ce laboratoire.** Les deux volets vous enseignent le même geste par deux chemins opposés. Au volet A, vous mesurez avant de changer. Au volet B, vous testez avant d'entraîner. Dans les deux cas, vous refusez de lancer la grosse machine avant d'avoir établi un point de référence vérifiable. C'est la discipline la plus rentable de tout le métier, et c'est aussi la plus difficile à tenir quand on est impatient de voir une courbe monter. Je vous le dis sans détour : les étudiants qui prennent cette habitude cette semaine sont ceux qui termineront le cours avec des résultats défendables.

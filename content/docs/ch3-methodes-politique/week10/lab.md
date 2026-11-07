@@ -39,7 +39,7 @@ Les trois volets partagent **un seul programme**. Le volet A écrit PPO et le fa
 
 **Attendu.** La courbe d'évaluation sur au moins trois graines avec intervalle, votre cible annoncée à partir de l'exécution pilote, et la figure du diagnostic ci-dessus avec une phrase de lecture : à partir de quelle époque votre dixième époque ne sert-elle plus à rien ?
 
-{{< colab url="TODO" label="Volet A : PPO écrit de bout en bout sur Pendulum-v1" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-10.ipynb" label="Volet A : PPO écrit de bout en bout sur Pendulum-v1" >}}
 
 ---
 
@@ -67,7 +67,7 @@ Les trois volets partagent **un seul programme**. Le volet A écrit PPO et le fa
 
 **Attendu.** Le tableau des sept configurations avec graines et intervalles, vos quatre réponses, et une phrase disant lequel des trois boutons a eu le plus d'effet sur votre tâche.
 
-{{< colab url="TODO" label="Volet B : régler epsilon, lambda et le nombre d'époques, avec graines et intervalles" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-10.ipynb" label="Volet B : régler epsilon, lambda et le nombre d'époques, avec graines et intervalles" >}}
 
 ---
 
@@ -110,7 +110,7 @@ for nom, (pas, duree) in RESULTATS.items():
 
 **Attendu.** Les deux figures, sur au moins trois graines, vos trois réponses, votre matériel, et le nombre de mises à jour par observation pour chacune des deux méthodes.
 
-{{< colab url="TODO" label="Volet C : une méthode hors politique sur la même tâche, et le compromis en deux figures" >}}
+{{< colab url="https://colab.research.google.com/github/FaycalZM/drl-course-teluq/blob/main/notebooks/semaine-10.ipynb" label="Volet C : une méthode hors politique sur la même tâche, et le compromis en deux figures" >}}
 
 > [!TIP]
  **Mon message pour ce laboratoire.** Faites les volets dans l'ordre, et résistez à la tentation de sauter au volet C, qui est le plus spectaculaire. La raison est celle de toute la semaine : la perte de PPO ne vous dit rien sur la santé de votre entraînement, puisqu'elle est l'opposé d'un objectif que l'écrêtage aplatit volontairement. Votre seul diagnostic honnête est le couple que le volet A vous demande de tracer, la divergence et la fraction d'échantillons écrêtés. Le volet B n'est interprétable qu'avec ce diagnostic sous les yeux, parce qu'il explique pourquoi une époque supplémentaire cesse d'apporter quoi que ce soit. Et le volet C n'est interprétable qu'après le volet B, parce qu'une comparaison entre deux méthodes dont l'une est mal réglée ne mesure que le réglage.
