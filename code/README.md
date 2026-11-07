@@ -30,6 +30,24 @@ n'ont besoin ni de réseaux ni d'écran, et doivent pouvoir tourner sans eux.
 | `sci1070.protocole` | section 7.2 | `mesurer`, `intervalle`, `se_recouvrent` — une configuration se mesure sur plusieurs graines, et une moyenne ne se rapporte jamais seule |
 | `sci1070.graines` | section 7.2 | `fixer_graines` — les trois sources de hasard d'un coup |
 | `sci1070.courbes` | section 7.2 | `bande`, `lisser`, `tracer_bande` — la moyenne et sa plage ombrée |
+| `sci1070.donnees` | semaine 7, volet B | `charger_prix` — les séries de prix fournies, dont deux qui sont des cas de test et non des marchés |
+| `sci1070.donnees` | semaine 15, volet B | `charger_journal` — les deux journaux à diagnostiquer. **Courbes reconstruites, pas mesurées**, et l'objet dit lui-même pourquoi |
+| `sci1070.poids` | semaine 5, volet C | `convertir_sb3` — renomme un point de contrôle Stable-Baselines3 vers le réseau de la section 5.8 |
+
+### Deux précisions qui comptent
+
+**Les journaux de la semaine 15 sont reconstruits.** Refaire l'entraînement d'origine
+demande environ six jours de processeur graphique. Les courbes portent le phénomène que
+la section 15.5 décrit, pour que le diagnostic du volet B soit possible, et leur champ
+`description` le dit. Elles ne sont pas une mesure et ne doivent pas être citées comme
+telle. Le volet D de cette même semaine vous apprend précisément à repérer un rapport
+qui garde ses chiffres et omet ses réserves.
+
+**Aucun fichier de poids n'est livré ici.** Les points de contrôle publics qui
+conviendraient au volet C de la semaine 5 sont publiés sans licence déclarée, et les
+redistribuer depuis le dépôt d'un cours est une décision qui appartient à l'équipe
+pédagogique. Ce qui est fourni, c'est la conversion, et elle est testée jusqu'à
+l'égalité numérique avec la sortie de Stable-Baselines3.
 
 ## Le protocole, en trois règles
 

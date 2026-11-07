@@ -263,6 +263,29 @@ for nom, (trames, retours, cumul) in resultats.items():
 # **Ce que vous écrivez.** Toute la chaîne d'enveloppes de la section 5.8, le réseau
 # de la section 5.8, le chargement des poids, et la boucle d'évaluation.
 
+# %% [markdown]
+# ### D'où viennent les poids, et pourquoi le dépôt du cours n'en livre aucun
+#
+# Ce dépôt ne contient **aucun fichier de poids**, et la raison n'est pas technique :
+# les points de contrôle publics qui conviendraient sont publiés **sans licence
+# déclarée**, et les redistribuer depuis le dépôt d'un cours est une décision qui
+# appartient à l'équipe pédagogique.
+#
+# Ce que le cours fournit, c'est la **conversion**, et elle est testée. L'architecture
+# de Stable-Baselines3 pour les images **est** celle de la section 5.8, aux noms près :
+# trois convolutions identiques, une couche de 512, une sortie par action. Convertir
+# est donc un **pur renommage de clés**, sans aucune réinterprétation des nombres.
+#
+# **Trois routes, et vous en choisissez une :**
+#
+# 1. **entraîner vous-même** un DQN sur Pong avec SB3 (une à trois heures de
+#    processeur graphique), puis convertir ;
+# 2. **télécharger** un point de contrôle public, **après avoir vérifié sa licence**,
+#    puis convertir ;
+# 3. demander à votre personne enseignante le fichier qu'elle met à disposition.
+#
+# La route 2 en trois lignes, une fois le fichier obtenu :
+
 # %%
 # Atari demande deux paquets de plus. ale-py embarque les ROMs depuis la version 0.9.
 for paquet, module in [("ale-py>=0.10", "ale_py"), ("opencv-python", "cv2")]:
@@ -272,16 +295,23 @@ for paquet, module in [("ale-py>=0.10", "ale_py"), ("opencv-python", "cv2")]:
 import ale_py
 gym.register_envs(ale_py)
 
-# Les poids fournis, et d'où ils viennent : voir notebooks/POIDS.md du dépôt du cours.
-import urllib.request
-from pathlib import Path
+# %%
+# La conversion, une fois que vous avez un point de controle SB3 sous la main.
+# Elle refuse un etat qui n'est pas du SB3, une couche manquante, et une forme qui
+# ne correspond pas (par exemple trois trames empilees au lieu de quatre).
+from stable_baselines3 import DQN as DQN_SB3
 
-POIDS = Path("pong_poids.dat")
-URL_POIDS = ("https://raw.githubusercontent.com/FaycalZM/drl-course-teluq/"
-             "main/notebooks/poids/pong_poids.dat")
-if not POIDS.exists():
-    urllib.request.urlretrieve(URL_POIDS, POIDS)
-print("poids :", POIDS, POIDS.stat().st_size // 1024, "Ko")
+modele_sb3 = DQN_SB3.load("dqn-PongNoFrameskip-v4.zip")
+torch.save(convertir_sb3(modele_sb3.policy.state_dict()), "pong_poids.dat")
+print("pong_poids.dat écrit")
+
+if importlib.util.find_spec("sci1070") is None:
+    subprocess.run([sys.executable, "-m", "pip", "install", "--quiet",
+                    "git+https://github.com/FaycalZM/drl-course-teluq.git#subdirectory=code"],
+                   check=True)
+
+from sci1070.poids import convertir_sb3
+print(convertir_sb3.__doc__.splitlines()[0])
 
 # %%
 # À COMPLÉTER : la chaîne d'enveloppes de la section 5.8, dans le bon ordre.
