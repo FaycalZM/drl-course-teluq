@@ -52,7 +52,8 @@ assert agent.valeur_action(15, 0) == 0.0 or agent.transitions[(15, 0)]
 
 **Attentes.**
 
-* L'environnement est résolu en **10 à 100 tours**, le plus souvent autour de la dizaine, en **moins d'une seconde**.
+* L'environnement est résolu en **quelques dizaines à quelques centaines de tours**, et l'exécution prend **moins d'une seconde** quoi qu'il arrive. Attendez-vous à une dispersion large : sur dix graines, le seuil est franchi entre le tour **37** et le tour **282**, médiane autour de **120**. Si votre première exécution en demande deux cents, votre code n'a rien d'anormal.
+* **Et la raison de cette dispersion est le critère lui-même**, ce qui en fait la leçon cachée du volet. La politique optimale de `FrozenLake-v1` glissant réussit environ **trois fois sur quatre**. Dépasser 0,80 sur **vingt** épisodes de test demande donc un lot de test chanceux, et non une meilleure politique : le nombre de tours mesure surtout l'attente de cette chance. Mesurez la qualité réelle de votre politique sur **quatre cents** épisodes, et vous trouverez une valeur stable entre **0,50 et 0,74**. C'est la semaine 7 par anticipation : **une mesure sur vingt épisodes ne permet de décider de rien.**
 * Les premiers tours affichent un retour de test de 0,000. Ce n'est pas un bogue : tant qu'aucun épisode n'a atteint l'objectif, il n'existe aucune récompense non nulle dans la table, donc rien à apprendre. Dites-le dans votre carnet en une phrase, avec le mot « exploration » dedans.
 * Affichez la table des valeurs à la fin. Les seize nombres doivent dessiner une pente croissante du départ vers l'objectif, et les trous doivent valoir zéro. Si ce n'est pas le cas, le coupable est presque toujours la gestion de l'état terminal.
 * **Ajoutez une ligne de commentaire sur la ligne où votre code lit la dynamique de l'environnement.** Ce commentaire est le vrai livrable de ce volet.

@@ -142,7 +142,7 @@ corrigée) ; calc_action_value et fig. 5.8 → FIG 04-07 et EQ 04-E24, écrite d
 depuis la figure dont les fractions sont inversées (156-157) ; select_action comme argmax pur,
 aucune exploration dans la décision (157) ; boucle d'entraînement, 100 pas aléatoires, un
 balayage, 20 épisodes de test qui nourrissent les tables, arrêt au-delà de 0,80 (158-159) ;
-résolu en 11 tours en moins d'une seconde, 10 à 100 tours typiques, deux raisons de la rapidité,
+résolu en 11 tours en moins d'une seconde, dispersion mesurée par le cours de 37 à 282 tours sur dix graines (le chiffre de 10 à 100 tours ne se reproduit pas, et la cause est le critère d'arrêt sur vingt épisodes), deux raisons de la rapidité,
 espérance sur les issues estimées et mise à jour depuis une transition unique, efficacité
 d'échantillon, comparaison avec la méthode de la semaine 3 en secondes contre une heure (159) ;
 FrozenLake ne paie qu'à l'objectif, 8 × 8 de 150 à 1 000 tours, figs. 5.9 et 5.10 écartées

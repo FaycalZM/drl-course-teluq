@@ -233,7 +233,7 @@ La troisième, et c'est l'absence remarquable. Regardez `choisir_action` : c'est
 
 ## Résultats, et pourquoi c'est aussi rapide
 
-Lançons. Une exécution de référence résout FrozenLake en **11 tours**, et l'ensemble prend **moins d'une seconde**. Les exécutions varient, parce que les pas aléatoires varient : comptez typiquement entre 10 et 100 tours.
+Lançons. Une exécution de référence résout FrozenLake en **11 tours**, et l'ensemble prend **moins d'une seconde**. Mais ne retenez pas ce nombre comme une attente, et je préfère vous le dire ici plutôt que de vous laisser croire que votre code est lent. Les exécutions varient beaucoup, parce que les pas aléatoires varient et surtout parce que le critère d'arrêt ne porte que sur vingt épisodes de test : sur dix graines, le seuil est franchi entre le tour **37** et le tour **282**. Le laboratoire revient sur ce que cette dispersion enseigne.
 
 {{% comment %}}SOURCE: LAPAN ch.5 p.159{{% /comment %}}
 
