@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sci1070"
+version = "0.1.0"
+description = "Code fourni du cours SCI1070 — Apprentissage par renforcement profond (TELUQ)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "numpy>=1.26",
+    "gymnasium>=1.0",
+]
+
+[project.optional-dependencies]
+# Tout ce qui touche aux reseaux. Separe parce que les semaines 1, 4 et 7 (volet B)
+# n'en ont pas besoin et tournent sans torch.
+torch = ["torch>=2.2"]
+# Les courbes. Separe pour la meme raison : un test n'a jamais besoin d'un ecran.
+courbes = ["matplotlib>=3.8"]
+dev = ["pytest>=8.0"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sci1070"]
+
+[tool.pytest.ini_options]
+# On teste la source sans installer le paquet : plus rapide a la boucle, et cela
+# evite qu'un test passe contre une version installee devenue obsolete.
+pythonpath = ["src"]
+testpaths = ["tests"]
+filterwarnings = ["error::DeprecationWarning:sci1070.*"]
