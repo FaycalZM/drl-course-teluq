@@ -25,7 +25,7 @@ Budget de calcul. Tout le laboratoire tourne sur **CartPole**, et c'est une déc
 
 **Objectif.** Vérifier que vous avez compris la transition premier-dernier, sans entraîner quoi que ce soit. Dix minutes, et c'est le meilleur rapport de tout le laboratoire entre ce que l'exercice apprend et ce qu'il coûte.
 
-**Protocole.** On installe la bibliothèque, `pip install ptan==0.8`, et on construit l'environnement jouet de la section 6.3 : une observation qui compte de 0 à 4, une récompense égale à l'action jouée, un épisode de dix pas exactement, et un agent qui joue toujours l'action 1.
+**Protocole.** On installe la bibliothèque en deux lignes, `pip install stable_baselines3` puis `pip install ptan==0.8 --no-deps` (la raison est donnée en section 6.1, et une installation ordinaire échoue), et on construit l'environnement jouet de la section 6.3 : une observation qui compte de 0 à 4, une récompense égale à l'action jouée, un épisode de dix pas exactement, et un agent qui joue toujours l'action 1.
 
 **Ce que je vous demande, et dans cet ordre.** D'abord, **écrivez sur une feuille** les douze premières transitions que la source d'expérience va produire avec `steps_count=2`, avec leurs quatre champs. Ensuite seulement, exécutez. Puis comparez, et expliquez en une phrase chacun des écarts, s'il y en a.
 
