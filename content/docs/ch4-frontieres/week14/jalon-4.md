@@ -5,7 +5,7 @@ weight: 19
 
 ## Ce qui est évalué, et pourquoi ce jalon est différent des trois autres
 
-Le jalon 4 clôt le module 4 et vaut **25 %** de la note du cours. **Remise : fin de la semaine 14.**
+Le jalon 4 clôt le module 4 et vaut **25 %** de la note du cours.
 
 Les trois premiers jalons vous imposaient une méthode : une méthode d'entropie croisée au jalon 1, un réseau Q profond avec extensions au jalon 2, une méthode de politique au jalon 3. **Celui-ci vous laisse choisir**, parmi cinq routes tirées des semaines 11 à 14, et c'est le seul du cours où la question « laquelle choisir » fait partie du travail.
 
@@ -15,6 +15,24 @@ Ce que je vous demande tient en une phrase : **une extension avancée de votre a
 
 > [!IMPORTANT]
  **Après treize semaines, c'est sur la reproductibilité que je serai le plus strict, et voici pourquoi.** Le jalon 2 a installé les graines multiples et les intervalles. Le jalon 3 a ajouté le protocole écrit. Cette semaine vous a montré trois résultats dont la portée dépend entièrement du protocole : un tableau de quatre lignes à une exécution chacune, un score de détection obtenu par une seule personne étiquetant sans être à l'aveugle, et des seuils relevés au pixel sur une figure. Dans les trois cas, le chiffre seul induit en erreur et le chiffre avec son protocole informe. **Je note la seconde chose.** Concrètement : un résultat modeste, mesuré sur plusieurs graines, avec ses graines listées, ses hyperparamètres, son matériel, sa durée et son critère d'arrêt fixé d'avance, vaut plus de points qu'un résultat impressionnant dont je ne peux pas savoir d'où il vient. Et un résultat négatif correctement établi vaut autant qu'un résultat positif.
+
+---
+
+## Le jalon en un coup d'œil
+
+Une seule chose distingue la forme de ce jalon des trois autres, et le schéma la place en tête : **la justification vient avant le code**. Les trois premiers jalons vous donnaient la méthode ; celui-ci vous demande d'abord de dire laquelle et pourquoi, et ce paragraphe est noté à part précisément pour que vous l'écriviez avant de commencer plutôt qu'après avoir fini.
+
+{{< mermaid >}}
+graph TD
+  J["Étape 1 : la justification, et elle vient avant le code"] -->|"une route sur cinq, un environnement"| X["L'extension, et elle fonctionne"]
+  X -->|"mêmes graines, même boucle d'évaluation"| K["Comparaison avec votre agent du jalon 3"]
+  X --> G["La grille de diagnostic, appliquée à votre agent"]
+  K --> A["L'analyse, et ce qu'elle ne permet pas de conclure"]
+  G --> A
+  A --> REP["L'annexe de reproductibilité : 4 points, le poste le plus lourd"]
+{{< /mermaid >}}
+
+Remarquez où aboutit le schéma. Dans les trois jalons précédents, la dernière case était l'analyse ; ici c'est l'annexe, et ce déplacement est le sujet de l'encadré ci-dessus.
 
 ---
 
@@ -79,6 +97,7 @@ Je tranche ce point explicitement, comme aux jalons 2 et 3, parce que l'exigence
 | **5.** Grille de diagnostic de la semaine appliquée à votre agent : récompense optimisée contre récompense voulue, type d'écart, deux mécanismes présents et deux absents | une page | 3 |
 | **6.** Analyse critique : une mesure, une déduction, une conclusion ; les recouvrements d'intervalles déclarés comme non-résultats ; une phrase sur ce que les mesures ne permettent pas de conclure | note de 1 à 2 pages | 3 |
 | **7.** **Reproductibilité** : graines listées, hyperparamètres complets, critère d'arrêt fixé d'avance, matériel, durée totale, versions des bibliothèques, et un dépôt qui tourne depuis un clone | annexe d'une page plus le dépôt | 4 |
+| **Total** | | **25** |
 
 **Ce qui n'est pas demandé**, et que je ne noterai pas : battre un score de référence, implémenter deux routes, reproduire une mesure de cette semaine, ou atteindre un seuil annoncé quelque part. Un **résultat nul correctement établi** vaut mieux qu'un écart impressionnant obtenu sur une seule exécution.
 
@@ -88,3 +107,7 @@ Je tranche ce point explicitement, comme aux jalons 2 et 3, parce que l'exigence
 {{% comment %}}SOURCE: source-assets/raw-content/week-10.md §Jalon 3{{% /comment %}}
 
 ---
+
+## Remise
+
+{{< remise cle="jalon-4" >}}

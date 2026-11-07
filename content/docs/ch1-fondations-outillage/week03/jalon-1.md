@@ -11,6 +11,22 @@ C'est la compétence la plus transférable de tout le cours. Dans les douze sema
 
 ---
 
+## Le jalon en un coup d'œil
+
+Lisez ce schéma dans le sens des flèches : chaque étape ne sert qu'à **rendre la suivante possible**, et ce que chacune transmet est écrit sur la flèche. C'est aussi la raison pour laquelle l'ordre n'est pas négociable. L'étape 3 s'écrit à partir de vos deux graphiques et de rien d'autre ; si vos axes ne sont pas nommés, vous ne pourrez pas la rédiger, et vous serez tenté de la recopier d'ici.
+
+{{< mermaid >}}
+graph TD
+  E1["Étape 1 : l'agent de la §3.4, inchangé"] -->|"un effondrement, le vôtre"| E2["Étape 2 : les deux graphiques"]
+  E2 -->|"la forme de votre distribution"| E3["Étape 3 : l'explication, 8 des 25 points"]
+  E3 -->|"la cause, identifiée et chiffrée"| E4["Étape 4 : les cinq correctifs, et le plateau"]
+  E4 -->|"ce que la correction achète, et ce qu'elle n'achète pas"| R["Un carnet exécuté, une note de 2 à 3 pages"]
+{{< /mermaid >}}
+
+Rien d'autre n'est attendu : **un carnet et une note**. Le jalon se joue sur la qualité d'une chaîne de raisonnement de quatre maillons, pas sur le volume rendu.
+
+---
+
 ## Les quatre étapes du livrable
 
 **Étape 1 : le transfert.** Lancez l'agent de la section 3.4, **inchangé**, sur `FrozenLake-v1` derrière votre enveloppe one-hot. Inchangé veut dire inchangé : mêmes hyperparamètres, même filtre, même boucle. La seule ligne nouvelle du carnet est l'enveloppe. Laissez tourner une centaine d'itérations, ce qui prend quelques minutes, les épisodes étant très courts.
@@ -36,6 +52,7 @@ Les deux graphiques doivent se suffire à eux-mêmes : axes nommés, unités, l�
 | Les deux graphiques de l'étape 2 | dans le carnet, axes nommés | 7 |
 | L'explication de l'effondrement, chiffres à l'appui | note de 1 à 2 pages | 8 |
 | Correctifs appliqués, mesure et commentaire du plateau | note, 1 page | 5 |
+| **Total** | | **25** |
 
 > [!IMPORTANT]
  **Je dois insister sur la contrainte de calcul, elle fait partie de la consigne.** L'exécution **notée** est celle du lac **non glissant** : environ 120 à 140 itérations, quelques minutes. Le lac glissant corrigé demande de l'ordre de **50 minutes** pour 10 000 itérations, et il n'est **pas** exigé. Si vous voulez le lancer, faites-le en extension facultative et commentez le plateau observé ; sinon, commentez les repères donnés en section 3.5, à savoir le passage à 50 % de réussites vers la 5 000ᵉ itération et l'arrêt des progrès autour de 55 %. Une analyse honnête de chiffres fournis vaut mieux qu'une exécution de 50 minutes mal interprétée.
@@ -44,3 +61,9 @@ Les deux graphiques doivent se suffire à eux-mêmes : axes nommés, unités, l�
 
 > [!TIP]
  **Un conseil pour la rédaction.** Écrivez votre note comme si vous expliquiez à un collègue pourquoi son agent, qui fonctionne parfaitement ailleurs, ne donne rien sur son problème à lui. Pas de récit chronologique de vos essais : une mesure, une déduction, une conclusion. C'est le format de toute bonne analyse d'échec, et c'est celui que je vous demanderai encore au jalon 2.
+
+---
+
+## Remise
+
+{{< remise cle="jalon-1" >}}

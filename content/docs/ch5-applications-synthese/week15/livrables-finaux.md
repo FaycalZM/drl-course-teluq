@@ -56,6 +56,13 @@ Voici concrètement ce que je vérifierai, point par point. Rien ici ne demande 
 | **Lecture critique de vos résultats** | 3 | ce que vos mesures établissent, ce qu'elles n'établissent pas, et ce qui reste inexpliqué |
 | **Présentation orale** | 2 | dix minutes, une question, une démonstration qui fonctionne |
 | **Qualité du rapport** | 1 | huit à dix pages, lisible, et les figures légendées |
+| **Total** | **20** | |
+
+---
+
+## Remise
+
+{{< remise cle="livrables-finaux" >}}
 
 ---
 

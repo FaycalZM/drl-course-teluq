@@ -136,6 +136,16 @@ signifient les lettres qui portent deux sens. La page
 [Glossaire]({{< relref "/docs/annexes/glossaire" >}}) fixe les équivalences français et
 anglais retenues, avec les formes à éviter et la semaine où chaque terme est introduit.
 
+---
+
+## Une page à lire avant de commencer
+
+La [Conclusion du cours]({{< relref "/docs/conclusion" >}}) porte son nom par position et
+non par usage : elle se lit **deux fois**, et la première est maintenant. Elle dit comment
+les quatre jalons s'emboîtent, quelles décisions de la semaine 1 vous coûteront du travail
+si vous les changez en route, les six règles de mesure qui deviennent notées à partir du
+jalon 2, et les huit pannes qui ne lèvent aucune erreur et prennent une soirée chacune.
+
 [Commencer la semaine 1 →]({{< relref "/docs/ch1-fondations-outillage/week01" >}})
 
 {{% comment %}}

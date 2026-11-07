@@ -5,13 +5,34 @@ weight: 9
 
 ## Ce qui est évalué, et pourquoi ce jalon regarde en arrière
 
-Le jalon 3 clôt le module 3 et vaut **25 %** de la note du cours. **Remise : fin de la semaine 10.**
+Le jalon 3 clôt le module 3 et vaut **25 %** de la note du cours.
 
 Ce que je vous demande tient en une phrase : **une méthode de politique qui apprend, une analyse de la variance de son gradient, et une comparaison honnête avec le réseau Q profond de votre jalon 2.** Les trois parties pèsent à peu près autant, et c'est la troisième qui est l'intérêt réel de ce jalon : vous allez mettre face à face les deux grandes familles du cours, sur une même tâche, avec les mêmes graines, et dire ce que chacune achète et ce qu'elle coûte.
 
 {{% comment %}}SOURCE: COURSE-PLAN-Lapan.md §10{{% /comment %}}
 
 Ce jalon reprend sans modification l'exigence installée au jalon 2 : **toute comparaison repose sur plusieurs graines avec intervalles**. La section 10.6 vous a donné le meilleur argument possible pour cette règle, un tableau de vingt mesures dont aucune ne porte d'intervalle et dont le plus mauvais chiffre est expliqué, par celui qui le publie, par une graine malheureuse. Je n'ajouterai rien.
+
+---
+
+## Le jalon en un coup d'œil
+
+Le schéma montre la pièce qui fait l'intérêt de ce jalon, et c'est la **boucle d'évaluation partagée** : vos deux agents, celui que vous écrivez cette semaine et celui que vous avez rendu au jalon 2, doivent passer par le même tunnel, avec les mêmes graines et le même critère d'arrêt. C'est cette pièce commune, et elle seule, qui rend les trois axes comparables.
+
+{{< mermaid >}}
+graph TD
+  R["Votre route : actions discrètes, ou continues"] --> P["La méthode de politique, et elle apprend"]
+  P --> V["Variance du gradient, deux configurations"]
+  P --> X["La même boucle d'évaluation pour les deux agents"]
+  Q["Votre réseau Q profond du jalon 2"] --> X
+  X -->|"efficacité d'échantillon"| A["Les trois axes"]
+  X -->|"stabilité"| A
+  X -->|"temps d'horloge"| A
+  A -->|"s'ils se contredisent, c'est le résultat"| C["L'analyse critique"]
+  V --> C
+{{< /mermaid >}}
+
+Notez que la variance du gradient part de votre méthode de politique et rejoint l'analyse sans passer par la comparaison : c'est une mesure sur **une** famille, pas une comparaison entre les deux. Les deux parties se rejoignent dans votre note, pas dans un tableau commun.
 
 ---
 
@@ -79,6 +100,7 @@ Les trois axes peuvent se contredire, et s'ils se contredisent chez vous, **c'es
 | **6.** Nombre d'exécutions n'ayant pas atteint la cible, rapporté séparément de la moyenne, pour chaque méthode | tableau ou note | 2 |
 | **7.** Analyse critique : une mesure, une déduction, une conclusion ; au moins une contradiction entre deux axes, ou sa mention explicite ; les recouvrements d'intervalles déclarés comme non-résultats | note de 1 à 2 pages | 3 |
 | **8.** Reproductibilité : graines listées, hyperparamètres, critère d'arrêt fixé d'avance, matériel, durée totale, et la route choisie | annexe d'une demi-page | 2 |
+| **Total** | | **25** |
 
 **Ce qui n'est pas demandé**, et que je ne noterai pas : battre un score particulier, obtenir un facteur d'efficacité donné, implémenter TRPO ou ACKTR, ou tourner sur un banc d'essai de locomotion. Un **résultat nul correctement établi** vaut mieux qu'un écart impressionnant obtenu sur une seule exécution, et il sera noté comme tel.
 
@@ -88,3 +110,7 @@ Les trois axes peuvent se contredire, et s'ils se contredisent chez vous, **c'es
 {{% comment %}}SOURCE: source-assets/raw-content/week-07.md §Jalon 2{{% /comment %}}
 
 ---
+
+## Remise
+
+{{< remise cle="jalon-3" >}}

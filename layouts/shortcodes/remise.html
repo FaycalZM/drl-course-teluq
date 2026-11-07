@@ -1,0 +1,46 @@
+{{- /*
+  Bloc de remise d'un travail noté.
+    {{< remise cle="jalon-1" >}}
+
+  Tout ce qui est susceptible de changer — l'échéance, le poids, l'URL du formulaire de
+  dépôt — vit dans [params.remises] de hugo.toml, et PAS dans la page. Les cinq travaux
+  du cours (quatre jalons plus les livrables finaux) apparaissent chacun sur deux pages,
+  la page de module et l'énoncé dans la semaine : écrire l'échéance dans le contenu
+  signifierait dix endroits à corriger, et la semaine 4 a montré ce que coûte un chiffre
+  recopié qui cesse d'être vrai.
+
+  `url = "TODO"` rend un bouton visiblement en attente plutôt qu'un lien mort. C'est le
+  même garde que le raccourci colab, et pour la même raison vérifiée : <a href="TODO">
+  se résout relativement à la page et envoie l'étudiant sur une 404 depuis un bouton
+  identique à un bouton valide. Les formulaires de dépôt n'existeront qu'à l'ouverture
+  du cours ; d'ici là le bouton dit qu'il n'existe pas.
+
+  Une clé absente de hugo.toml arrête la construction (errorf). C'est voulu : une faute
+  de frappe dans `cle` produirait sinon un bloc vide sur une page d'évaluation.
+*/ -}}
+{{- $cle := .Get "cle" | default "" -}}
+{{- $table := site.Params.remises | default dict -}}
+{{- $r := index $table $cle -}}
+{{- if not $r -}}
+  {{- errorf "raccourci remise : pas d'entrée [params.remises.%s] dans hugo.toml (appelé depuis %s)" $cle .Page.Path -}}
+{{- end -}}
+{{- $titre := $r.titre | default "Travail noté" -}}
+{{- $semaine := $r.semaine -}}
+{{- $poids := $r.poids | default "" -}}
+{{- $url := $r.url | default "TODO" -}}
+{{- $attente := or (eq $url "TODO") (eq $url "") -}}
+<div class="remise{{ if $attente }} remise--attente{{ end }}" role="group" aria-labelledby="remise-{{ $cle }}-titre">
+  <p class="remise-entete">
+    <span class="remise-titre" id="remise-{{ $cle }}-titre">{{ $titre }}</span>
+    {{- with $poids }}<span class="remise-poids">{{ . }}</span>{{ end -}}
+  </p>
+  {{- with $semaine }}
+  <p class="remise-echeance">À remettre <strong>à la fin de la semaine {{ . }}</strong>, par le formulaire de dépôt du cours.</p>
+  {{- end }}
+  {{ if $attente -}}
+  <p class="remise-bouton remise-bouton--attente" role="note" aria-label="Formulaire de dépôt à venir">Formulaire de dépôt à venir</p>
+  <p class="remise-note">Le lien sera actif à l'ouverture du trimestre. D'ici là, préparez vos livrables : le formulaire ne demandera rien d'autre que ce qui est listé ci-dessus.</p>
+  {{- else -}}
+  <p><a class="remise-bouton" href="{{ $url }}" target="_blank" rel="noopener">Déposer mon travail</a></p>
+  {{- end }}
+</div>
