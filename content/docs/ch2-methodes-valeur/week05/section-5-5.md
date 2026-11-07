@@ -20,8 +20,8 @@ Avec la cible à un pas de Sarsa, on obtient la méthode complète, qui s'appell
 
 $$
 \mathbf{w}_{t+1} \defeq \mathbf{w}_t + \alpha
-\big[\, R_{t+1} + \gamma\,\hat q(S_{t+1},A_{t+1},\mathbf{w}_t)
- - \hat q(S_t,A_t,\mathbf{w}_t) \,\big]\nabla\hat q(S_t,A_t,\mathbf{w}_t)
+\big[\, R_{t+1} + \gamma\,\hat q(S_{t+1},A_{t+1},\mathbf{w}_t) -
+ \hat q(S_t,A_t,\mathbf{w}_t) \,\big]\nabla\hat q(S_t,A_t,\mathbf{w}_t)
 $$
 
 {{% comment %}}SOURCE: SB ch.10 éq. 10.2 p.266{{% /comment %}}

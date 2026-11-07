@@ -98,8 +98,8 @@ Et ce n'est pas tout, car on pourrait encore soupçonner l'échantillonnage : pe
 $$
 \mathbf{w}_{k+1} \defeq \mathbf{w}_k + \frac{\alpha}{\lvert\mathcal{S}\rvert}
  \sum_{s} \Big(
- \E_\pi\big[\, R_{t+1} + \gamma\,\hat v(S_{t+1},\mathbf{w}_k) \mid S_t = s \,\big]
- - \hat v(s,\mathbf{w}_k) \Big)\nabla\hat v(s,\mathbf{w}_k)
+ \E_\pi\big[\, R_{t+1} + \gamma\,\hat v(S_{t+1},\mathbf{w}_k) \mid S_t = s \,\big] -
+ \hat v(s,\mathbf{w}_k) \Big)\nabla\hat v(s,\mathbf{w}_k)
 $$
 
 {{% comment %}}SOURCE: SB ch.11 éq. 11.9 p.284{{% /comment %}}

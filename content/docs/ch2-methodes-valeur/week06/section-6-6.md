@@ -33,8 +33,8 @@ Ici \(r_{a,t+1}\) est la récompense immédiate obtenue en jouant l'action \(a\)
 Alors on fait l'approximation, et il faut la regarder en face parce qu'elle est tout le contenu de la section. On suppose que l'action jouée au pas \(t+1\) était la bonne, c'est-à-dire que le maximum extérieur est atteint par l'action du tampon. Le \(\max_a\) intermédiaire disparaît :
 
 $$
-Q_\theta(s_t,a_t) \;=\; r_t + \gamma\,r_{t+1}
- + \gamma^2 \max_{a'} Q_{\theta^-}(s_{t+2},a')
+Q_\theta(s_t,a_t) \;=\; r_t + \gamma\,r_{t+1} +
+ \gamma^2 \max_{a'} Q_{\theta^-}(s_{t+2},a')
 $$
 
 {{% comment %}}SOURCE: LAPAN ch.8 p.241{{% /comment %}}
