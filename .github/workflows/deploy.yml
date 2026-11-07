@@ -20,6 +20,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # The build is 11 seconds of Hugo on a 265-page site. Ten minutes is a backstop for a
+    # hung action install or a runner that never gets going, not a budget to grow into.
+    timeout-minutes: 10
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -57,7 +60,29 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    # Twelve minutes, deliberately LONGER than the action's own ten-minute timeout below, so
+    # that on a hung deployment the action fails first and says what timed out. A job timeout
+    # shorter than the action's would kill the runner instead and leave only the generic
+    # "exceeded the maximum execution time", which is the less useful of the two messages.
+    timeout-minutes: 12
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # Ten minutes, written down rather than inherited from the action's default.
+          #
+          # Pages reports `syncing_files` while it unpacks the artifact and pushes it to the
+          # CDN, and the action prints that state every few seconds. On 07/11 a deploy sat
+          # there for eight minutes and was cancelled, because a wall of identical lines with
+          # no stated bound reads as a hang. It was not one: the same commit redeployed in ten
+          # seconds, the artifact was 536 files and 31 MB, and GitHub reported no incident.
+          #
+          # The cancellation is what cost something. A cancelled Pages deployment ends in
+          # `error` and the site keeps serving the previous version, so the fix sat committed
+          # and unpublished. Hence this number in the file: the run now carries its own
+          # deadline, and waiting it out is the cheaper move than guessing.
+          timeout: 600000
+          # Ten consecutive polling errors end the deployment. The default, made explicit for
+          # the same reason: it is the other way this step can stop, and it should be visible.
+          error_count: 10
